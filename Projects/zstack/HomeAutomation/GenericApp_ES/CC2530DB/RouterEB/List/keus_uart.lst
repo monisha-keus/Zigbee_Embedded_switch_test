@@ -1,0 +1,809 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V10.30.1.6000 for 8051               03/Jan/2020  15:52:22
+# Copyright 2004-2018 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for 8051
+#
+#    Core               =  plain
+#    Code model         =  banked
+#    Data model         =  large
+#    Calling convention =  xdata reentrant
+#    Constant location  =  data_rom
+#    Dptr setup         =  1,16
+#                          
+#    Source file        =  
+#        D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_uart.c
+#    Command line       =  
+#        -f C:\Users\Monisha\AppData\Local\Temp\EWFE61.tmp
+#        (D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_uart.c
+#        -D SECURE=1 -D TC_LINKKEY_JOIN -D NV_INIT -D NV_RESTORE -D
+#        HAL_KEY=FALSE -D HAL_LCD=FALSE -D HAL_LED=FALSE -D HAL_UART=TRUE -D
+#        HAL_UART_ISR=1 -D HAL_UART_ISR_RX_MAX=64 -D HAL_UART_ISR_TX_MAX=64 -D
+#        HAL_UART_DMA=2 -D HAL_UART_DMA_RX_MAX=64 -D HAL_UART_DMA_TX_MAX=64 -D
+#        NWK_MAX_DEVICE_LIST=5 -D NWK_LINK_STATUS_PERIOD=50 -D
+#        INT_HEAP_LEN=3172 -D OSC32K_CRYSTAL_INSTALLED=FALSE -D
+#        MULTICAST_ENABLED=FALSE -D APS_MAX_GROUPS=4 -D ZCL_BASIC -D
+#        ZCL_IDENTIFY -D ZCL_READ -D DISABLE_GREENPOWER_BASIC_PROXY -D
+#        KEUS_GPIO_INTERRUPT_HANDLER_DISABLE -lC
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\RouterEB\List
+#        -lA
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\RouterEB\List
+#        --diag_suppress Pe001,Pa010 -o
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\RouterEB\Obj
+#        -e --debug --core=plain --dptr=16,1 --data_model=large
+#        --code_model=banked --calling_convention=xdata_reentrant
+#        --place_constants=data_rom --nr_virtual_regs 16 -f
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\Tools\CC2530DB\f8wRouter.cfg
+#        (-DCPU32MHZ -DROOT=__near_func -DMAC_CFG_APP_PENDING_QUEUE=TRUE
+#        -DMAC_CFG_TX_DATA_MAX=5 -DMAC_CFG_TX_MAX=8 -DMAC_CFG_RX_MAX=5
+#        -DRTR_NWK) -f
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\Tools\CC2530DB\f8wConfig.cfg
+#        (-DZIGBEEPRO -DSECURE=1 -DZG_SECURE_DYNAMIC=0 -DREFLECTOR
+#        -DDEFAULT_CHANLIST=0x00000800 -DZDAPP_CONFIG_PAN_ID=0xFFFF
+#        -DNWK_START_DELAY=100 -DEXTENDED_JOINING_RANDOM_MASK=0x007F
+#        -DBEACON_REQUEST_DELAY=100 -DBEACON_REQ_DELAY_MASK=0x00FF
+#        -DLINK_STATUS_JITTER_MASK=0x007F -DROUTE_EXPIRY_TIME=30
+#        -DAPSC_ACK_WAIT_DURATION_POLLED=3000 -DNWK_INDIRECT_MSG_TIMEOUT=7
+#        -DMAX_RREQ_ENTRIES=8 -DAPSC_MAX_FRAME_RETRIES=3
+#        -DNWK_MAX_DATA_RETRIES=2 -DMAX_POLL_FAILURE_RETRIES=2 -DMAX_BCAST=9
+#        -DAPS_MAX_GROUPS=16 -DMAX_RTG_ENTRIES=40 -DNWK_MAX_BINDING_ENTRIES=4
+#        -DMAX_BINDING_CLUSTER_IDS=4 -DDEFAULT_KEY={0} -DMAC_MAX_FRAME_SIZE=116
+#        -DZDNWKMGR_MIN_TRANSMISSIONS=20 "-DCONST=const __code"
+#        -DGENERIC=__generic -DRFD_RCVC_ALWAYS_ON=FALSE -DPOLL_RATE=1000
+#        -DQUEUED_POLL_RATE=100 -DRESPONSE_POLL_RATE=100 -DREJOIN_POLL_RATE=440
+#        -DREJOIN_BACKOFF=900000 -DREJOIN_SCAN=900000 -DENABLE_LED4_DISABLE_S1)
+#        -f
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\Tools\CC2530DB\f8wZCL.cfg
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\Source\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\Source\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\ZMain\TI2530DB\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\hal\include\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\hal\target\CC2530EB\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\mac\include\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\mac\high_level\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\mac\low_level\srf04\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\mac\low_level\srf04\single_chip\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\mt\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\osal\include\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\services\saddr\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\services\sdata\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\af\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\bdb\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\nwk\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\bdb\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\gp\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\sapi\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\sec\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\sys\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\zcl\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\stack\zdo\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\zmac\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\zmac\f8w\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\keus\embeddedswitch\
+#        -I
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\..\..\..\..\..\Components\keus\common\
+#        -Ohz --require_prototypes)
+#    Locale             =  English_USA.1252
+#    List file          =  
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\RouterEB\List\keus_uart.lst
+#    Object file        =  
+#        D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\RouterEB\Obj\keus_uart.r51
+#
+###############################################################################
+
+D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_uart.c
+      1          
+      2          
+      3          #include "keus_uart.h"
+      4          
+      5          /******************************************************************************************************
+      6           * ***************************VARIABLES DECLARATION****************************************************
+      7           * ****************************************************************************************************/
+      8          
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+      9          uint8 data_length = 0,cmd_id = 0,uart_cmd_end = 0,rcv_ptr = 0,task_type =0;
+   \                     data_length:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     cmd_id:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     uart_cmd_end:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     rcv_ptr:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     task_type:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     10          uint8 uart1_data_length =0; 
+   \                     uart1_data_length:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     11          uint8 data_buff[20] = {0};  //buffer to hold only data comming through uart0.
+   \                     data_buff:
+   \   000000                DS 20
+   \   000014                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     12          uint16 event_t = 0x00;      //variable to set differen event.
+   \                     event_t:
+   \   000000                DS 2
+   \   000002                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     13          uint8 uart1_buff[5] = {0};  //buffer to hold data comming through uart1.
+   \                     uart1_buff:
+   \   000000                DS 5
+   \   000005                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     14          uint8 switch_state_buffer = 0;
+   \                     switch_state_buffer:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     15          uint8 config_state_buffer = 0;
+   \                     config_state_buffer:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+     16          
+     17          extern KeusGPIOPin ledPin1 ;//= {0, 0, GPIO_OUTPUT, false, GPIO_LOW};
+     18          
+     19          /*************************************************************************
+     20           * @brief   Callback function for Uart0
+     21           * @param
+     22           * @return
+     23           * ***********************************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+     24          void uart0RxCb( uint8 port, uint8 event ) {
+   \                     uart0RxCb:
+   \   000000                REQUIRE ?V0
+   \   000000                REQUIRE ?V2
+   \   000000                REQUIRE ?V3
+   \   000000   74F4         MOV       A,#-0xc
+   \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
+   \   000005                ; Saved register size: 12
+   \   000005                ; Auto size: 1
+   \   000005   74FF         MOV       A,#-0x1
+   \   000007   12....       LCALL     ?ALLOC_XSTACK8
+   \   00000A   89..         MOV       ?V0,R1
+     25            uint8  ch,uart_cmd_started=0,uart_data_ptr = 0;
+   \   00000C   7F00         MOV       R7,#0x0
+   \   00000E   7E00         MOV       R6,#0x0
+   \   000010   8008         SJMP      ??CrossCallReturnLabel_4
+     26            while (Hal_UART_RxBufLen(port))
+     27            {
+     28              // Read one byte from UART to ch
+     29              HalUARTRead (port, &ch, 1);
+     30              //check for the start byte
+     31              if (ch == UART_INITIATOR && uart_cmd_started == 0) {
+     32                uart_cmd_started = 1;
+     33                uart_data_ptr=0;
+     34              }
+     35              else if(uart_cmd_started == 1){
+     36                data_length = ch;
+     37                uart_cmd_started = 2;
+     38                uart_data_ptr = 0; 
+     39              }
+     40              else if(uart_cmd_started == 2  && (uart_data_ptr == data_length) && ch == UART_TERNINATOR){ 
+     41                uart_cmd_end = 1;
+     42                uart_cmd_started = 0;
+     43                uart_data_ptr =0;
+     44          
+     45              }
+     46              else if(uart_cmd_started == 2 && (uart_data_ptr+1) > data_length ){
+     47                uart_cmd_started = 0;
+     48                uart_data_ptr =0;
+     49              }
+     50              else if(uart_cmd_started == 2)
+     51              {
+     52                data_buff[uart_data_ptr++] = ch;
+     53              }
+     54              else
+     55              {
+     56                uart_cmd_started = 0;
+     57                uart_data_ptr =0;
+     58              }
+     59              if(uart_cmd_end){
+     60                cmd_id = data_buff[0];
+     61                switch (cmd_id){
+     62                  case 0x01:
+     63                    event_t = 0x02;
+   \                     ??uart0RxCb_0:
+   \   000012   90....       MOV       DPTR,#event_t
+   \   000015   7402         MOV       A,#0x2
+   \                     ??uart0RxCb_1:
+   \   000017   12....       LCALL     ??Subroutine5_0 & 0xFFFF
+     64                    break;
+   \                     ??CrossCallReturnLabel_4:
+   \   00001A                ; Setup parameters for call to function Hal_UART_RxBufLen
+   \   00001A   A9..         MOV       R1,?V0
+   \   00001C   12....       LCALL     `??Hal_UART_RxBufLen::?relay`; Banked call to: Hal_UART_RxBufLen
+   \   00001F   EA           MOV       A,R2
+   \   000020   4B           ORL       A,R3
+   \   000021   7003         JNZ       $+5
+   \   000023   02....       LJMP      ??uart0RxCb_2 & 0xFFFF
+   \   000026                ; Setup parameters for call to function HalUARTRead
+   \   000026   7C01         MOV       R4,#0x1
+   \   000028   7D00         MOV       R5,#0x0
+   \   00002A   AA..         MOV       R2,?XSP + 0
+   \   00002C   AB..         MOV       R3,?XSP + 1
+   \   00002E   A9..         MOV       R1,?V0
+   \   000030   12....       LCALL     ?Subroutine3 & 0xFFFF
+   \                     ??CrossCallReturnLabel_2:
+   \   000033   7007         JNZ       ??uart0RxCb_3
+   \   000035   EF           MOV       A,R7
+   \   000036   7004         JNZ       ??uart0RxCb_3
+   \   000038   7F01         MOV       R7,#0x1
+   \   00003A   802D         SJMP      ??uart0RxCb_4
+   \                     ??uart0RxCb_3:
+   \   00003C   7401         MOV       A,#0x1
+   \   00003E   6F           XRL       A,R7
+   \   00003F   7009         JNZ       ??uart0RxCb_5
+   \   000041   E0           MOVX      A,@DPTR
+   \   000042   90....       MOV       DPTR,#data_length
+   \   000045   F0           MOVX      @DPTR,A
+   \   000046   7F02         MOV       R7,#0x2
+   \   000048   801F         SJMP      ??uart0RxCb_4
+   \                     ??uart0RxCb_5:
+   \   00004A   7402         MOV       A,#0x2
+   \   00004C   6F           XRL       A,R7
+   \   00004D   7018         JNZ       ??uart0RxCb_6
+   \   00004F   90....       MOV       DPTR,#data_length
+   \   000052   E0           MOVX      A,@DPTR
+   \   000053   6E           XRL       A,R6
+   \   000054   7038         JNZ       ??uart0RxCb_7
+   \   000056   85..82       MOV       DPL,?XSP + 0
+   \   000059   85..83       MOV       DPH,?XSP + 1
+   \   00005C   E0           MOVX      A,@DPTR
+   \   00005D   6429         XRL       A,#0x29
+   \   00005F   702D         JNZ       ??uart0RxCb_7
+   \   000061   90....       MOV       DPTR,#uart_cmd_end
+   \   000064   7401         MOV       A,#0x1
+   \   000066   F0           MOVX      @DPTR,A
+   \                     ??uart0RxCb_6:
+   \   000067   7F00         MOV       R7,#0x0
+   \                     ??uart0RxCb_4:
+   \   000069   7E00         MOV       R6,#0x0
+   \                     ??uart0RxCb_8:
+   \   00006B   90....       MOV       DPTR,#uart_cmd_end
+   \   00006E   E0           MOVX      A,@DPTR
+   \   00006F   60A9         JZ        ??CrossCallReturnLabel_4
+   \   000071   90....       MOV       DPTR,#data_buff
+   \   000074   E0           MOVX      A,@DPTR
+   \   000075   90....       MOV       DPTR,#cmd_id
+   \   000078   F0           MOVX      @DPTR,A
+   \   000079   14           DEC       A
+   \   00007A   6096         JZ        ??uart0RxCb_0
+   \   00007C   14           DEC       A
+   \   00007D   6008         JZ        ??uart0RxCb_9
+   \   00007F   14           DEC       A
+   \   000080   602F         JZ        ??uart0RxCb_10
+   \   000082   14           DEC       A
+   \   000083   6034         JZ        ??uart0RxCb_11
+   \   000085   8093         SJMP      ??CrossCallReturnLabel_4
+     65                  case 0x02:
+     66                    event_t = 0x04;
+   \                     ??uart0RxCb_9:
+   \   000087   90....       MOV       DPTR,#event_t
+   \   00008A   7404         MOV       A,#0x4
+   \   00008C   8089         SJMP      ??uart0RxCb_1
+   \                     ??uart0RxCb_7:
+   \   00008E   EE           MOV       A,R6
+   \   00008F   F8           MOV       R0,A
+   \   000090   90....       MOV       DPTR,#data_length
+   \   000093   12....       LCALL     ?Subroutine2 & 0xFFFF
+   \                     ??CrossCallReturnLabel_0:
+   \   000096   40CF         JC        ??uart0RxCb_6
+   \   000098   85..82       MOV       DPL,?XSP + 0
+   \   00009B   85..83       MOV       DPH,?XSP + 1
+   \   00009E   E0           MOVX      A,@DPTR
+   \   00009F   C0E0         PUSH      A
+   \   0000A1   74..         MOV       A,#data_buff & 0xff
+   \   0000A3   28           ADD       A,R0
+   \   0000A4   F582         MOV       DPL,A
+   \   0000A6   E4           CLR       A
+   \   0000A7   34..         ADDC      A,#(data_buff >> 8) & 0xff
+   \   0000A9   F583         MOV       DPH,A
+   \   0000AB   D0E0         POP       A
+   \   0000AD   F0           MOVX      @DPTR,A
+   \   0000AE   0E           INC       R6
+   \   0000AF   80BA         SJMP      ??uart0RxCb_8
+     67                    break;
+     68                  case 0x03:
+     69                    event_t = 0x08;
+   \                     ??uart0RxCb_10:
+   \   0000B1   90....       MOV       DPTR,#event_t
+   \   0000B4   7408         MOV       A,#0x8
+   \   0000B6   02....       LJMP      ??uart0RxCb_1 & 0xFFFF
+     70                    break;
+     71                  case 0x04:
+     72                    event_t = 0x01;
+   \                     ??uart0RxCb_11:
+   \   0000B9   90....       MOV       DPTR,#event_t
+   \   0000BC   7401         MOV       A,#0x1
+   \   0000BE   02....       LJMP      ??uart0RxCb_1 & 0xFFFF
+     73                    break;
+     74                  default:
+     75                  break;
+     76                
+     77          
+     78                }
+     79              }
+     80              
+     81            }
+     82          }
+   \                     ??uart0RxCb_2:
+   \   0000C1                REQUIRE ?Subroutine0
+   \   0000C1                ; // Fall through to label ?Subroutine0
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine0:
+   \   000000   7401         MOV       A,#0x1
+   \   000002   12....       LCALL     ?DEALLOC_XSTACK8
+   \   000005   7F04         MOV       R7,#0x4
+   \   000007   02....       LJMP      ?BANKED_LEAVE_XDATA
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ??Subroutine5_0:
+   \   000000   F0           MOVX      @DPTR,A
+   \   000001   A3           INC       DPTR
+   \   000002   E4           CLR       A
+   \   000003   F0           MOVX      @DPTR,A
+   \   000004   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine3:
+   \   000000   12....       LCALL     `??HalUARTRead::?relay`; Banked call to: HalUARTRead
+   \   000003   85..82       MOV       DPL,?XSP + 0
+   \   000006   85..83       MOV       DPH,?XSP + 1
+   \   000009   E0           MOVX      A,@DPTR
+   \   00000A   6428         XRL       A,#0x28
+   \   00000C   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine2:
+   \   000000   E0           MOVX      A,@DPTR
+   \   000001   FC           MOV       R4,A
+   \   000002   E8           MOV       A,R0
+   \   000003   2401         ADD       A,#0x1
+   \   000005   FA           MOV       R2,A
+   \   000006   E4           CLR       A
+   \   000007   3400         ADDC      A,#0x0
+   \   000009   FB           MOV       R3,A
+   \   00000A   EC           MOV       A,R4
+   \   00000B   9A           SUBB      A,R2
+   \   00000C   E4           CLR       A
+   \   00000D   9B           SUBB      A,R3
+   \   00000E   C3           CLR       C
+   \   00000F   65D0         XRL       A,PSW
+   \   000011   33           RLC       A
+   \   000012   22           RET
+     83          
+     84          /*
+     85          * Uart0 initialization
+     86          */
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+     87          void initUart0(void) {
+   \                     initUart0:
+   \   000000   C082         PUSH      DPL
+   \   000002   C083         PUSH      DPH
+   \   000004                ; Saved register size: 2
+   \   000004                ; Auto size: 29
+   \   000004   74E3         MOV       A,#-0x1d
+   \   000006   12....       LCALL     ?ALLOC_XSTACK8
+     88           halUARTCfg_t uart0Config;
+     89           uart0Config.configured           = TRUE;
+   \   000009   85..82       MOV       DPL,?XSP + 0
+   \   00000C   85..83       MOV       DPH,?XSP + 1
+   \   00000F   7401         MOV       A,#0x1
+   \   000011   F0           MOVX      @DPTR,A
+     90           uart0Config.baudRate             = HAL_UART_BR_115200;
+   \   000012   12....       LCALL     ?XSTACK_DISP0_8
+   \   000015   7404         MOV       A,#0x4
+   \   000017   F0           MOVX      @DPTR,A
+     91           uart0Config.flowControl          = FALSE;
+   \   000018   7402         MOV       A,#0x2
+   \   00001A   12....       LCALL     ?XSTACK_DISP0_8
+   \   00001D   E4           CLR       A
+   \   00001E   F0           MOVX      @DPTR,A
+     92           uart0Config.flowControlThreshold = 48;
+   \   00001F   7403         MOV       A,#0x3
+   \   000021   12....       LCALL     ?XSTACK_DISP0_8
+   \   000024   7430         MOV       A,#0x30
+   \   000026   12....       LCALL     ??Subroutine5_0 & 0xFFFF
+     93           uart0Config.rx.maxBufSize        = 64;
+   \                     ??CrossCallReturnLabel_5:
+   \   000029   740A         MOV       A,#0xa
+   \   00002B   12....       LCALL     ?XSTACK_DISP0_8
+   \   00002E   12....       LCALL     ?Subroutine4 & 0xFFFF
+     94           uart0Config.tx.maxBufSize        = 64;
+   \                     ??CrossCallReturnLabel_7:
+   \   000031   7412         MOV       A,#0x12
+   \   000033   12....       LCALL     ?XSTACK_DISP0_8
+   \   000036   12....       LCALL     ?Subroutine4 & 0xFFFF
+     95           uart0Config.idleTimeout          = 6;  
+   \                     ??CrossCallReturnLabel_8:
+   \   000039   7405         MOV       A,#0x5
+   \   00003B   12....       LCALL     ?XSTACK_DISP0_8
+   \   00003E   7406         MOV       A,#0x6
+   \   000040   F0           MOVX      @DPTR,A
+     96           uart0Config.intEnable            = TRUE;
+   \   000041   7416         MOV       A,#0x16
+   \   000043   12....       LCALL     ?XSTACK_DISP0_8
+   \   000046   7401         MOV       A,#0x1
+   \   000048   F0           MOVX      @DPTR,A
+     97           uart0Config.callBackFunc         = uart0RxCb;
+   \   000049   741B         MOV       A,#0x1b
+   \   00004B   12....       LCALL     ?XSTACK_DISP0_8
+   \   00004E   74..         MOV       A,#`??uart0RxCb::?relay` & 0xff
+   \   000050   F0           MOVX      @DPTR,A
+   \   000051   A3           INC       DPTR
+   \   000052   74..         MOV       A,#(`??uart0RxCb::?relay` >> 8) & 0xff
+   \   000054   F0           MOVX      @DPTR,A
+     98           HalUARTOpen (HAL_UART_PORT_0, &uart0Config);
+   \   000055                ; Setup parameters for call to function HalUARTOpen
+   \   000055   AA..         MOV       R2,?XSP + 0
+   \   000057   AB..         MOV       R3,?XSP + 1
+   \   000059   7900         MOV       R1,#0x0
+   \   00005B                REQUIRE ?Subroutine1
+   \   00005B                ; // Fall through to label ?Subroutine1
+     99          }
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine1:
+   \   000000   12....       LCALL     `??HalUARTOpen::?relay`; Banked call to: HalUARTOpen
+   \   000003   741D         MOV       A,#0x1d
+   \   000005   12....       LCALL     ?DEALLOC_XSTACK8
+   \   000008   D083         POP       DPH
+   \   00000A   D082         POP       DPL
+   \   00000C   02....       LJMP      ?BRET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine4:
+   \   000000   7440         MOV       A,#0x40
+   \   000002                REQUIRE ??Subroutine5_0
+   \   000002                ; // Fall through to label ??Subroutine5_0
+    100           
+    101           /*************************************************************************
+    102           * @brief   Callback function for Uart1
+    103           *          This UART1 is for communicate between Zigbee and Mini-58. 
+    104           * @param
+    105           * @return
+    106           * ***********************************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    107          void uart1RxCb( uint8 port, uint8 event ) {
+   \                     uart1RxCb:
+   \   000000                REQUIRE ?V0
+   \   000000                REQUIRE ?V1
+   \   000000                REQUIRE ?V2
+   \   000000                REQUIRE ?V3
+   \   000000   74F4         MOV       A,#-0xc
+   \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
+   \   000005                ; Saved register size: 12
+   \   000005                ; Auto size: 1
+   \   000005   74FF         MOV       A,#-0x1
+   \   000007   12....       LCALL     ?ALLOC_XSTACK8
+   \   00000A   89..         MOV       ?V1,R1
+    108              uint8  ch,uart_cmd_started=0,uart_data_ptr = 0,uart1_cmd_end =0,mgs=0;
+   \   00000C   7F00         MOV       R7,#0x0
+   \   00000E   7E00         MOV       R6,#0x0
+   \   000010   75..00       MOV       ?V0,#0x0
+   \   000013   8043         SJMP      ??uart1RxCb_0
+    109          
+    110            while (Hal_UART_RxBufLen(port))
+    111            {
+    112              //*****Read one byte from UART to ch
+    113              HalUARTRead (port, &ch, 1);
+    114              //*****check for Start byte reseived
+    115              if (ch == UART_INITIATOR && uart_cmd_started == 0) {
+    116                uart_cmd_started = 1;
+    117                uart_data_ptr=0;
+    118              }
+    119              else if(uart_cmd_started == 1){
+   \                     ??uart1RxCb_1:
+   \   000015   7401         MOV       A,#0x1
+   \   000017   6F           XRL       A,R7
+   \   000018   7009         JNZ       ??uart1RxCb_2
+    120                uart1_data_length = ch;
+   \   00001A   E0           MOVX      A,@DPTR
+   \   00001B   90....       MOV       DPTR,#uart1_data_length
+   \   00001E   F0           MOVX      @DPTR,A
+    121                uart_cmd_started = 2;
+   \   00001F   7F02         MOV       R7,#0x2
+    122                uart_data_ptr = 0; 
+   \   000021   801C         SJMP      ??uart1RxCb_3
+    123              }
+    124          
+    125              //******check for end byte received
+    126              else if(uart_cmd_started == 2  && (uart_data_ptr == uart1_data_length) && ch == UART_TERNINATOR){ 
+   \                     ??uart1RxCb_2:
+   \   000023   7402         MOV       A,#0x2
+   \   000025   6F           XRL       A,R7
+   \   000026   7015         JNZ       ??uart1RxCb_4
+   \   000028   90....       MOV       DPTR,#uart1_data_length
+   \   00002B   E0           MOVX      A,@DPTR
+   \   00002C   6E           XRL       A,R6
+   \   00002D   7048         JNZ       ??uart1RxCb_5
+   \   00002F   85..82       MOV       DPL,?XSP + 0
+   \   000032   85..83       MOV       DPH,?XSP + 1
+   \   000035   E0           MOVX      A,@DPTR
+   \   000036   6429         XRL       A,#0x29
+   \   000038   703D         JNZ       ??uart1RxCb_5
+    127                uart1_cmd_end = 1;
+   \   00003A   75..01       MOV       ?V0,#0x1
+    128                uart_cmd_started = 0;
+    129                uart_data_ptr =0;
+    130          
+    131              }
+    132          
+    133              //********everytime check for data length
+    134              else if(uart_cmd_started == 2 && (uart_data_ptr+1) > uart1_data_length ){
+    135                uart_cmd_started = 0;
+    136                uart_data_ptr =0;
+    137              }
+    138              //*******fill data_buffer with incomming data 
+    139              else if(uart_cmd_started == 2)
+    140              {
+    141                uart1_buff[uart_data_ptr++] = ch;
+    142              }
+    143              else
+    144              {
+    145                uart_cmd_started = 0;
+   \                     ??uart1RxCb_4:
+   \   00003D   7F00         MOV       R7,#0x0
+    146                uart_data_ptr =0;
+   \                     ??uart1RxCb_3:
+   \   00003F   7E00         MOV       R6,#0x0
+    147              }
+    148           //*******After end byte received check for command id
+    149            if(uart1_cmd_end == 1){
+   \                     ??uart1RxCb_6:
+   \   000041   E5..         MOV       A,?V0
+   \   000043   A2E0         MOV       C,0xE0 /* A   */.0
+   \   000045   5011         JNC       ??uart1RxCb_0
+    150              mgs = uart1_buff[0];
+    151          
+    152          //******Based on command id make that particular command ack buffer 0
+    153            if (mgs == TASK_UART_ACK) {
+   \   000047   90....       MOV       DPTR,#uart1_buff
+   \   00004A   E0           MOVX      A,@DPTR
+   \   00004B   6405         XRL       A,#0x5
+   \   00004D   7009         JNZ       ??uart1RxCb_0
+    154              switch_state_buffer = 0;
+   \   00004F   90....       MOV       DPTR,#switch_state_buffer
+   \   000052   E4           CLR       A
+   \   000053   F0           MOVX      @DPTR,A
+    155              config_state_buffer = 0;
+   \   000054   90....       MOV       DPTR,#config_state_buffer
+   \   000057   F0           MOVX      @DPTR,A
+    156              //ledPin1.state = GPIO_LOW;
+    157              //  KeusGPIOSetPinValue(&ledPin1);
+    158              //  HalUARTWrite( HAL_UART_PORT_0, "LOW", (byte)osal_strlen("LOW")); 
+    159             } 
+    160             
+    161            //  else if(mgs == 0x02) {
+    162            //    config_state_buffer = 0;
+    163              //  ledPin1.state = GPIO_HIGH;
+    164              //  KeusGPIOSetPinValue(&ledPin1);
+    165              //  HalUARTWrite( HAL_UART_PORT_0, "HIGH", (byte)osal_strlen("HIGH"));
+    166             //}
+    167             }
+   \                     ??uart1RxCb_0:
+   \   000058                ; Setup parameters for call to function Hal_UART_RxBufLen
+   \   000058   A9..         MOV       R1,?V1
+   \   00005A   12....       LCALL     `??Hal_UART_RxBufLen::?relay`; Banked call to: Hal_UART_RxBufLen
+   \   00005D   EA           MOV       A,R2
+   \   00005E   4B           ORL       A,R3
+   \   00005F   6039         JZ        ??uart1RxCb_7
+   \   000061                ; Setup parameters for call to function HalUARTRead
+   \   000061   7C01         MOV       R4,#0x1
+   \   000063   7D00         MOV       R5,#0x0
+   \   000065   AA..         MOV       R2,?XSP + 0
+   \   000067   AB..         MOV       R3,?XSP + 1
+   \   000069   A9..         MOV       R1,?V1
+   \   00006B   12....       LCALL     ?Subroutine3 & 0xFFFF
+   \                     ??CrossCallReturnLabel_3:
+   \   00006E   70A5         JNZ       ??uart1RxCb_1
+   \   000070   EF           MOV       A,R7
+   \   000071   70A2         JNZ       ??uart1RxCb_1
+   \   000073   7F01         MOV       R7,#0x1
+   \   000075   80C8         SJMP      ??uart1RxCb_3
+   \                     ??uart1RxCb_5:
+   \   000077   EE           MOV       A,R6
+   \   000078   F8           MOV       R0,A
+   \   000079   90....       MOV       DPTR,#uart1_data_length
+   \   00007C   12....       LCALL     ?Subroutine2 & 0xFFFF
+   \                     ??CrossCallReturnLabel_1:
+   \   00007F   40BC         JC        ??uart1RxCb_4
+   \   000081   85..82       MOV       DPL,?XSP + 0
+   \   000084   85..83       MOV       DPH,?XSP + 1
+   \   000087   E0           MOVX      A,@DPTR
+   \   000088   C0E0         PUSH      A
+   \   00008A   74..         MOV       A,#uart1_buff & 0xff
+   \   00008C   28           ADD       A,R0
+   \   00008D   F582         MOV       DPL,A
+   \   00008F   E4           CLR       A
+   \   000090   34..         ADDC      A,#(uart1_buff >> 8) & 0xff
+   \   000092   F583         MOV       DPH,A
+   \   000094   D0E0         POP       A
+   \   000096   F0           MOVX      @DPTR,A
+   \   000097   0E           INC       R6
+   \   000098   80A7         SJMP      ??uart1RxCb_6
+    168            }
+    169          }
+   \                     ??uart1RxCb_7:
+   \   00009A   02....       LJMP      ?Subroutine0 & 0xFFFF
+    170           /*
+    171          * Uart1 initialization
+    172          * P1-7 : Rx
+    173          * P1-6 : Tx
+    174          */
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    175          void initUart1(void) {
+   \                     initUart1:
+   \   000000   C082         PUSH      DPL
+   \   000002   C083         PUSH      DPH
+   \   000004                ; Saved register size: 2
+   \   000004                ; Auto size: 29
+   \   000004   74E3         MOV       A,#-0x1d
+   \   000006   12....       LCALL     ?ALLOC_XSTACK8
+    176           halUARTCfg_t uart1Config;
+    177           uart1Config.configured           = TRUE;
+   \   000009   85..82       MOV       DPL,?XSP + 0
+   \   00000C   85..83       MOV       DPH,?XSP + 1
+   \   00000F   7401         MOV       A,#0x1
+   \   000011   F0           MOVX      @DPTR,A
+    178           uart1Config.baudRate             = HAL_UART_BR_115200;
+   \   000012   12....       LCALL     ?XSTACK_DISP0_8
+   \   000015   7404         MOV       A,#0x4
+   \   000017   F0           MOVX      @DPTR,A
+    179           uart1Config.flowControl          = FALSE;
+   \   000018   7402         MOV       A,#0x2
+   \   00001A   12....       LCALL     ?XSTACK_DISP0_8
+   \   00001D   E4           CLR       A
+   \   00001E   F0           MOVX      @DPTR,A
+    180           uart1Config.flowControlThreshold = 48;
+   \   00001F   7403         MOV       A,#0x3
+   \   000021   12....       LCALL     ?XSTACK_DISP0_8
+   \   000024   7430         MOV       A,#0x30
+   \   000026   12....       LCALL     ??Subroutine5_0 & 0xFFFF
+    181           uart1Config.rx.maxBufSize        = 64;
+   \                     ??CrossCallReturnLabel_6:
+   \   000029   740A         MOV       A,#0xa
+   \   00002B   12....       LCALL     ?XSTACK_DISP0_8
+   \   00002E   12....       LCALL     ?Subroutine4 & 0xFFFF
+    182           uart1Config.tx.maxBufSize        = 64;
+   \                     ??CrossCallReturnLabel_9:
+   \   000031   7412         MOV       A,#0x12
+   \   000033   12....       LCALL     ?XSTACK_DISP0_8
+   \   000036   12....       LCALL     ?Subroutine4 & 0xFFFF
+    183           uart1Config.idleTimeout          = 6;  
+   \                     ??CrossCallReturnLabel_10:
+   \   000039   7405         MOV       A,#0x5
+   \   00003B   12....       LCALL     ?XSTACK_DISP0_8
+   \   00003E   7406         MOV       A,#0x6
+   \   000040   F0           MOVX      @DPTR,A
+    184           uart1Config.intEnable            = TRUE;
+   \   000041   7416         MOV       A,#0x16
+   \   000043   12....       LCALL     ?XSTACK_DISP0_8
+   \   000046   7401         MOV       A,#0x1
+   \   000048   F0           MOVX      @DPTR,A
+    185           uart1Config.callBackFunc         = uart1RxCb;
+   \   000049   741B         MOV       A,#0x1b
+   \   00004B   12....       LCALL     ?XSTACK_DISP0_8
+   \   00004E   74..         MOV       A,#`??uart1RxCb::?relay` & 0xff
+   \   000050   F0           MOVX      @DPTR,A
+   \   000051   A3           INC       DPTR
+   \   000052   74..         MOV       A,#(`??uart1RxCb::?relay` >> 8) & 0xff
+   \   000054   F0           MOVX      @DPTR,A
+    186           HalUARTOpen (HAL_UART_PORT_1, &uart1Config);
+   \   000055                ; Setup parameters for call to function HalUARTOpen
+   \   000055   AA..         MOV       R2,?XSP + 0
+   \   000057   AB..         MOV       R3,?XSP + 1
+   \   000059   7901         MOV       R1,#0x1
+   \   00005B   02....       LJMP      ?Subroutine1 & 0xFFFF
+    187          }
+
+   Maximum stack usage in bytes:
+
+   ISTACK XSTACK Function
+   ------ ------ --------
+      2     29   initUart0
+        2     29   -> HalUARTOpen
+      2     29   initUart1
+        2     29   -> HalUARTOpen
+      1     13   uart0RxCb
+        0     13   -> HalUARTRead
+        0     13   -> Hal_UART_RxBufLen
+      1     13   uart1RxCb
+        0     13   -> HalUARTRead
+        0     13   -> Hal_UART_RxBufLen
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       5  ??Subroutine5_0
+      10  ?Subroutine0
+      15  ?Subroutine1
+      19  ?Subroutine2
+      13  ?Subroutine3
+       2  ?Subroutine4
+       1  cmd_id
+       1  config_state_buffer
+      20  data_buff
+       1  data_length
+       2  event_t
+      91  initUart0
+      94  initUart1
+       1  rcv_ptr
+       1  switch_state_buffer
+       1  task_type
+     193  uart0RxCb
+     157  uart1RxCb
+       5  uart1_buff
+       1  uart1_data_length
+       1  uart_cmd_end
+      24  -- Other
+
+ 
+ 599 bytes in segment BANKED_CODE
+  24 bytes in segment BANK_RELAYS
+  35 bytes in segment XDATA_Z
+ 
+  24 bytes of CODE     memory
+ 599 bytes of HUGECODE memory
+  35 bytes of XDATA    memory
+
+Errors: none
+Warnings: none
