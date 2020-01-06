@@ -21,11 +21,29 @@
 #define BUTTON_ACTIVE   GPIO_LOW
 #define BUTTON_INAVTIVE GPIO_HIGH
 
-#define KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME 500
+#define KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME 1000
 #define KEUS_EMBEDDEDSWITCH_RESET_BTN_TIMEOUT 10000
+//extern uint8 button_Pressed;
 
+#define ONOFF                   1
+#define DIMMING                 2
+#define FAN_CONTROLLER          3
 
-extern uint8 button_Pressed;
+#define ON      0x01
+#define OFF     0x00
+#define HIGH    255
+#define LOW     0x00
+
+//*****config data 
+struct CONFIG_INFO_t{
+    uint8   led;
+    uint8   valid_state;
+    uint8   config_id; 
+};
+
+bool KeusThemeSwitchMiniMemoryInit(void);
+bool KeusThemeSwitchMiniReadConfigDataIntoMemory(void);
+bool KeusThemeSwitchMiniWriteConfigDataIntoMemory(void);
 
 #endif
 

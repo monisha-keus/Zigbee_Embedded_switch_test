@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V10.30.1.6000 for 8051               06/Jan/2020  14:52:57
+# IAR C/C++ Compiler V10.30.1.6000 for 8051               06/Jan/2020  19:06:11
 # Copyright 2004-2018 IAR Systems AB.
 # PC-locked license - IAR Embedded Workbench for 8051
 #
@@ -14,7 +14,7 @@
 #    Source file        =  
 #        D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
 #    Command line       =  
-#        -f C:\Users\Monisha\AppData\Local\Temp\EWB3EC.tmp
+#        -f C:\Users\Monisha\AppData\Local\Temp\EW8C61.tmp
 #        (D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
 #        -D SECURE=1 -D TC_LINKKEY_JOIN -D NV_INIT -D NV_RESTORE -D
 #        HAL_KEY=FALSE -D HAL_LCD=FALSE -D HAL_LED=FALSE -D HAL_UART=TRUE -D
@@ -122,7 +122,7 @@
 D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
       1          
       2          /********************************************************
-      3           * @fn  This function is to declare all GPIOs
+      3           * @fn  This file is to declare all GPIOs
       4           * *****************************************************/
       5          
       6          #include "keus_task.h"
@@ -136,15 +136,9 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
    \                     debounce:
    \   000000                DS 1
    \   000001                REQUIRE __INIT_XDATA_Z
-     12          //bool toggle = false, toggle1 = false, toggle3 = false;
 
    \                                 In  segment XDATA_Z, align 1, keep-with-next
-     13          uint8 count = 0, count1 = 0, count2 = 0;//led_state;
-   \                     count:
-   \   000000                DS 1
-   \   000001                REQUIRE __INIT_XDATA_Z
-
-   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     12          uint8 count1 = 0, count2 = 0, count3 = 0,count4 = 0;
    \                     count1:
    \   000000                DS 1
    \   000001                REQUIRE __INIT_XDATA_Z
@@ -155,7 +149,17 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
    \   000001                REQUIRE __INIT_XDATA_Z
 
    \                                 In  segment XDATA_Z, align 1, keep-with-next
-     14          uint8 button_Pressed =0,button_state = 0;
+   \                     count3:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     count4:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     13          uint8 button_Pressed =0,button_state = 0;
    \                     button_Pressed:
    \   000000                DS 1
    \   000001                REQUIRE __INIT_XDATA_Z
@@ -164,437 +168,821 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
    \                     button_state:
    \   000000                DS 1
    \   000001                REQUIRE __INIT_XDATA_Z
-     15          
-     16          void ledTimerCbk(uint8 timerId);
-     17          void leddebounceCbk(uint8 timerId);
-     18          //void check_sw_pressed(void);
-     19          
-     20          
-     21          typedef void (*KeusBtnCbk)(void);
-     22          typedef struct {
-     23            uint16 btnDelay;
-     24            uint16 elapsedTime;
-     25            KeusBtnCbk btnCbk;
-     26          } KeusBtnManager;
-     27          
 
    \                                 In  segment XDATA_Z, align 1, keep-with-next
-     28          KeusBtnManager buttonManager;
+     14          uint8 contineous_on1 =0,contineous_on2 =0,contineous_on3 =0,contineous_on4 =0;
+   \                     contineous_on1:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     contineous_on2:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     contineous_on3:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+   \                     contineous_on4:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+     15          
+     16          //Variables for NVIC Memory
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     17          bool init_status = 0;
+   \                     init_status:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     18          bool read_status = 0;
+   \                     read_status:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     19          bool write_status = 0;
+   \                     write_status:
+   \   000000                DS 1
+   \   000001                REQUIRE __INIT_XDATA_Z
+     20          
+     21          void ledTimerCbk(uint8 timerId);
+     22          void leddebounceCbk(uint8 timerId);
+     23          void update_led(uint8 led_no, uint8 led_state_t);
+     24          void update_config_struct(uint8 led_no, uint8 led_state);
+     25          void update_config_to_memory(void);
+     26          void uart_send_switch_sate_ack(void);
+     27          
+     28          typedef void (*KeusBtnCbk)(void);
+     29          
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     30          struct CONFIG_INFO_t config_data[4];
+   \                     config_data:
+   \   000000                DS 12
+   \   00000C                REQUIRE __INIT_XDATA_Z
+     31          //
+     32          typedef struct {
+     33            uint16 btnDelay;
+     34            uint16 elapsedTime;
+     35            KeusBtnCbk btnCbk;
+     36          } KeusBtnManager;
+     37          
+
+   \                                 In  segment XDATA_Z, align 1, keep-with-next
+     38          KeusBtnManager buttonManager;
    \                     buttonManager:
    \   000000                DS 6
    \   000006                REQUIRE __INIT_XDATA_Z
-     29          
-     30          //Debounce configuration
+     39          
+     40          //Debounce configuration
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     31          KeusTimerConfig debounceTimer = {
+     41          KeusTimerConfig debounceTimer = {
    \                     debounceTimer:
    \   000000                DS 8
    \   000008                REQUIRE `?<Initializer for debounceTimer>`
    \   000008                REQUIRE __INIT_XDATA_I
-     32              &leddebounceCbk,
-     33              200,
-     34              true,
-     35              -1,
-     36              0};
-     37          
-     38          //Timer Configuration
+     42              &leddebounceCbk,
+     43              200,
+     44              true,
+     45              -1,
+     46              0};
+     47          
+     48          //Timer Configuration
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     39          KeusTimerConfig intervalTimer = {
+     49          KeusTimerConfig intervalTimer = {
    \                     intervalTimer:
    \   000000                DS 8
    \   000008                REQUIRE `?<Initializer for intervalTimer>`
    \   000008                REQUIRE __INIT_XDATA_I
-     40              &ledTimerCbk,
-     41              100,
-     42              true,
-     43              -1,
-     44              0};
-     45          /****************************************************************************
-     46           * **************************FUNCTION DECLARATION****************************
-     47           * ***************************************************************************/
-     48          void KEUS_init_fnc(void);
-     49          void KEUS_loop(void);
-     50          
-     51          //********LED and button initilization
+     50              &ledTimerCbk,
+     51              100,
+     52              true,
+     53              -1,
+     54              0};
+     55          /****************************************************************************
+     56           * **************************FUNCTION DECLARATION****************************
+     57           * ***************************************************************************/
+     58          void KEUS_init_fnc(void);
+     59          void KEUS_loop(void);
+     60          
+     61          //********LED and button initilization
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     52          extern KeusGPIOPin ledPin1 = {0, 0, GPIO_OUTPUT, false, LED_OFF};
+     62          extern KeusGPIOPin ledPin1 = {0, 0, GPIO_OUTPUT, false, LED_OFF};
    \                     ledPin1:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for ledPin1>`
    \   000005                REQUIRE __INIT_XDATA_I
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     53          extern KeusGPIOPin ledPin2 = {0, 1, GPIO_OUTPUT, false, LED_OFF};
+     63          extern KeusGPIOPin ledPin2 = {0, 1, GPIO_OUTPUT, false, LED_OFF};
    \                     ledPin2:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for ledPin2>`
    \   000005                REQUIRE __INIT_XDATA_I
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     54          extern KeusGPIOPin ledPin3 = {0, 4, GPIO_OUTPUT, false, LED_OFF};
+     64          extern KeusGPIOPin ledPin3 = {0, 4, GPIO_OUTPUT, false, LED_OFF};
    \                     ledPin3:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for ledPin3>`
    \   000005                REQUIRE __INIT_XDATA_I
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     55          extern KeusGPIOPin ledPin4 = {0, 5, GPIO_OUTPUT, false, LED_OFF};
+     65          extern KeusGPIOPin ledPin4 = {0, 5, GPIO_OUTPUT, false, LED_OFF};
    \                     ledPin4:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for ledPin4>`
    \   000005                REQUIRE __INIT_XDATA_I
-     56          
+     66          
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     57          extern KeusGPIOPin buttonPin1 = {1, 2, GPIO_INPUT, true, LED_OFF};
+     67          extern KeusGPIOPin buttonPin1 = {1, 2, GPIO_INPUT, true, LED_OFF};
    \                     buttonPin1:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for buttonPin1>`
    \   000005                REQUIRE __INIT_XDATA_I
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     58          extern KeusGPIOPin buttonPin2 = {1, 3, GPIO_INPUT, true, LED_OFF};
+     68          extern KeusGPIOPin buttonPin2 = {1, 3, GPIO_INPUT, true, LED_OFF};
    \                     buttonPin2:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for buttonPin2>`
    \   000005                REQUIRE __INIT_XDATA_I
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     59          extern KeusGPIOPin buttonPin3 = {1, 4, GPIO_INPUT, true, LED_OFF};
+     69          extern KeusGPIOPin buttonPin3 = {1, 4, GPIO_INPUT, true, LED_OFF};
    \                     buttonPin3:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for buttonPin3>`
    \   000005                REQUIRE __INIT_XDATA_I
 
    \                                 In  segment XDATA_I, align 1, keep-with-next
-     60          extern KeusGPIOPin buttonPin4 = {1, 5, GPIO_INPUT, true, LED_OFF};
+     70          extern KeusGPIOPin buttonPin4 = {1, 5, GPIO_INPUT, true, LED_OFF};
    \                     buttonPin4:
    \   000000                DS 5
    \   000005                REQUIRE `?<Initializer for buttonPin4>`
    \   000005                REQUIRE __INIT_XDATA_I
-     61          /*******************************************************
-     62           * @brief  Callback function for timer
-     63                     Called every after 100ms
-     64          
-     65          *********************************************************/
+     71          /*******************************************************
+     72           * @brief  Callback function for timer
+     73                     Called every after 100ms
+     74          
+     75          *********************************************************/
 
    \                                 In  segment BANKED_CODE, align 1, keep-with-next
-     66          void ledTimerCbk(uint8 timerId)
+     76          void ledTimerCbk(uint8 timerId)
    \                     ledTimerCbk:
-     67          {
+     77          {
    \   000000   C082         PUSH      DPL
    \   000002   C083         PUSH      DPH
    \   000004                ; Saved register size: 2
    \   000004                ; Auto size: 0
-     68            KeusGPIOReadPinValue(&buttonPin1);
+     78            KeusGPIOReadPinValue(&buttonPin1);
    \   000004                ; Setup parameters for call to function KeusGPIOReadPinValue
    \   000004   7A..         MOV       R2,#buttonPin1 & 0xff
    \   000006   7B..         MOV       R3,#(buttonPin1 >> 8) & 0xff
    \   000008   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-     69            if (buttonPin1.state == BUTTON_ACTIVE) {
-   \   00000B   90....       MOV       DPTR,#buttonPin1 + 4
-   \   00000E   E0           MOVX      A,@DPTR
-   \   00000F   90....       MOV       DPTR,#buttonManager + 2
-   \   000012   704D         JNZ       ??ledTimerCbk_0
-     70              buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-   \   000014   E0           MOVX      A,@DPTR
-   \   000015   24F4         ADD       A,#-0xc
-   \   000017   F0           MOVX      @DPTR,A
-   \   000018   A3           INC       DPTR
-   \   000019   E0           MOVX      A,@DPTR
-   \   00001A   3401         ADDC      A,#0x1
-   \   00001C   F0           MOVX      @DPTR,A
-     71              count++;
-   \   00001D   90....       MOV       DPTR,#count
-   \   000020   E0           MOVX      A,@DPTR
-   \   000021   04           INC       A
-   \   000022   F0           MOVX      @DPTR,A
-     72              if(count >= 100){
-   \   000023   C3           CLR       C
-   \   000024   9464         SUBB      A,#0x64
-   \   000026   4006         JC        ??ledTimerCbk_1
-     73                ledPin1.state = LED_ON;
-   \   000028   90....       MOV       DPTR,#ledPin1 + 4
-   \   00002B   E4           CLR       A
-   \   00002C   8029         SJMP      ??ledTimerCbk_2
-     74                KeusGPIOSetPinValue(&ledPin1);
-     75              }
-     76              else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
+     79            KeusGPIOReadPinValue(&buttonPin2);
+   \   00000B                ; Setup parameters for call to function KeusGPIOReadPinValue
+   \   00000B   7A..         MOV       R2,#buttonPin2 & 0xff
+   \   00000D   7B..         MOV       R3,#(buttonPin2 >> 8) & 0xff
+   \   00000F   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
+     80            KeusGPIOReadPinValue(&buttonPin3);
+   \   000012                ; Setup parameters for call to function KeusGPIOReadPinValue
+   \   000012   7A..         MOV       R2,#buttonPin3 & 0xff
+   \   000014   7B..         MOV       R3,#(buttonPin3 >> 8) & 0xff
+   \   000016   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
+     81            KeusGPIOReadPinValue(&buttonPin4);
+   \   000019                ; Setup parameters for call to function KeusGPIOReadPinValue
+   \   000019   7A..         MOV       R2,#buttonPin4 & 0xff
+   \   00001B   7B..         MOV       R3,#(buttonPin4 >> 8) & 0xff
+   \   00001D   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
+     82          
+     83            if (buttonPin1.state == BUTTON_ACTIVE){
+   \   000020   90....       MOV       DPTR,#buttonPin1 + 4
+   \   000023   E0           MOVX      A,@DPTR
+   \   000024   7036         JNZ       ??ledTimerCbk_0
+     84              buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
+   \   000026   12....       LCALL     ?Subroutine3 & 0xFFFF
+     85              count1++;
+   \                     ??CrossCallReturnLabel_27:
+   \   000029   90....       MOV       DPTR,#count1
+   \   00002C   12....       LCALL     ?Subroutine4 & 0xFFFF
+     86              if(count1 >= 50){
+   \                     ??CrossCallReturnLabel_4:
+   \   00002F   400C         JC        ??ledTimerCbk_1
+     87                contineous_on1 = 1;
+   \   000031   90....       MOV       DPTR,#contineous_on1
+   \   000034   7401         MOV       A,#0x1
+   \   000036   F0           MOVX      @DPTR,A
+     88                ledPin1.state = LED_ON;
+   \   000037   90....       MOV       DPTR,#ledPin1 + 4
+   \   00003A   E4           CLR       A
+   \   00003B   8017         SJMP      ??ledTimerCbk_2
+     89                KeusGPIOSetPinValue(&ledPin1);
+     90              }
+     91              else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
    \                     ??ledTimerCbk_1:
-   \   00002E   90....       MOV       DPTR,#buttonManager
-   \   000031   E0           MOVX      A,@DPTR
-   \   000032   F8           MOV       R0,A
-   \   000033   A3           INC       DPTR
-   \   000034   E0           MOVX      A,@DPTR
-   \   000035   F9           MOV       R1,A
-   \   000036   7583..       MOV       DPH,#((buttonManager + 2) >> 8) & 0xff
-   \   000039   7582..       MOV       DPL,#(buttonManager + 2) & 0xff
-   \   00003C   C3           CLR       C
-   \   00003D   E0           MOVX      A,@DPTR
-   \   00003E   98           SUBB      A,R0
-   \   00003F   A3           INC       DPTR
-   \   000040   E0           MOVX      A,@DPTR
-   \   000041   99           SUBB      A,R1
-   \   000042   4025         JC        ??ledTimerCbk_3
-     77                buttonManager.elapsedTime = 0;
-   \   000044   90....       MOV       DPTR,#buttonManager + 2
-   \   000047   E4           CLR       A
-   \   000048   F0           MOVX      @DPTR,A
-   \   000049   A3           INC       DPTR
-   \   00004A   F0           MOVX      @DPTR,A
-     78                ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
+   \   00003D   12....       LCALL     ?Subroutine2 & 0xFFFF
+   \                     ??CrossCallReturnLabel_0:
+   \   000040   5003         JNC       $+5
+   \   000042   02....       LJMP      ??ledTimerCbk_3 & 0xFFFF
+     92                contineous_on1 = 0;
+   \   000045   90....       MOV       DPTR,#contineous_on1
+   \   000048   12....       LCALL     ?Subroutine7 & 0xFFFF
+     93                buttonManager.elapsedTime = 0;
+     94                ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
+   \                     ??CrossCallReturnLabel_16:
    \   00004B                ; Setup parameters for call to function KeusGPIOToggledState
    \   00004B   90....       MOV       DPTR,#ledPin1 + 4
-   \   00004E   E0           MOVX      A,@DPTR
-   \   00004F   F9           MOV       R1,A
-   \   000050   12....       LCALL     `??KeusGPIOToggledState::?relay`; Banked call to: KeusGPIOToggledState
-   \   000053   E9           MOV       A,R1
-   \   000054   90....       MOV       DPTR,#ledPin1 + 4
+   \   00004E   12....       LCALL     ?Subroutine5 & 0xFFFF
+   \                     ??CrossCallReturnLabel_8:
+   \   000051   90....       MOV       DPTR,#ledPin1 + 4
    \                     ??ledTimerCbk_2:
-   \   000057   F0           MOVX      @DPTR,A
-     79                KeusGPIOSetPinValue(&ledPin1);
-   \   000058                ; Setup parameters for call to function KeusGPIOSetPinValue
-   \   000058   7A..         MOV       R2,#ledPin1 & 0xff
-   \   00005A   7B..         MOV       R3,#(ledPin1 >> 8) & 0xff
-   \   00005C   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-   \   00005F   8008         SJMP      ??ledTimerCbk_3
-     80              }
-     81            } 
-     82            else {
-     83              buttonManager.elapsedTime = 0;
+   \   000054   F0           MOVX      @DPTR,A
+     95                KeusGPIOSetPinValue(&ledPin1);
+   \   000055                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   000055   7A..         MOV       R2,#ledPin1 & 0xff
+   \   000057   7B..         MOV       R3,#(ledPin1 >> 8) & 0xff
+   \   000059   02....       LJMP      ??ledTimerCbk_4 & 0xFFFF
+     96              }
+     97            } 
+     98             else if (buttonPin2.state == BUTTON_ACTIVE) {
    \                     ??ledTimerCbk_0:
-   \   000061   E4           CLR       A
-   \   000062   F0           MOVX      @DPTR,A
-   \   000063   A3           INC       DPTR
-   \   000064   F0           MOVX      @DPTR,A
-     84              count = 0;
-   \   000065   90....       MOV       DPTR,#count
-   \   000068   F0           MOVX      @DPTR,A
-     85            }
-     86          }
+   \   00005C   90....       MOV       DPTR,#buttonPin2 + 4
+   \   00005F   E0           MOVX      A,@DPTR
+   \   000060   7036         JNZ       ??ledTimerCbk_5
+     99              buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
+   \   000062   12....       LCALL     ?Subroutine3 & 0xFFFF
+    100              count2++;
+   \                     ??CrossCallReturnLabel_28:
+   \   000065   90....       MOV       DPTR,#count2
+   \   000068   12....       LCALL     ?Subroutine4 & 0xFFFF
+    101              if(count2 >= 50){
+   \                     ??CrossCallReturnLabel_5:
+   \   00006B   400C         JC        ??ledTimerCbk_6
+    102                contineous_on2 = 1;
+   \   00006D   90....       MOV       DPTR,#contineous_on2
+   \   000070   7401         MOV       A,#0x1
+   \   000072   F0           MOVX      @DPTR,A
+    103                ledPin2.state = LED_ON;
+   \   000073   90....       MOV       DPTR,#ledPin2 + 4
+   \   000076   E4           CLR       A
+   \   000077   8017         SJMP      ??ledTimerCbk_7
+    104                KeusGPIOSetPinValue(&ledPin2);
+    105              }
+    106              else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
+   \                     ??ledTimerCbk_6:
+   \   000079   12....       LCALL     ?Subroutine2 & 0xFFFF
+   \                     ??CrossCallReturnLabel_1:
+   \   00007C   5003         JNC       $+5
+   \   00007E   02....       LJMP      ??ledTimerCbk_3 & 0xFFFF
+    107                contineous_on2 = 0;
+   \   000081   90....       MOV       DPTR,#contineous_on2
+   \   000084   12....       LCALL     ?Subroutine7 & 0xFFFF
+    108                buttonManager.elapsedTime = 0;
+    109                ledPin2.state = KeusGPIOToggledState(ledPin2.state); //toggle led at button pressed
+   \                     ??CrossCallReturnLabel_17:
+   \   000087                ; Setup parameters for call to function KeusGPIOToggledState
+   \   000087   90....       MOV       DPTR,#ledPin2 + 4
+   \   00008A   12....       LCALL     ?Subroutine5 & 0xFFFF
+   \                     ??CrossCallReturnLabel_9:
+   \   00008D   90....       MOV       DPTR,#ledPin2 + 4
+   \                     ??ledTimerCbk_7:
+   \   000090   F0           MOVX      @DPTR,A
+    110                KeusGPIOSetPinValue(&ledPin2);
+   \   000091                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   000091   7A..         MOV       R2,#ledPin2 & 0xff
+   \   000093   7B..         MOV       R3,#(ledPin2 >> 8) & 0xff
+   \   000095   02....       LJMP      ??ledTimerCbk_4 & 0xFFFF
+    111              }
+    112            }  
+    113            else if (buttonPin3.state == BUTTON_ACTIVE) {
+   \                     ??ledTimerCbk_5:
+   \   000098   90....       MOV       DPTR,#buttonPin3 + 4
+   \   00009B   E0           MOVX      A,@DPTR
+   \   00009C   7036         JNZ       ??ledTimerCbk_8
+    114              buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
+   \   00009E   12....       LCALL     ?Subroutine3 & 0xFFFF
+    115              count3++;
+   \                     ??CrossCallReturnLabel_29:
+   \   0000A1   90....       MOV       DPTR,#count3
+   \   0000A4   12....       LCALL     ?Subroutine4 & 0xFFFF
+    116              if(count3 >= 50){
+   \                     ??CrossCallReturnLabel_6:
+   \   0000A7   400C         JC        ??ledTimerCbk_9
+    117                contineous_on3 = 1;
+   \   0000A9   90....       MOV       DPTR,#contineous_on3
+   \   0000AC   7401         MOV       A,#0x1
+   \   0000AE   F0           MOVX      @DPTR,A
+    118                ledPin3.state = LED_ON;
+   \   0000AF   90....       MOV       DPTR,#ledPin3 + 4
+   \   0000B2   E4           CLR       A
+   \   0000B3   8017         SJMP      ??ledTimerCbk_10
+    119                KeusGPIOSetPinValue(&ledPin3);
+    120              }
+    121              else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
+   \                     ??ledTimerCbk_9:
+   \   0000B5   12....       LCALL     ?Subroutine2 & 0xFFFF
+   \                     ??CrossCallReturnLabel_2:
+   \   0000B8   5003         JNC       $+5
+   \   0000BA   02....       LJMP      ??ledTimerCbk_3 & 0xFFFF
+    122                contineous_on3 = 0;
+   \   0000BD   90....       MOV       DPTR,#contineous_on3
+   \   0000C0   12....       LCALL     ?Subroutine7 & 0xFFFF
+    123                buttonManager.elapsedTime = 0;
+    124                ledPin3.state = KeusGPIOToggledState(ledPin3.state); //toggle led at button pressed
+   \                     ??CrossCallReturnLabel_18:
+   \   0000C3                ; Setup parameters for call to function KeusGPIOToggledState
+   \   0000C3   90....       MOV       DPTR,#ledPin3 + 4
+   \   0000C6   12....       LCALL     ?Subroutine5 & 0xFFFF
+   \                     ??CrossCallReturnLabel_10:
+   \   0000C9   90....       MOV       DPTR,#ledPin3 + 4
+   \                     ??ledTimerCbk_10:
+   \   0000CC   F0           MOVX      @DPTR,A
+    125                KeusGPIOSetPinValue(&ledPin3);
+   \   0000CD                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   0000CD   7A..         MOV       R2,#ledPin3 & 0xff
+   \   0000CF   7B..         MOV       R3,#(ledPin3 >> 8) & 0xff
+   \   0000D1   02....       LJMP      ??ledTimerCbk_4 & 0xFFFF
+    126              }
+    127            }  
+    128            else if (buttonPin4.state == BUTTON_ACTIVE) {
+   \                     ??ledTimerCbk_8:
+   \   0000D4   90....       MOV       DPTR,#buttonPin4 + 4
+   \   0000D7   E0           MOVX      A,@DPTR
+   \   0000D8   90....       MOV       DPTR,#buttonManager + 2
+   \   0000DB   702D         JNZ       ??ledTimerCbk_11
+    129              buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
+   \   0000DD   12....       LCALL     ??Subroutine10_0 & 0xFFFF
+    130              count4++;
+   \                     ??CrossCallReturnLabel_26:
+   \   0000E0   90....       MOV       DPTR,#count4
+   \   0000E3   12....       LCALL     ?Subroutine4 & 0xFFFF
+    131              if(count4 >= 50){
+   \                     ??CrossCallReturnLabel_7:
+   \   0000E6   400C         JC        ??ledTimerCbk_12
+    132                contineous_on4 = 1;
+   \   0000E8   90....       MOV       DPTR,#contineous_on4
+   \   0000EB   7401         MOV       A,#0x1
+   \   0000ED   F0           MOVX      @DPTR,A
+    133                ledPin4.state = LED_ON;
+   \   0000EE   90....       MOV       DPTR,#ledPin4 + 4
+   \   0000F1   E4           CLR       A
+   \   0000F2   806E         SJMP      ??ledTimerCbk_13
+    134                KeusGPIOSetPinValue(&ledPin4);
+    135              }
+    136              else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
+   \                     ??ledTimerCbk_12:
+   \   0000F4   12....       LCALL     ?Subroutine2 & 0xFFFF
+   \                     ??CrossCallReturnLabel_3:
+   \   0000F7   4071         JC        ??ledTimerCbk_3
+    137                contineous_on4 = 0;
+   \   0000F9   90....       MOV       DPTR,#contineous_on4
+   \   0000FC   12....       LCALL     ?Subroutine7 & 0xFFFF
+    138                buttonManager.elapsedTime = 0;
+    139                ledPin4.state = KeusGPIOToggledState(ledPin4.state); //toggle led at button pressed
+   \                     ??CrossCallReturnLabel_19:
+   \   0000FF                ; Setup parameters for call to function KeusGPIOToggledState
+   \   0000FF   90....       MOV       DPTR,#ledPin4 + 4
+   \   000102   12....       LCALL     ?Subroutine5 & 0xFFFF
+    140                KeusGPIOSetPinValue(&ledPin4);
+    141              }
+    142            } 
+   \                     ??CrossCallReturnLabel_11:
+   \   000105   90....       MOV       DPTR,#ledPin4 + 4
+   \   000108   8058         SJMP      ??ledTimerCbk_13
+    143            else {
+    144              buttonManager.elapsedTime = 0;
+   \                     ??ledTimerCbk_11:
+   \   00010A   E4           CLR       A
+   \   00010B   F0           MOVX      @DPTR,A
+   \   00010C   A3           INC       DPTR
+   \   00010D   F0           MOVX      @DPTR,A
+    145              count1 = 0;
+   \   00010E   90....       MOV       DPTR,#count1
+   \   000111   F0           MOVX      @DPTR,A
+    146              count2 = 0;
+   \   000112   90....       MOV       DPTR,#count2
+   \   000115   F0           MOVX      @DPTR,A
+    147              count3 = 0;
+   \   000116   90....       MOV       DPTR,#count3
+   \   000119   F0           MOVX      @DPTR,A
+    148              count4 = 0;
+   \   00011A   90....       MOV       DPTR,#count4
+   \   00011D   F0           MOVX      @DPTR,A
+    149          
+    150              if(contineous_on1 ==0){
+   \   00011E   90....       MOV       DPTR,#contineous_on1
+   \   000121   E0           MOVX      A,@DPTR
+   \   000122   700D         JNZ       ??ledTimerCbk_14
+    151                ledPin1.state = LED_OFF;
+   \   000124   90....       MOV       DPTR,#ledPin1 + 4
+   \   000127   7401         MOV       A,#0x1
+   \   000129   F0           MOVX      @DPTR,A
+    152                KeusGPIOSetPinValue(&ledPin1);
+   \   00012A                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   00012A   7A..         MOV       R2,#ledPin1 & 0xff
+   \   00012C   7B..         MOV       R3,#(ledPin1 >> 8) & 0xff
+   \   00012E   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
+    153              }
+    154              if(contineous_on2 ==0){
+   \                     ??ledTimerCbk_14:
+   \   000131   90....       MOV       DPTR,#contineous_on2
+   \   000134   E0           MOVX      A,@DPTR
+   \   000135   700D         JNZ       ??ledTimerCbk_15
+    155                ledPin2.state = LED_OFF;
+   \   000137   90....       MOV       DPTR,#ledPin2 + 4
+   \   00013A   7401         MOV       A,#0x1
+   \   00013C   F0           MOVX      @DPTR,A
+    156                KeusGPIOSetPinValue(&ledPin2);
+   \   00013D                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   00013D   7A..         MOV       R2,#ledPin2 & 0xff
+   \   00013F   7B..         MOV       R3,#(ledPin2 >> 8) & 0xff
+   \   000141   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
+    157              }
+    158              if(contineous_on3 ==0){
+   \                     ??ledTimerCbk_15:
+   \   000144   90....       MOV       DPTR,#contineous_on3
+   \   000147   E0           MOVX      A,@DPTR
+   \   000148   700D         JNZ       ??ledTimerCbk_16
+    159                ledPin3.state = LED_OFF;
+   \   00014A   90....       MOV       DPTR,#ledPin3 + 4
+   \   00014D   7401         MOV       A,#0x1
+   \   00014F   F0           MOVX      @DPTR,A
+    160                KeusGPIOSetPinValue(&ledPin3);
+   \   000150                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   000150   7A..         MOV       R2,#ledPin3 & 0xff
+   \   000152   7B..         MOV       R3,#(ledPin3 >> 8) & 0xff
+   \   000154   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
+    161              }
+    162              if(contineous_on4 ==0){
+   \                     ??ledTimerCbk_16:
+   \   000157   90....       MOV       DPTR,#contineous_on4
+   \   00015A   E0           MOVX      A,@DPTR
+   \   00015B   700D         JNZ       ??ledTimerCbk_3
+    163                ledPin4.state = LED_OFF;
+   \   00015D   90....       MOV       DPTR,#ledPin4 + 4
+   \   000160   7401         MOV       A,#0x1
+   \                     ??ledTimerCbk_13:
+   \   000162   F0           MOVX      @DPTR,A
+    164                KeusGPIOSetPinValue(&ledPin4);
+   \   000163                ; Setup parameters for call to function KeusGPIOSetPinValue
+   \   000163   7A..         MOV       R2,#ledPin4 & 0xff
+   \   000165   7B..         MOV       R3,#(ledPin4 >> 8) & 0xff
+   \                     ??ledTimerCbk_4:
+   \   000167   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
+    165              }
+    166            }
+    167          }
    \                     ??ledTimerCbk_3:
-   \   000069                REQUIRE ?Subroutine0
-   \   000069                ; // Fall through to label ?Subroutine0
+   \   00016A   80..         SJMP      ??Subroutine11_0
 
    \                                 In  segment BANKED_CODE, align 1, keep-with-next
-   \                     ?Subroutine0:
+   \                     ?Subroutine7:
+   \   000000   E4           CLR       A
+   \   000001   F0           MOVX      @DPTR,A
+   \   000002   90....       MOV       DPTR,#buttonManager + 2
+   \   000005   F0           MOVX      @DPTR,A
+   \   000006   A3           INC       DPTR
+   \   000007   F0           MOVX      @DPTR,A
+   \   000008   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine5:
+   \   000000   E0           MOVX      A,@DPTR
+   \   000001   F9           MOV       R1,A
+   \   000002   12....       LCALL     `??KeusGPIOToggledState::?relay`; Banked call to: KeusGPIOToggledState
+   \   000005   E9           MOV       A,R1
+   \   000006   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine4:
+   \   000000   E0           MOVX      A,@DPTR
+   \   000001   04           INC       A
+   \   000002   F0           MOVX      @DPTR,A
+   \   000003   C3           CLR       C
+   \   000004   9432         SUBB      A,#0x32
+   \   000006   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine3:
+   \   000000   90....       MOV       DPTR,#buttonManager + 2
+   \   000003                REQUIRE ??Subroutine10_0
+   \   000003                ; // Fall through to label ??Subroutine10_0
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ??Subroutine10_0:
+   \   000000   E0           MOVX      A,@DPTR
+   \   000001   24E8         ADD       A,#-0x18
+   \   000003   F0           MOVX      @DPTR,A
+   \   000004   A3           INC       DPTR
+   \   000005   E0           MOVX      A,@DPTR
+   \   000006   3403         ADDC      A,#0x3
+   \   000008   F0           MOVX      @DPTR,A
+   \   000009   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine2:
+   \   000000   90....       MOV       DPTR,#buttonManager
+   \   000003   E0           MOVX      A,@DPTR
+   \   000004   F8           MOV       R0,A
+   \   000005   A3           INC       DPTR
+   \   000006   E0           MOVX      A,@DPTR
+   \   000007   F9           MOV       R1,A
+   \   000008   7583..       MOV       DPH,#((buttonManager + 2) >> 8) & 0xff
+   \   00000B   7582..       MOV       DPL,#(buttonManager + 2) & 0xff
+   \   00000E   C3           CLR       C
+   \   00000F   E0           MOVX      A,@DPTR
+   \   000010   98           SUBB      A,R0
+   \   000011   A3           INC       DPTR
+   \   000012   E0           MOVX      A,@DPTR
+   \   000013   99           SUBB      A,R1
+   \   000014   22           RET
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ??Subroutine11_0:
    \   000000   D083         POP       DPH
    \   000002   D082         POP       DPL
    \   000004   02....       LJMP      ?BRET
-     87          
-     88          /**************************************************************
-     89           * @fn      leddebounceCbk
-     90           * @brief   callback function for Debounce,called every after 200ms
-     91           * @param   none
-     92           * @return  None
-     93           * ***********************************************************/
-     94          
+    168          
+    169          /**************************************************************
+    170           * @fn      leddebounceCbk
+    171           * @brief   callback function for Debounce,called every after 200ms
+    172           * @param   none
+    173           * @return  None
+    174           * ***********************************************************/
+    175          
 
    \                                 In  segment BANKED_CODE, align 1, keep-with-next
-     95          void leddebounceCbk(uint8 timerId)
+   \                     ?Subroutine0:
+   \   000000   F0           MOVX      @DPTR,A
+   \   000001                REQUIRE ??Subroutine11_0
+   \   000001                ; // Fall through to label ??Subroutine11_0
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    176          void leddebounceCbk(uint8 timerId)
    \                     leddebounceCbk:
-     96          {
+    177          {
    \   000000   C082         PUSH      DPL
    \   000002   C083         PUSH      DPH
    \   000004                ; Saved register size: 2
    \   000004                ; Auto size: 0
-     97            debounce = true;
+    178            debounce = true;
    \   000004   90....       MOV       DPTR,#debounce
    \   000007   7401         MOV       A,#0x1
-   \   000009   F0           MOVX      @DPTR,A
-     98          }
-   \   00000A   80..         SJMP      ?Subroutine0
-     99          
-    100          
-    101          
-    102          /*************************************************************
-    103           * @fn      KEUS_init_fnc
-    104           * @brief   All Initilization
-    105           * @return  None
-    106           * @param   None  
-    107           * ***********************************************************/
+   \   000009   80..         SJMP      ?Subroutine0
+    179          }
+    180          
+    181          
+    182          
+    183          /*************************************************************
+    184           * @fn      KEUS_init_fnc
+    185           * @brief   All Initilization
+    186           * @return  None
+    187           * @param   None  
+    188           * ***********************************************************/
 
    \                                 In  segment BANKED_CODE, align 1, keep-with-next
-    108          void KEUS_init_fnc(void)
+    189          void KEUS_init_fnc(void)
    \                     KEUS_init_fnc:
-    109          {
+    190          {
    \   000000                REQUIRE ?V0
    \   000000                REQUIRE ?V1
    \   000000   74F6         MOV       A,#-0xa
    \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
    \   000005                ; Saved register size: 10
    \   000005                ; Auto size: 0
-    110          
-    111            //****Setting GPIOs direction and edge
-    112            KeusGPIOSetDirection(&ledPin1);
+    191          
+    192            //****Setting GPIOs direction and edge
+    193            KeusGPIOSetDirection(&ledPin1);
    \   000005                ; Setup parameters for call to function KeusGPIOSetDirection
    \   000005   7A..         MOV       R2,#ledPin1 & 0xff
    \   000007   7B..         MOV       R3,#(ledPin1 >> 8) & 0xff
    \   000009   12....       LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-    113            KeusGPIOSetDirection(&buttonPin1);
+    194            KeusGPIOSetDirection(&buttonPin1);
    \   00000C                ; Setup parameters for call to function KeusGPIOSetDirection
    \   00000C   7A..         MOV       R2,#buttonPin1 & 0xff
    \   00000E   7B..         MOV       R3,#(buttonPin1 >> 8) & 0xff
-   \   000010   12....       LCALL     ?Subroutine1 & 0xFFFF
-    114            KeusGPIOEdgeConfiguration(&buttonPin1, GPIO_RISING_EDGE);
-   \                     ??CrossCallReturnLabel_0:
+   \   000010   12....       LCALL     ?Subroutine8 & 0xFFFF
+    195            KeusGPIOEdgeConfiguration(&buttonPin1, GPIO_RISING_EDGE);
+   \                     ??CrossCallReturnLabel_20:
    \   000013   7A..         MOV       R2,#buttonPin1 & 0xff
    \   000015   7B..         MOV       R3,#(buttonPin1 >> 8) & 0xff
    \   000017   12....       LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-    115            KeusGPIOReadPinValue(&buttonPin1);
+    196            KeusGPIOReadPinValue(&buttonPin1);
    \   00001A                ; Setup parameters for call to function KeusGPIOReadPinValue
    \   00001A   7A..         MOV       R2,#buttonPin1 & 0xff
    \   00001C   7B..         MOV       R3,#(buttonPin1 >> 8) & 0xff
    \   00001E   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-    116            KeusGPIOSetPinValue(&ledPin1);
+    197            KeusGPIOSetPinValue(&ledPin1);
    \   000021                ; Setup parameters for call to function KeusGPIOSetPinValue
    \   000021   7A..         MOV       R2,#ledPin1 & 0xff
    \   000023   7B..         MOV       R3,#(ledPin1 >> 8) & 0xff
    \   000025   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-    117          
-    118            KeusGPIOSetDirection(&ledPin2);
+    198          
+    199            KeusGPIOSetDirection(&ledPin2);
    \   000028                ; Setup parameters for call to function KeusGPIOSetDirection
    \   000028   7A..         MOV       R2,#ledPin2 & 0xff
    \   00002A   7B..         MOV       R3,#(ledPin2 >> 8) & 0xff
    \   00002C   12....       LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-    119            KeusGPIOSetDirection(&buttonPin2);
+    200            KeusGPIOSetDirection(&buttonPin2);
    \   00002F                ; Setup parameters for call to function KeusGPIOSetDirection
    \   00002F   7A..         MOV       R2,#buttonPin2 & 0xff
    \   000031   7B..         MOV       R3,#(buttonPin2 >> 8) & 0xff
-   \   000033   12....       LCALL     ?Subroutine1 & 0xFFFF
-    120            KeusGPIOEdgeConfiguration(&buttonPin2, GPIO_RISING_EDGE);
-   \                     ??CrossCallReturnLabel_1:
+   \   000033   12....       LCALL     ?Subroutine8 & 0xFFFF
+    201            KeusGPIOEdgeConfiguration(&buttonPin2, GPIO_RISING_EDGE);
+   \                     ??CrossCallReturnLabel_21:
    \   000036   7A..         MOV       R2,#buttonPin2 & 0xff
    \   000038   7B..         MOV       R3,#(buttonPin2 >> 8) & 0xff
    \   00003A   12....       LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-    121            KeusGPIOReadPinValue(&buttonPin2);
+    202            KeusGPIOReadPinValue(&buttonPin2);
    \   00003D                ; Setup parameters for call to function KeusGPIOReadPinValue
    \   00003D   7A..         MOV       R2,#buttonPin2 & 0xff
    \   00003F   7B..         MOV       R3,#(buttonPin2 >> 8) & 0xff
    \   000041   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-    122            KeusGPIOSetPinValue(&ledPin2);
+    203            KeusGPIOSetPinValue(&ledPin2);
    \   000044                ; Setup parameters for call to function KeusGPIOSetPinValue
    \   000044   7A..         MOV       R2,#ledPin2 & 0xff
    \   000046   7B..         MOV       R3,#(ledPin2 >> 8) & 0xff
    \   000048   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-    123          
-    124            KeusGPIOSetDirection(&ledPin3);
+    204          
+    205            KeusGPIOSetDirection(&ledPin3);
    \   00004B                ; Setup parameters for call to function KeusGPIOSetDirection
    \   00004B   7A..         MOV       R2,#ledPin3 & 0xff
    \   00004D   7B..         MOV       R3,#(ledPin3 >> 8) & 0xff
    \   00004F   12....       LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-    125            KeusGPIOSetDirection(&buttonPin3);
+    206            KeusGPIOSetDirection(&buttonPin3);
    \   000052                ; Setup parameters for call to function KeusGPIOSetDirection
    \   000052   7A..         MOV       R2,#buttonPin3 & 0xff
    \   000054   7B..         MOV       R3,#(buttonPin3 >> 8) & 0xff
-   \   000056   12....       LCALL     ?Subroutine1 & 0xFFFF
-    126            KeusGPIOEdgeConfiguration(&buttonPin3, GPIO_RISING_EDGE);
-   \                     ??CrossCallReturnLabel_2:
+   \   000056   12....       LCALL     ?Subroutine8 & 0xFFFF
+    207            KeusGPIOEdgeConfiguration(&buttonPin3, GPIO_RISING_EDGE);
+   \                     ??CrossCallReturnLabel_22:
    \   000059   7A..         MOV       R2,#buttonPin3 & 0xff
    \   00005B   7B..         MOV       R3,#(buttonPin3 >> 8) & 0xff
    \   00005D   12....       LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-    127            KeusGPIOReadPinValue(&buttonPin3);
+    208            KeusGPIOReadPinValue(&buttonPin3);
    \   000060                ; Setup parameters for call to function KeusGPIOReadPinValue
    \   000060   7A..         MOV       R2,#buttonPin3 & 0xff
    \   000062   7B..         MOV       R3,#(buttonPin3 >> 8) & 0xff
    \   000064   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-    128            KeusGPIOSetPinValue(&ledPin3);
+    209            KeusGPIOSetPinValue(&ledPin3);
    \   000067                ; Setup parameters for call to function KeusGPIOSetPinValue
    \   000067   7A..         MOV       R2,#ledPin3 & 0xff
    \   000069   7B..         MOV       R3,#(ledPin3 >> 8) & 0xff
    \   00006B   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-    129          
-    130            KeusGPIOSetDirection(&ledPin4);
+    210          
+    211            KeusGPIOSetDirection(&ledPin4);
    \   00006E                ; Setup parameters for call to function KeusGPIOSetDirection
    \   00006E   7A..         MOV       R2,#ledPin4 & 0xff
    \   000070   7B..         MOV       R3,#(ledPin4 >> 8) & 0xff
    \   000072   12....       LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-    131            KeusGPIOSetDirection(&buttonPin4);
+    212            KeusGPIOSetDirection(&buttonPin4);
    \   000075                ; Setup parameters for call to function KeusGPIOSetDirection
    \   000075   7A..         MOV       R2,#buttonPin4 & 0xff
    \   000077   7B..         MOV       R3,#(buttonPin4 >> 8) & 0xff
-   \   000079   12....       LCALL     ?Subroutine1 & 0xFFFF
-    132            KeusGPIOEdgeConfiguration(&buttonPin4, GPIO_RISING_EDGE);
-   \                     ??CrossCallReturnLabel_3:
+   \   000079   12....       LCALL     ?Subroutine8 & 0xFFFF
+    213            KeusGPIOEdgeConfiguration(&buttonPin4, GPIO_RISING_EDGE);
+   \                     ??CrossCallReturnLabel_23:
    \   00007C   7A..         MOV       R2,#buttonPin4 & 0xff
    \   00007E   7B..         MOV       R3,#(buttonPin4 >> 8) & 0xff
    \   000080   12....       LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-    133            KeusGPIOReadPinValue(&buttonPin4);
+    214            KeusGPIOReadPinValue(&buttonPin4);
    \   000083                ; Setup parameters for call to function KeusGPIOReadPinValue
    \   000083   7A..         MOV       R2,#buttonPin4 & 0xff
    \   000085   7B..         MOV       R3,#(buttonPin4 >> 8) & 0xff
    \   000087   12....       LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-    134            KeusGPIOSetPinValue(&ledPin4);
+    215            KeusGPIOSetPinValue(&ledPin4);
    \   00008A                ; Setup parameters for call to function KeusGPIOSetPinValue
    \   00008A   7A..         MOV       R2,#ledPin4 & 0xff
    \   00008C   7B..         MOV       R3,#(ledPin4 >> 8) & 0xff
    \   00008E   12....       LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-    135          
-    136            //******Enabling Timer and Debounce
-    137            KeusTimerUtilAddTimer(&intervalTimer);
+    216          
+    217            //******Enabling Timer and Debounce
+    218            KeusTimerUtilAddTimer(&intervalTimer);
    \   000091                ; Setup parameters for call to function KeusTimerUtilAddTimer
    \   000091   7A..         MOV       R2,#intervalTimer & 0xff
    \   000093   7B..         MOV       R3,#(intervalTimer >> 8) & 0xff
    \   000095   12....       LCALL     `??KeusTimerUtilAddTimer::?relay`; Banked call to: KeusTimerUtilAddTimer
-    138            KeusTimerUtilAddTimer(&debounceTimer);
+    219            KeusTimerUtilAddTimer(&debounceTimer);
    \   000098                ; Setup parameters for call to function KeusTimerUtilAddTimer
    \   000098   7A..         MOV       R2,#debounceTimer & 0xff
    \   00009A   7B..         MOV       R3,#(debounceTimer >> 8) & 0xff
    \   00009C   12....       LCALL     `??KeusTimerUtilAddTimer::?relay`; Banked call to: KeusTimerUtilAddTimer
-    139          
-    140            // init_status = KeusThemeSwitchMiniMemoryInit();
-    141            // read_status = KeusThemeSwitchMiniReadConfigDataIntoMemory();
-    142            //*****Timer Initialization
-    143            KeusTimerUtilInit();
-   \   00009F                ; Setup parameters for call to function KeusTimerUtilInit
-   \   00009F   12....       LCALL     `??KeusTimerUtilInit::?relay`; Banked call to: KeusTimerUtilInit
-    144            //******Timer Start
-    145            KeusTimerUtilStartTimer();
-   \   0000A2                ; Setup parameters for call to function KeusTimerUtilStartTimer
-   \   0000A2   12....       LCALL     `??KeusTimerUtilStartTimer::?relay`; Banked call to: KeusTimerUtilStartTimer
-    146          
-    147            // //*****UART Initialization
-    148            initUart0();
-   \   0000A5                ; Setup parameters for call to function initUart0
-   \   0000A5   12....       LCALL     `??initUart0::?relay`; Banked call to: initUart0
-    149          
-    150            HalUARTWrite(HAL_UART_PORT_0, "KEUS INIT", (byte)osal_strlen("KEUS INIT"));
-   \   0000A8                ; Setup parameters for call to function osal_strlen
-   \   0000A8   7A..         MOV       R2,#`?<Constant "KEUS INIT">` & 0xff
-   \   0000AA   7B..         MOV       R3,#(`?<Constant "KEUS INIT">` >> 8) & 0xff
-   \   0000AC   12....       LCALL     `??osal_strlen::?relay`; Banked call to: osal_strlen
-   \   0000AF   8A..         MOV       ?V0,R2
-   \   0000B1                ; Setup parameters for call to function HalUARTWrite
-   \   0000B1   AC..         MOV       R4,?V0
-   \   0000B3   7D00         MOV       R5,#0x0
-   \   0000B5   7A..         MOV       R2,#`?<Constant "KEUS INIT">` & 0xff
-   \   0000B7   7B..         MOV       R3,#(`?<Constant "KEUS INIT">` >> 8) & 0xff
-   \   0000B9   7900         MOV       R1,#0x0
-   \   0000BB   12....       LCALL     `??HalUARTWrite::?relay`; Banked call to: HalUARTWrite
-    151          
-    152            
-    153          
-    154            //********At bootup send config and switch state to mini-58
-    155            //uart_send_switch_sate_ack(UART1,0x04,4,0x0B);
-    156            buttonManager.btnDelay = KEUS_EMBEDDEDSWITCH_RESET_BTN_TIMEOUT;
-   \   0000BE   90....       MOV       DPTR,#buttonManager
-   \   0000C1   7410         MOV       A,#0x10
-   \   0000C3   F0           MOVX      @DPTR,A
-   \   0000C4   A3           INC       DPTR
-   \   0000C5   7427         MOV       A,#0x27
-   \   0000C7   F0           MOVX      @DPTR,A
-    157            KEUS_loop();
+    220          
+    221            init_status = KeusThemeSwitchMiniMemoryInit();
+   \   00009F                ; Setup parameters for call to function KeusThemeSwitchMiniMemoryInit
+   \   00009F   12....       LCALL     `??KeusThemeSwitchMiniMemoryInit::?relay`; Banked call to: KeusThemeSwitchMiniMemoryInit
+   \   0000A2   E9           MOV       A,R1
+   \   0000A3   90....       MOV       DPTR,#init_status
+   \   0000A6   F0           MOVX      @DPTR,A
+    222            read_status = KeusThemeSwitchMiniReadConfigDataIntoMemory();
+   \   0000A7                ; Setup parameters for call to function KeusThemeSwitchMiniReadConfigDataIntoMemory
+   \   0000A7   12....       LCALL     `??KeusThemeSwitchMiniReadConfigDataIntoMemory::`; Banked call to: KeusThemeSwitchMiniReadConfigDataIntoMemory
+   \   0000AA   E9           MOV       A,R1
+   \   0000AB   90....       MOV       DPTR,#read_status
+   \   0000AE   F0           MOVX      @DPTR,A
+    223            //*****Timer Initialization
+    224            KeusTimerUtilInit();
+   \   0000AF                ; Setup parameters for call to function KeusTimerUtilInit
+   \   0000AF   12....       LCALL     `??KeusTimerUtilInit::?relay`; Banked call to: KeusTimerUtilInit
+    225            //******Timer Start
+    226            KeusTimerUtilStartTimer();
+   \   0000B2                ; Setup parameters for call to function KeusTimerUtilStartTimer
+   \   0000B2   12....       LCALL     `??KeusTimerUtilStartTimer::?relay`; Banked call to: KeusTimerUtilStartTimer
+    227          
+    228            // //*****UART Initialization
+    229            initUart0();
+   \   0000B5                ; Setup parameters for call to function initUart0
+   \   0000B5   12....       LCALL     `??initUart0::?relay`; Banked call to: initUart0
+    230          
+    231            HalUARTWrite(HAL_UART_PORT_0, "KEUS INIT", (byte)osal_strlen("KEUS INIT"));
+   \   0000B8                ; Setup parameters for call to function osal_strlen
+   \   0000B8   7A..         MOV       R2,#`?<Constant "KEUS INIT">` & 0xff
+   \   0000BA   7B..         MOV       R3,#(`?<Constant "KEUS INIT">` >> 8) & 0xff
+   \   0000BC   12....       LCALL     `??osal_strlen::?relay`; Banked call to: osal_strlen
+   \   0000BF   8A..         MOV       ?V0,R2
+   \   0000C1                ; Setup parameters for call to function HalUARTWrite
+   \   0000C1   AC..         MOV       R4,?V0
+   \   0000C3   7D00         MOV       R5,#0x0
+   \   0000C5   7A..         MOV       R2,#`?<Constant "KEUS INIT">` & 0xff
+   \   0000C7   7B..         MOV       R3,#(`?<Constant "KEUS INIT">` >> 8) & 0xff
+   \   0000C9   7900         MOV       R1,#0x0
+   \   0000CB   12....       LCALL     `??HalUARTWrite::?relay`; Banked call to: HalUARTWrite
+    232          
+    233            
+    234            buttonManager.btnDelay = KEUS_EMBEDDEDSWITCH_RESET_BTN_TIMEOUT;
+   \   0000CE   90....       MOV       DPTR,#buttonManager
+   \   0000D1   7410         MOV       A,#0x10
+   \   0000D3   F0           MOVX      @DPTR,A
+   \   0000D4   A3           INC       DPTR
+   \   0000D5   7427         MOV       A,#0x27
+   \   0000D7   F0           MOVX      @DPTR,A
+    235          
+    236            config_data[0].config_id = 1;
+   \   0000D8   90....       MOV       DPTR,#config_data + 2
+   \   0000DB   7401         MOV       A,#0x1
+   \   0000DD   F0           MOVX      @DPTR,A
+    237            config_data[0].led = 1;
+   \   0000DE   90....       MOV       DPTR,#config_data
+   \   0000E1   F0           MOVX      @DPTR,A
+    238            config_data[0].valid_state = 1;
+   \   0000E2   A3           INC       DPTR
+   \   0000E3   F0           MOVX      @DPTR,A
+    239          
+    240            config_data[1].config_id = 1;
+   \   0000E4   90....       MOV       DPTR,#config_data + 5
+   \   0000E7   F0           MOVX      @DPTR,A
+    241            config_data[1].led = 2;
+   \   0000E8   90....       MOV       DPTR,#config_data + 3
+   \   0000EB   04           INC       A
+   \   0000EC   F0           MOVX      @DPTR,A
+    242            config_data[1].valid_state = 1;
+   \   0000ED   A3           INC       DPTR
+   \   0000EE   14           DEC       A
+   \   0000EF   F0           MOVX      @DPTR,A
+    243          
+    244            config_data[2].config_id = 1;
+   \   0000F0   90....       MOV       DPTR,#config_data + 8
+   \   0000F3   F0           MOVX      @DPTR,A
+    245            config_data[2].led = 3;
+   \   0000F4   90....       MOV       DPTR,#config_data + 6
+   \   0000F7   7403         MOV       A,#0x3
+   \   0000F9   F0           MOVX      @DPTR,A
+    246            config_data[2].valid_state = 1;
+   \   0000FA   A3           INC       DPTR
+   \   0000FB   7401         MOV       A,#0x1
+   \   0000FD   F0           MOVX      @DPTR,A
+    247          
+    248            config_data[3].config_id = 1;
+   \   0000FE   90....       MOV       DPTR,#config_data + 11
+   \   000101   F0           MOVX      @DPTR,A
+    249            config_data[3].led = 4;
+   \   000102   90....       MOV       DPTR,#config_data + 9
+   \   000105   7404         MOV       A,#0x4
+   \   000107   F0           MOVX      @DPTR,A
+    250            config_data[3].valid_state = 1;
+   \   000108   A3           INC       DPTR
+   \   000109   7401         MOV       A,#0x1
+   \   00010B   F0           MOVX      @DPTR,A
+    251          
+    252            KEUS_loop();
    \                     ??KEUS_init_fnc_0:
-   \   0000C8                ; Setup parameters for call to function HalUARTPoll
-   \   0000C8   12....       LCALL     `??HalUARTPoll::?relay`; Banked call to: HalUARTPoll
-   \   0000CB   80FB         SJMP      ??KEUS_init_fnc_0
-    158          }
+   \   00010C                ; Setup parameters for call to function HalUARTPoll
+   \   00010C   12....       LCALL     `??HalUARTPoll::?relay`; Banked call to: HalUARTPoll
+   \   00010F   80FB         SJMP      ??KEUS_init_fnc_0
+    253          }
 
    \                                 In  segment BANKED_CODE, align 1, keep-with-next
-   \                     ?Subroutine1:
+   \                     ?Subroutine8:
    \   000000   12....       LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
    \   000003                ; Setup parameters for call to function KeusGPIOEdgeConfiguration
    \   000003                ; Setup parameters for call to function KeusGPIOEdgeConfiguration
@@ -602,33 +990,1009 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
    \   000003                ; Setup parameters for call to function KeusGPIOEdgeConfiguration
    \   000003   7901         MOV       R1,#0x1
    \   000005   22           RET
-    159          
-    160          /**********************************************************************
-    161           * @fn      KEUS_loop
-    162           * @brief   Infinite loop
-    163           * @return  No return after this
-    164           * @param   None
-    165           * *********************************************************************/
+    254          
+    255          /**********************************************************************
+    256           * @fn      KEUS_loop
+    257           * @brief   Infinite loop
+    258           * @return  No return after this
+    259           * @param   None
+    260           * *********************************************************************/
 
    \                                 In  segment BANKED_CODE, align 1, keep-with-next
-    166          void KEUS_loop(void)
+    261          void KEUS_loop(void)
    \                     KEUS_loop:
-    167          {
+    262          {
    \   000000   C082         PUSH      DPL
    \   000002   C083         PUSH      DPH
    \   000004                ; Saved register size: 2
    \   000004                ; Auto size: 0
-    168            while (1)
-    169            {
-    170              HalUARTPoll();
+    263            while (1)
+    264            {
+    265              HalUARTPoll();
    \                     ??KEUS_loop_0:
    \   000004                ; Setup parameters for call to function HalUARTPoll
    \   000004   12....       LCALL     `??HalUARTPoll::?relay`; Banked call to: HalUARTPoll
    \   000007   80FB         SJMP      ??KEUS_loop_0
-    171              //check_sw_pressed();
-    172              
-    173            }
-    174          }
+    266              
+    267            }
+    268          }
+    269          
+    270          /*******************************************************************
+    271           * @fn    update_led
+    272           * @brief   Function to receive LED state
+    273           * *****************************************************************/
+    274          
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    275          void update_led(uint8 led_no, uint8 led_state_t){
+   \                     update_led:
+   \   000000   C082         PUSH      DPL
+   \   000002   C083         PUSH      DPH
+   \   000004                ; Saved register size: 2
+   \   000004                ; Auto size: 0
+    276            uint8 led_state;
+    277            led_state = led_state_t;
+    278            if (led_no == 1)
+   \   000004   7469         MOV       A,#0x69
+   \   000006   2A           ADD       A,R2
+   \   000007   FD           MOV       R5,A
+   \   000008   749B         MOV       A,#-0x65
+   \   00000A   2A           ADD       A,R2
+   \   00000B   FC           MOV       R4,A
+   \   00000C   74CD         MOV       A,#-0x33
+   \   00000E   2A           ADD       A,R2
+   \   00000F   FB           MOV       R3,A
+   \   000010   7401         MOV       A,#0x1
+   \   000012   69           XRL       A,R1
+   \   000013   6003         JZ        $+5
+   \   000015   02....       LJMP      ??update_led_0 & 0xFFFF
+    279            {
+    280              if (config_data[0].config_id == ONOFF)
+   \   000018   90....       MOV       DPTR,#config_data + 2
+   \   00001B   12....       LCALL     ?Subroutine6 & 0xFFFF
+   \                     ??CrossCallReturnLabel_12:
+   \   00001E   7009         JNZ       ??update_led_1
+    281              {
+    282                if (led_state == 0)
+   \   000020   EA           MOV       A,R2
+   \   000021   706C         JNZ       ??update_led_2
+    283                {
+    284                  config_data[0].valid_state = LOW;
+   \   000023   90....       MOV       DPTR,#config_data + 1
+   \   000026   E4           CLR       A
+   \   000027   806B         SJMP      ??update_led_3
+    285                }
+    286                else
+    287                {
+    288                  config_data[0].valid_state = HIGH;
+    289                }
+    290              }
+    291              else if (config_data[0].config_id == DIMMING)
+   \                     ??update_led_1:
+   \   000029   7402         MOV       A,#0x2
+   \   00002B   68           XRL       A,R0
+   \   00002C   6021         JZ        ??update_led_4
+    292              {
+    293                config_data[0].valid_state = led_state;
+    294              }
+    295              else if (config_data[0].config_id == FAN_CONTROLLER)
+   \   00002E   7403         MOV       A,#0x3
+   \   000030   68           XRL       A,R0
+   \   000031   7062         JNZ       ??update_led_5
+    296              {
+    297                if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
+   \   000033   EA           MOV       A,R2
+   \   000034   6019         JZ        ??update_led_4
+   \   000036   7432         MOV       A,#0x32
+   \   000038   6A           XRL       A,R2
+   \   000039   6014         JZ        ??update_led_4
+   \   00003B   7464         MOV       A,#0x64
+   \   00003D   6A           XRL       A,R2
+   \   00003E   600F         JZ        ??update_led_4
+   \   000040   7496         MOV       A,#-0x6a
+   \   000042   6A           XRL       A,R2
+   \   000043   600A         JZ        ??update_led_4
+   \   000045   74C8         MOV       A,#-0x38
+   \   000047   6A           XRL       A,R2
+   \   000048   6005         JZ        ??update_led_4
+   \   00004A   74FF         MOV       A,#-0x1
+   \   00004C   6A           XRL       A,R2
+   \   00004D   7006         JNZ       ??update_led_6
+    298                {
+    299                  config_data[0].valid_state = led_state;
+   \                     ??update_led_4:
+   \   00004F   EA           MOV       A,R2
+   \   000050   90....       MOV       DPTR,#config_data + 1
+   \   000053   803F         SJMP      ??update_led_3
+    300                }
+    301                else if (led_state > 0 && led_state < 50)
+   \                     ??update_led_6:
+   \   000055   EA           MOV       A,R2
+   \   000056   C3           CLR       C
+   \   000057   9432         SUBB      A,#0x32
+   \   000059   5007         JNC       ??update_led_7
+    302                {
+    303                  config_data[0].valid_state = 50;
+   \   00005B   90....       MOV       DPTR,#config_data + 1
+   \   00005E   7432         MOV       A,#0x32
+   \   000060   8032         SJMP      ??update_led_3
+    304                }
+    305                else if (led_state > 50 && led_state < 100)
+   \                     ??update_led_7:
+   \   000062   14           DEC       A
+   \   000063   C3           CLR       C
+   \   000064   9431         SUBB      A,#0x31
+   \   000066   5007         JNC       ??update_led_8
+    306                {
+    307                  config_data[0].valid_state = 100;
+   \   000068   90....       MOV       DPTR,#config_data + 1
+   \   00006B   7464         MOV       A,#0x64
+   \   00006D   8025         SJMP      ??update_led_3
+    308                }
+    309                else if (led_state > 100 && led_state < 150)
+   \                     ??update_led_8:
+   \   00006F   14           DEC       A
+   \   000070   C3           CLR       C
+   \   000071   9431         SUBB      A,#0x31
+   \   000073   5007         JNC       ??update_led_9
+    310                {
+    311                  config_data[0].valid_state = 150;
+   \   000075   90....       MOV       DPTR,#config_data + 1
+   \   000078   7496         MOV       A,#-0x6a
+   \   00007A   8018         SJMP      ??update_led_3
+    312                }
+    313                else if (led_state > 150 && led_state < 200)
+   \                     ??update_led_9:
+   \   00007C   14           DEC       A
+   \   00007D   C3           CLR       C
+   \   00007E   9431         SUBB      A,#0x31
+   \   000080   5007         JNC       ??update_led_10
+    314                {
+    315                  config_data[0].valid_state = 200;
+   \   000082   90....       MOV       DPTR,#config_data + 1
+   \   000085   74C8         MOV       A,#-0x38
+   \   000087   800B         SJMP      ??update_led_3
+    316                }
+    317                else if (led_state > 200 && led_state < 255)
+   \                     ??update_led_10:
+   \   000089   EA           MOV       A,R2
+   \   00008A   C3           CLR       C
+   \   00008B   94C9         SUBB      A,#-0x37
+   \   00008D   4006         JC        ??update_led_5
+    318                {
+    319                  config_data[0].valid_state = 255;
+   \                     ??update_led_2:
+   \   00008F   90....       MOV       DPTR,#config_data + 1
+   \   000092   74FF         MOV       A,#-0x1
+   \                     ??update_led_3:
+   \   000094   F0           MOVX      @DPTR,A
+    320                }
+    321              }
+    322              config_data[0].led = led_no;
+   \                     ??update_led_5:
+   \   000095   90....       MOV       DPTR,#config_data
+   \   000098   7401         MOV       A,#0x1
+   \   00009A   02....       LJMP      ??update_led_11 & 0xFFFF
+    323            }
+    324          
+    325            //LED == 2
+    326            else if (led_no == 2)
+   \                     ??update_led_0:
+   \   00009D   7402         MOV       A,#0x2
+   \   00009F   69           XRL       A,R1
+   \   0000A0   6003         JZ        $+5
+   \   0000A2   02....       LJMP      ??update_led_12 & 0xFFFF
+    327            {
+    328              if (config_data[1].config_id == ONOFF)
+   \   0000A5   90....       MOV       DPTR,#config_data + 5
+   \   0000A8   12....       LCALL     ?Subroutine6 & 0xFFFF
+   \                     ??CrossCallReturnLabel_13:
+   \   0000AB   7009         JNZ       ??update_led_13
+    329              {
+    330                if (led_state == 0)
+   \   0000AD   EA           MOV       A,R2
+   \   0000AE   706B         JNZ       ??update_led_14
+    331                {
+    332                  config_data[1].valid_state = LOW;
+   \   0000B0   90....       MOV       DPTR,#config_data + 4
+   \   0000B3   E4           CLR       A
+   \   0000B4   806A         SJMP      ??update_led_15
+    333                }
+    334                else
+    335                {
+    336                  config_data[1].valid_state = HIGH;
+    337                }
+    338              }
+    339              else if (config_data[1].config_id == DIMMING)
+   \                     ??update_led_13:
+   \   0000B6   7402         MOV       A,#0x2
+   \   0000B8   68           XRL       A,R0
+   \   0000B9   6025         JZ        ??update_led_16
+    340              {
+    341                config_data[1].valid_state = led_state;
+    342              }
+    343              
+    344              else if (config_data[1].config_id == FAN_CONTROLLER)
+   \   0000BB   7403         MOV       A,#0x3
+   \   0000BD   68           XRL       A,R0
+   \   0000BE   7061         JNZ       ??update_led_17
+    345              {
+    346                if (config_data[1].valid_state == 0 || config_data[1].valid_state == 50 || config_data[1].valid_state == 100 || config_data[1].valid_state == 150 || config_data[1].valid_state == 200 || config_data[1].valid_state == 255)
+   \   0000C0   90....       MOV       DPTR,#config_data + 4
+   \   0000C3   E0           MOVX      A,@DPTR
+   \   0000C4   F8           MOV       R0,A
+   \   0000C5   6019         JZ        ??update_led_16
+   \   0000C7   7432         MOV       A,#0x32
+   \   0000C9   68           XRL       A,R0
+   \   0000CA   6014         JZ        ??update_led_16
+   \   0000CC   7464         MOV       A,#0x64
+   \   0000CE   68           XRL       A,R0
+   \   0000CF   600F         JZ        ??update_led_16
+   \   0000D1   7496         MOV       A,#-0x6a
+   \   0000D3   68           XRL       A,R0
+   \   0000D4   600A         JZ        ??update_led_16
+   \   0000D6   74C8         MOV       A,#-0x38
+   \   0000D8   68           XRL       A,R0
+   \   0000D9   6005         JZ        ??update_led_16
+   \   0000DB   74FF         MOV       A,#-0x1
+   \   0000DD   68           XRL       A,R0
+   \   0000DE   7006         JNZ       ??update_led_18
+    347                {
+    348                  config_data[1].valid_state = led_state;
+   \                     ??update_led_16:
+   \   0000E0   EA           MOV       A,R2
+   \   0000E1   90....       MOV       DPTR,#config_data + 4
+   \   0000E4   803A         SJMP      ??update_led_15
+    349                }
+    350                else if (led_state > 0 && led_state < 50)
+   \                     ??update_led_18:
+   \   0000E6   EA           MOV       A,R2
+   \   0000E7   6009         JZ        ??update_led_19
+   \   0000E9   C3           CLR       C
+   \   0000EA   9432         SUBB      A,#0x32
+   \   0000EC   5004         JNC       ??update_led_19
+    351                {
+    352                  config_data[1].valid_state = 50;
+   \   0000EE   7432         MOV       A,#0x32
+   \   0000F0   802E         SJMP      ??update_led_15
+    353                }
+    354                else if (led_state > 50 && led_state < 100)
+   \                     ??update_led_19:
+   \   0000F2   EB           MOV       A,R3
+   \   0000F3   C3           CLR       C
+   \   0000F4   9431         SUBB      A,#0x31
+   \   0000F6   5004         JNC       ??update_led_20
+    355                {
+    356                  config_data[1].valid_state = 100;
+   \   0000F8   7464         MOV       A,#0x64
+   \   0000FA   8024         SJMP      ??update_led_15
+    357                }
+    358                else if (led_state > 100 && led_state < 150)
+   \                     ??update_led_20:
+   \   0000FC   14           DEC       A
+   \   0000FD   C3           CLR       C
+   \   0000FE   9431         SUBB      A,#0x31
+   \   000100   5004         JNC       ??update_led_21
+    359                {
+    360                  config_data[1].valid_state = 150;
+   \   000102   7496         MOV       A,#-0x6a
+   \   000104   801A         SJMP      ??update_led_15
+    361                }
+    362                else if (led_state > 150 && led_state < 200)
+   \                     ??update_led_21:
+   \   000106   14           DEC       A
+   \   000107   C3           CLR       C
+   \   000108   9431         SUBB      A,#0x31
+   \   00010A   5004         JNC       ??update_led_22
+    363                {
+    364                  config_data[1].valid_state = 200;
+   \   00010C   74C8         MOV       A,#-0x38
+   \   00010E   8010         SJMP      ??update_led_15
+    365                }
+    366                else if (led_state > 200 && led_state < 255)
+   \                     ??update_led_22:
+   \   000110   EA           MOV       A,R2
+   \   000111   C3           CLR       C
+   \   000112   94C9         SUBB      A,#-0x37
+   \   000114   400B         JC        ??update_led_17
+   \   000116   74FF         MOV       A,#-0x1
+   \   000118   6A           XRL       A,R2
+   \   000119   6006         JZ        ??update_led_17
+    367                {
+    368                  config_data[1].valid_state = 255;
+   \                     ??update_led_14:
+   \   00011B   90....       MOV       DPTR,#config_data + 4
+   \   00011E   74FF         MOV       A,#-0x1
+   \                     ??update_led_15:
+   \   000120   F0           MOVX      @DPTR,A
+    369                }
+    370              }
+    371              config_data[1].led = led_no;
+   \                     ??update_led_17:
+   \   000121   90....       MOV       DPTR,#config_data + 3
+   \   000124   7402         MOV       A,#0x2
+   \   000126   02....       LJMP      ??update_led_11 & 0xFFFF
+    372            }
+    373            //LED == 3
+    374            else if (led_no == 3)
+   \                     ??update_led_12:
+   \   000129   7403         MOV       A,#0x3
+   \   00012B   69           XRL       A,R1
+   \   00012C   6003         JZ        $+5
+   \   00012E   02....       LJMP      ??update_led_23 & 0xFFFF
+    375            {
+    376              if (config_data[2].config_id == ONOFF)
+   \   000131   90....       MOV       DPTR,#config_data + 8
+   \   000134   12....       LCALL     ?Subroutine6 & 0xFFFF
+   \                     ??CrossCallReturnLabel_14:
+   \   000137   7009         JNZ       ??update_led_24
+    377              {
+    378                if (led_state == 0)
+   \   000139   EA           MOV       A,R2
+   \   00013A   706C         JNZ       ??update_led_25
+    379                {
+    380                  config_data[2].valid_state = LOW;
+   \   00013C   90....       MOV       DPTR,#config_data + 7
+   \   00013F   E4           CLR       A
+   \   000140   806B         SJMP      ??update_led_26
+    381                }
+    382                else
+    383                {
+    384                  config_data[2].valid_state = HIGH;
+    385                }
+    386              }
+    387              else if (config_data[2].config_id == DIMMING)
+   \                     ??update_led_24:
+   \   000142   7402         MOV       A,#0x2
+   \   000144   68           XRL       A,R0
+   \   000145   6021         JZ        ??update_led_27
+    388              {
+    389                config_data[2].valid_state = led_state;
+    390                
+    391              }
+    392              else if (config_data[2].config_id == FAN_CONTROLLER)
+   \   000147   7403         MOV       A,#0x3
+   \   000149   68           XRL       A,R0
+   \   00014A   7062         JNZ       ??update_led_28
+    393              {
+    394                if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
+   \   00014C   EA           MOV       A,R2
+   \   00014D   6019         JZ        ??update_led_27
+   \   00014F   7432         MOV       A,#0x32
+   \   000151   6A           XRL       A,R2
+   \   000152   6014         JZ        ??update_led_27
+   \   000154   7464         MOV       A,#0x64
+   \   000156   6A           XRL       A,R2
+   \   000157   600F         JZ        ??update_led_27
+   \   000159   7496         MOV       A,#-0x6a
+   \   00015B   6A           XRL       A,R2
+   \   00015C   600A         JZ        ??update_led_27
+   \   00015E   74C8         MOV       A,#-0x38
+   \   000160   6A           XRL       A,R2
+   \   000161   6005         JZ        ??update_led_27
+   \   000163   74FF         MOV       A,#-0x1
+   \   000165   6A           XRL       A,R2
+   \   000166   7006         JNZ       ??update_led_29
+    395                {
+    396                  config_data[2].valid_state = led_state;
+   \                     ??update_led_27:
+   \   000168   EA           MOV       A,R2
+   \   000169   90....       MOV       DPTR,#config_data + 7
+   \   00016C   803F         SJMP      ??update_led_26
+    397                }
+    398                else if (led_state > 0 && led_state < 50)
+   \                     ??update_led_29:
+   \   00016E   EA           MOV       A,R2
+   \   00016F   C3           CLR       C
+   \   000170   9432         SUBB      A,#0x32
+   \   000172   5007         JNC       ??update_led_30
+    399                {
+    400                  config_data[2].valid_state = 50;
+   \   000174   90....       MOV       DPTR,#config_data + 7
+   \   000177   7432         MOV       A,#0x32
+   \   000179   8032         SJMP      ??update_led_26
+    401                }
+    402                else if (led_state > 50 && led_state < 100)
+   \                     ??update_led_30:
+   \   00017B   14           DEC       A
+   \   00017C   C3           CLR       C
+   \   00017D   9431         SUBB      A,#0x31
+   \   00017F   5007         JNC       ??update_led_31
+    403                {
+    404                  config_data[2].valid_state = 100;
+   \   000181   90....       MOV       DPTR,#config_data + 7
+   \   000184   7464         MOV       A,#0x64
+   \   000186   8025         SJMP      ??update_led_26
+    405                }
+    406                else if (led_state > 100 && led_state < 150)
+   \                     ??update_led_31:
+   \   000188   14           DEC       A
+   \   000189   C3           CLR       C
+   \   00018A   9431         SUBB      A,#0x31
+   \   00018C   5007         JNC       ??update_led_32
+    407                {
+    408                  config_data[2].valid_state = 150;
+   \   00018E   90....       MOV       DPTR,#config_data + 7
+   \   000191   7496         MOV       A,#-0x6a
+   \   000193   8018         SJMP      ??update_led_26
+    409                }
+    410                else if (led_state > 150 && led_state < 200)
+   \                     ??update_led_32:
+   \   000195   14           DEC       A
+   \   000196   C3           CLR       C
+   \   000197   9431         SUBB      A,#0x31
+   \   000199   5007         JNC       ??update_led_33
+    411                {
+    412                  config_data[2].valid_state = 200;
+   \   00019B   90....       MOV       DPTR,#config_data + 7
+   \   00019E   74C8         MOV       A,#-0x38
+   \   0001A0   800B         SJMP      ??update_led_26
+    413                }
+    414                else if (led_state > 200 && led_state < 255)
+   \                     ??update_led_33:
+   \   0001A2   EA           MOV       A,R2
+   \   0001A3   C3           CLR       C
+   \   0001A4   94C9         SUBB      A,#-0x37
+   \   0001A6   4006         JC        ??update_led_28
+    415                {
+    416                  config_data[2].valid_state = 255;
+   \                     ??update_led_25:
+   \   0001A8   90....       MOV       DPTR,#config_data + 7
+   \   0001AB   74FF         MOV       A,#-0x1
+   \                     ??update_led_26:
+   \   0001AD   F0           MOVX      @DPTR,A
+    417                }
+    418              }
+    419              config_data[2].led = led_no;
+   \                     ??update_led_28:
+   \   0001AE   90....       MOV       DPTR,#config_data + 6
+   \   0001B1   7403         MOV       A,#0x3
+   \   0001B3   02....       LJMP      ??update_led_11 & 0xFFFF
+    420            }
+    421            //LED == 4
+    422            else if (led_no == 4)
+   \                     ??update_led_23:
+   \   0001B6   7404         MOV       A,#0x4
+   \   0001B8   69           XRL       A,R1
+   \   0001B9   6003         JZ        $+5
+   \   0001BB   02....       LJMP      ??update_led_34 & 0xFFFF
+    423            {
+    424              if (config_data[3].config_id == ONOFF)
+   \   0001BE   90....       MOV       DPTR,#config_data + 11
+   \   0001C1   12....       LCALL     ?Subroutine6 & 0xFFFF
+   \                     ??CrossCallReturnLabel_15:
+   \   0001C4   7009         JNZ       ??update_led_35
+    425              {
+    426                if (led_state == 0)
+   \   0001C6   EA           MOV       A,R2
+   \   0001C7   706C         JNZ       ??update_led_36
+    427                {
+    428                  config_data[3].valid_state = LOW;
+   \   0001C9   90....       MOV       DPTR,#config_data + 10
+   \   0001CC   E4           CLR       A
+   \   0001CD   806B         SJMP      ??update_led_37
+    429                }
+    430                else
+    431                {
+    432                  config_data[3].valid_state = HIGH;
+    433                }
+    434              }
+    435              else if (config_data[3].config_id == DIMMING)
+   \                     ??update_led_35:
+   \   0001CF   7402         MOV       A,#0x2
+   \   0001D1   68           XRL       A,R0
+   \   0001D2   6021         JZ        ??update_led_38
+    436              {
+    437                config_data[3].valid_state = led_state;
+    438                
+    439              }
+    440              else if (config_data[3].config_id == FAN_CONTROLLER)
+   \   0001D4   7403         MOV       A,#0x3
+   \   0001D6   68           XRL       A,R0
+   \   0001D7   7062         JNZ       ??update_led_39
+    441              {
+    442                if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
+   \   0001D9   EA           MOV       A,R2
+   \   0001DA   6019         JZ        ??update_led_38
+   \   0001DC   7432         MOV       A,#0x32
+   \   0001DE   6A           XRL       A,R2
+   \   0001DF   6014         JZ        ??update_led_38
+   \   0001E1   7464         MOV       A,#0x64
+   \   0001E3   6A           XRL       A,R2
+   \   0001E4   600F         JZ        ??update_led_38
+   \   0001E6   7496         MOV       A,#-0x6a
+   \   0001E8   6A           XRL       A,R2
+   \   0001E9   600A         JZ        ??update_led_38
+   \   0001EB   74C8         MOV       A,#-0x38
+   \   0001ED   6A           XRL       A,R2
+   \   0001EE   6005         JZ        ??update_led_38
+   \   0001F0   74FF         MOV       A,#-0x1
+   \   0001F2   6A           XRL       A,R2
+   \   0001F3   7006         JNZ       ??update_led_40
+    443                {
+    444                  config_data[3].valid_state = led_state;
+   \                     ??update_led_38:
+   \   0001F5   EA           MOV       A,R2
+   \   0001F6   90....       MOV       DPTR,#config_data + 10
+   \   0001F9   803F         SJMP      ??update_led_37
+    445                }
+    446                else if (led_state > 0 && led_state < 50)
+   \                     ??update_led_40:
+   \   0001FB   EA           MOV       A,R2
+   \   0001FC   C3           CLR       C
+   \   0001FD   9432         SUBB      A,#0x32
+   \   0001FF   5007         JNC       ??update_led_41
+    447                {
+    448                  config_data[3].valid_state = 50;
+   \   000201   90....       MOV       DPTR,#config_data + 10
+   \   000204   7432         MOV       A,#0x32
+   \   000206   8032         SJMP      ??update_led_37
+    449                }
+    450                else if (led_state > 50 && led_state < 100)
+   \                     ??update_led_41:
+   \   000208   14           DEC       A
+   \   000209   C3           CLR       C
+   \   00020A   9431         SUBB      A,#0x31
+   \   00020C   5007         JNC       ??update_led_42
+    451                {
+    452                  config_data[3].valid_state = 100;
+   \   00020E   90....       MOV       DPTR,#config_data + 10
+   \   000211   7464         MOV       A,#0x64
+   \   000213   8025         SJMP      ??update_led_37
+    453                }
+    454                else if (led_state > 100 && led_state < 150)
+   \                     ??update_led_42:
+   \   000215   14           DEC       A
+   \   000216   C3           CLR       C
+   \   000217   9431         SUBB      A,#0x31
+   \   000219   5007         JNC       ??update_led_43
+    455                {
+    456                  config_data[3].valid_state = 150;
+   \   00021B   90....       MOV       DPTR,#config_data + 10
+   \   00021E   7496         MOV       A,#-0x6a
+   \   000220   8018         SJMP      ??update_led_37
+    457                }
+    458                else if (led_state > 150 && led_state < 200)
+   \                     ??update_led_43:
+   \   000222   14           DEC       A
+   \   000223   C3           CLR       C
+   \   000224   9431         SUBB      A,#0x31
+   \   000226   5007         JNC       ??update_led_44
+    459                {
+    460                  config_data[3].valid_state = 200;
+   \   000228   90....       MOV       DPTR,#config_data + 10
+   \   00022B   74C8         MOV       A,#-0x38
+   \   00022D   800B         SJMP      ??update_led_37
+    461                }
+    462                else if (led_state > 200 && led_state < 255)
+   \                     ??update_led_44:
+   \   00022F   EA           MOV       A,R2
+   \   000230   C3           CLR       C
+   \   000231   94C9         SUBB      A,#-0x37
+   \   000233   4006         JC        ??update_led_39
+    463                {
+    464                  config_data[3].valid_state = 255;
+   \                     ??update_led_36:
+   \   000235   90....       MOV       DPTR,#config_data + 10
+   \   000238   74FF         MOV       A,#-0x1
+   \                     ??update_led_37:
+   \   00023A   F0           MOVX      @DPTR,A
+    465                }
+    466              }
+    467              config_data[3].led = led_no;
+   \                     ??update_led_39:
+   \   00023B   90....       MOV       DPTR,#config_data + 9
+   \   00023E   7404         MOV       A,#0x4
+   \                     ??update_led_11:
+   \   000240   F0           MOVX      @DPTR,A
+    468            }
+    469          }
+   \                     ??update_led_34:
+   \   000241   02....       LJMP      ??Subroutine11_0 & 0xFFFF
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine6:
+   \   000000   E0           MOVX      A,@DPTR
+   \   000001   F8           MOV       R0,A
+   \   000002   7401         MOV       A,#0x1
+   \   000004   68           XRL       A,R0
+   \   000005   22           RET
+    470          
+    471          
+    472          /***********************************************************************
+    473           * @fn      update_config_struct
+    474           * @brief   update config structure
+    475           * 
+    476           * ********************************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    477          void update_config_struct(uint8 led_no, uint8 led_state)
+   \                     update_config_struct:
+    478          {
+   \   000000   74F7         MOV       A,#-0x9
+   \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
+   \   000005                ; Saved register size: 9
+   \   000005                ; Auto size: 0
+   \   000005   E9           MOV       A,R1
+   \   000006   FE           MOV       R6,A
+    479            if (led_no == 1)
+   \   000007   7401         MOV       A,#0x1
+   \   000009   6E           XRL       A,R6
+   \   00000A   700C         JNZ       ??update_config_struct_0
+    480            {
+    481              config_data[0].valid_state = led_state;
+   \   00000C   EA           MOV       A,R2
+   \   00000D   90....       MOV       DPTR,#config_data + 1
+   \   000010   F0           MOVX      @DPTR,A
+    482              config_data[0].led = led_no;
+   \   000011   90....       MOV       DPTR,#config_data
+   \   000014   7401         MOV       A,#0x1
+   \   000016   8025         SJMP      ??update_config_struct_1
+    483            }
+    484            else if (led_no == 2)
+   \                     ??update_config_struct_0:
+   \   000018   7402         MOV       A,#0x2
+   \   00001A   6E           XRL       A,R6
+   \   00001B   7007         JNZ       ??update_config_struct_2
+    485            {
+    486              config_data[1].led = led_no;
+   \   00001D   90....       MOV       DPTR,#config_data + 3
+   \   000020   7402         MOV       A,#0x2
+   \   000022   8016         SJMP      ??update_config_struct_3
+    487              config_data[1].valid_state = led_state;
+    488            }
+    489            else if (led_no == 3)
+   \                     ??update_config_struct_2:
+   \   000024   7403         MOV       A,#0x3
+   \   000026   6E           XRL       A,R6
+   \   000027   7007         JNZ       ??update_config_struct_4
+    490            {
+    491              config_data[2].led = led_no;
+   \   000029   90....       MOV       DPTR,#config_data + 6
+   \   00002C   7403         MOV       A,#0x3
+   \   00002E   800A         SJMP      ??update_config_struct_3
+    492              config_data[2].valid_state = led_state;
+    493            }
+    494            else if (led_no == 4)
+   \                     ??update_config_struct_4:
+   \   000030   7404         MOV       A,#0x4
+   \   000032   6E           XRL       A,R6
+   \   000033   7009         JNZ       ??update_config_struct_5
+    495            {
+    496              config_data[3].led = led_no;
+   \   000035   90....       MOV       DPTR,#config_data + 9
+   \   000038   7404         MOV       A,#0x4
+   \                     ??update_config_struct_3:
+   \   00003A   F0           MOVX      @DPTR,A
+    497              config_data[3].valid_state = led_state;
+   \   00003B   EA           MOV       A,R2
+   \   00003C   A3           INC       DPTR
+   \                     ??update_config_struct_1:
+   \   00003D   F0           MOVX      @DPTR,A
+    498            }
+    499            update_config_to_memory();
+   \                     ??update_config_struct_5:
+   \   00003E                ; Setup parameters for call to function KeusThemeSwitchMiniWriteConfigDataIntoMemory
+   \   00003E   12....       LCALL     `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`; Banked call to: KeusThemeSwitchMiniWriteConfigDataIntoMemory
+   \   000041   E9           MOV       A,R1
+   \   000042   90....       MOV       DPTR,#write_status
+   \   000045   F0           MOVX      @DPTR,A
+    500          }
+   \   000046   7F01         MOV       R7,#0x1
+   \   000048   02....       LJMP      ?BANKED_LEAVE_XDATA
+    501          
+    502          // uint8 get_state(uint8* state){
+    503          //   uint8 Tx_buff [] = {0},index = 0;
+    504          //   for(uint8 i = 0;i<4;i++){
+    505          //   Tx_buff[index++] = config_data[i].led;
+    506          //   Tx_buff[index++] = config_data[i].valid_state;
+    507          //   }
+    508          //   return Tx_buff;
+    509          // }
+    510          
+    511          /*****************************************************************************
+    512           * @fn      uart_send_sate_ack
+    513           * @brief   Send back State of all switch to uart
+    514           * @return
+    515           * @param 
+    516           * **************************************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    517          void uart_send_switch_sate_ack(void){
+   \                     uart_send_switch_sate_ack:
+   \   000000   C082         PUSH      DPL
+   \   000002   C083         PUSH      DPH
+   \   000004                ; Saved register size: 2
+   \   000004                ; Auto size: 20
+   \   000004   74EC         MOV       A,#-0x14
+   \   000006   12....       LCALL     ?ALLOC_XSTACK8
+    518            uint8 Tx_buff[20] = {0};
+   \   000009   90....       MOV       DPTR,#`?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0`
+   \   00000C   AC..         MOV       R4,?XSP + 0
+   \   00000E   AD..         MOV       R5,?XSP + 1
+   \   000010   7414         MOV       A,#0x14
+   \   000012   12....       LCALL     ?MOVE_LONG8_XDATA_XDATA
+    519            uint8 index =0;
+    520            Tx_buff[index++] = 0x28;
+   \   000015   85..82       MOV       DPL,?XSP + 0
+   \   000018   85..83       MOV       DPH,?XSP + 1
+   \   00001B   7428         MOV       A,#0x28
+   \   00001D   F0           MOVX      @DPTR,A
+   \   00001E   7A01         MOV       R2,#0x1
+    521            for(uint8 i = 0;i<4;i++){
+   \   000020   7B00         MOV       R3,#0x0
+    522            Tx_buff[index++] = config_data[i].led;
+   \                     ??uart_send_switch_sate_ack_0:
+   \   000022   EB           MOV       A,R3
+   \   000023   75F003       MOV       B,#0x3
+   \   000026   A4           MUL       AB
+   \   000027   F8           MOV       R0,A
+   \   000028   A9F0         MOV       R1,B
+   \   00002A   74..         MOV       A,#config_data & 0xff
+   \   00002C   28           ADD       A,R0
+   \   00002D   F8           MOV       R0,A
+   \   00002E   74..         MOV       A,#(config_data >> 8) & 0xff
+   \   000030   39           ADDC      A,R1
+   \   000031   F9           MOV       R1,A
+   \   000032   8882         MOV       DPL,R0
+   \   000034   F583         MOV       DPH,A
+   \   000036   E0           MOVX      A,@DPTR
+   \   000037   C0E0         PUSH      A
+   \   000039   EA           MOV       A,R2
+   \   00003A   FC           MOV       R4,A
+   \   00003B   85..82       MOV       DPL,?XSP + 0
+   \   00003E   85..83       MOV       DPH,?XSP + 1
+   \   000041   E582         MOV       A,DPL
+   \   000043   2C           ADD       A,R4
+   \   000044   F582         MOV       DPL,A
+   \   000046   E4           CLR       A
+   \   000047   3583         ADDC      A,DPH
+   \   000049   F583         MOV       DPH,A
+   \   00004B   D0E0         POP       A
+   \   00004D   F0           MOVX      @DPTR,A
+   \   00004E   0A           INC       R2
+    523            Tx_buff[index++] = config_data[i].valid_state;
+   \   00004F   8882         MOV       DPL,R0
+   \   000051   8983         MOV       DPH,R1
+   \   000053   A3           INC       DPTR
+   \   000054   E0           MOVX      A,@DPTR
+   \   000055   C0E0         PUSH      A
+   \   000057   12....       LCALL     ?Subroutine9 & 0xFFFF
+    524            }
+   \                     ??CrossCallReturnLabel_24:
+   \   00005A   D0E0         POP       A
+   \   00005C   F0           MOVX      @DPTR,A
+   \   00005D   0A           INC       R2
+   \   00005E   0B           INC       R3
+   \   00005F   EB           MOV       A,R3
+   \   000060   C3           CLR       C
+   \   000061   9404         SUBB      A,#0x4
+   \   000063   40BD         JC        ??uart_send_switch_sate_ack_0
+    525            Tx_buff[index++] = 0x29;
+   \   000065   12....       LCALL     ?Subroutine9 & 0xFFFF
+   \                     ??CrossCallReturnLabel_25:
+   \   000068   7429         MOV       A,#0x29
+   \   00006A   F0           MOVX      @DPTR,A
+    526            HalUARTWrite(HAL_UART_PORT_0, Tx_buff, index);
+   \   00006B                ; Setup parameters for call to function HalUARTWrite
+   \   00006B   0C           INC       R4
+   \   00006C   0C           INC       R4
+   \   00006D   0C           INC       R4
+   \   00006E   7D00         MOV       R5,#0x0
+   \   000070   AA..         MOV       R2,?XSP + 0
+   \   000072   AB..         MOV       R3,?XSP + 1
+   \   000074   7900         MOV       R1,#0x0
+   \   000076   12....       LCALL     `??HalUARTWrite::?relay`; Banked call to: HalUARTWrite
+    527            index++;
+    528          }
+   \   000079   7414         MOV       A,#0x14
+   \   00007B   12....       LCALL     ?DEALLOC_XSTACK8
+   \   00007E   02....       LJMP      ??Subroutine11_0 & 0xFFFF
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine9:
+   \   000000   85..82       MOV       DPL,?XSP + 0
+   \   000003   85..83       MOV       DPH,?XSP + 1
+   \   000006   E582         MOV       A,DPL
+   \   000008   2A           ADD       A,R2
+   \   000009   F582         MOV       DPL,A
+   \   00000B   E4           CLR       A
+   \   00000C   3583         ADDC      A,DPH
+   \   00000E   F583         MOV       DPH,A
+   \   000010   22           RET
+    529          /*****************************************************************************
+    530           * @fn        update_config_to_memory
+    531           * **************************************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    532          void update_config_to_memory(void)
+   \                     update_config_to_memory:
+    533          {
+   \   000000   C082         PUSH      DPL
+   \   000002   C083         PUSH      DPH
+   \   000004                ; Saved register size: 2
+   \   000004                ; Auto size: 0
+    534            write_status = KeusThemeSwitchMiniWriteConfigDataIntoMemory();
+   \   000004                ; Setup parameters for call to function KeusThemeSwitchMiniWriteConfigDataIntoMemory
+   \   000004   12....       LCALL     `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`; Banked call to: KeusThemeSwitchMiniWriteConfigDataIntoMemory
+   \   000007   E9           MOV       A,R1
+   \   000008   90....       MOV       DPTR,#write_status
+   \   00000B   02....       LJMP      ?Subroutine0 & 0xFFFF
+    535          }
+    536          
+    537          
+    538          //*************************NVIC MEMORY
+    539          
+    540          /*******************************************************
+    541           * @fn          KeusThemeSwitchMiniMemoryInit
+    542           * @brief       nvic memory init
+    543           * @return
+    544           * @param
+    545           * *****************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    546          bool KeusThemeSwitchMiniMemoryInit(void)
+   \                     KeusThemeSwitchMiniMemoryInit:
+    547          {
+   \   000000                REQUIRE ?V0
+   \   000000                REQUIRE ?V1
+   \   000000   74F6         MOV       A,#-0xa
+   \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
+   \   000005                ; Saved register size: 10
+   \   000005                ; Auto size: 0
+    548            //  for (uint8 i = 0; i < CLICK_TYPES; i++)
+    549            //  {
+    550            //    themeManager.btnThemeMap[i] = 255;
+    551            //  }
+    552          
+    553            uint8 res = osal_nv_item_init(NVIC_MEMORY_POSITION, sizeof(config_data), (void *)config_data);
+   \   000005                ; Setup parameters for call to function osal_nv_item_init
+   \   000005   75....       MOV       ?V0,#config_data & 0xff
+   \   000008   75....       MOV       ?V1,#(config_data >> 8) & 0xff
+   \   00000B   78..         MOV       R0,#?V0
+   \   00000D   12....       LCALL     ?PUSH_XSTACK_I_TWO
+   \   000010   7C0C         MOV       R4,#0xc
+   \   000012   7D00         MOV       R5,#0x0
+   \   000014   7A10         MOV       R2,#0x10
+   \   000016   7B00         MOV       R3,#0x0
+   \   000018   12....       LCALL     `??osal_nv_item_init::?relay`; Banked call to: osal_nv_item_init
+   \   00001B   7402         MOV       A,#0x2
+   \   00001D   12....       LCALL     ?DEALLOC_XSTACK8
+   \   000020   E9           MOV       A,R1
+   \   000021   F8           MOV       R0,A
+    554          
+    555            if (res == SUCCESS || res == NV_ITEM_UNINIT)
+   \   000022   6005         JZ        ??KeusThemeSwitchMiniMemoryInit_0
+   \   000024   7409         MOV       A,#0x9
+   \   000026   68           XRL       A,R0
+   \   000027   7004         JNZ       ??KeusThemeSwitchMiniMemoryInit_1
+    556            {
+    557              return true;
+   \                     ??KeusThemeSwitchMiniMemoryInit_0:
+   \   000029   7901         MOV       R1,#0x1
+   \   00002B   8002         SJMP      ??KeusThemeSwitchMiniMemoryInit_2
+    558            }
+    559            else
+    560            {
+    561              return false;
+   \                     ??KeusThemeSwitchMiniMemoryInit_1:
+   \   00002D   7900         MOV       R1,#0x0
+    562            }
+   \                     ??KeusThemeSwitchMiniMemoryInit_2:
+   \   00002F                REQUIRE ?Subroutine1
+   \   00002F                ; // Fall through to label ?Subroutine1
+    563          }
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+   \                     ?Subroutine1:
+   \   000000   7F02         MOV       R7,#0x2
+   \   000002   02....       LJMP      ?BANKED_LEAVE_XDATA
+    564          /*******************************************************
+    565           * @fn      KeusThemeSwitchMiniReadConfigDataIntoMemory
+    566           * @brief   NVIC memory read 
+    567           * @return
+    568           * @param  
+    569           * ****************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    570          bool KeusThemeSwitchMiniReadConfigDataIntoMemory(void)
+   \                     KeusThemeSwitchMiniReadConfigDataIntoMemory:
+    571          {
+   \   000000                REQUIRE ?V0
+   \   000000                REQUIRE ?V1
+   \   000000   74F6         MOV       A,#-0xa
+   \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
+   \   000005                ; Saved register size: 10
+   \   000005                ; Auto size: 0
+    572            uint8 res = osal_nv_read(NVIC_MEMORY_POSITION, 0, sizeof(config_data), (void *)config_data);
+    573          
+    574            if (res == SUCCESS)
+   \   000005                ; Setup parameters for call to function osal_nv_read
+   \   000005   75....       MOV       ?V0,#config_data & 0xff
+   \   000008   75....       MOV       ?V1,#(config_data >> 8) & 0xff
+   \   00000B   78..         MOV       R0,#?V0
+   \   00000D   12....       LCALL     ?PUSH_XSTACK_I_TWO
+   \   000010   75..0C       MOV       ?V0,#0xc
+   \   000013   75..00       MOV       ?V1,#0x0
+   \   000016   78..         MOV       R0,#?V0
+   \   000018   12....       LCALL     ?PUSH_XSTACK_I_TWO
+   \   00001B   7C00         MOV       R4,#0x0
+   \   00001D   7D00         MOV       R5,#0x0
+   \   00001F   7A10         MOV       R2,#0x10
+   \   000021   7B00         MOV       R3,#0x0
+   \   000023   12....       LCALL     `??osal_nv_read::?relay`; Banked call to: osal_nv_read
+   \   000026   7404         MOV       A,#0x4
+   \   000028   12....       LCALL     ?DEALLOC_XSTACK8
+   \   00002B   E9           MOV       A,R1
+   \   00002C   7004         JNZ       ??KeusThemeSwitchMiniReadConfigDataIntoMemory_0
+    575            {
+    576              return true;
+   \   00002E   7901         MOV       R1,#0x1
+   \   000030   8002         SJMP      ??KeusThemeSwitchMiniReadConfigDataIntoMemory_1
+    577            }
+    578            else
+    579            {
+    580              return false;
+   \                     ??KeusThemeSwitchMiniReadConfigDataIntoMemory_0:
+   \   000032   7900         MOV       R1,#0x0
+    581            }
+   \                     ??KeusThemeSwitchMiniReadConfigDataIntoMemory_1:
+   \   000034   80..         SJMP      ?Subroutine1
+    582          }
+    583          
+    584          
+    585          /********************************************************
+    586           * @fn      KeusThemeSwitchMiniWriteConfigDataIntoMemory
+    587           * @brief   NVIC Memory write
+    588           * @return
+    589           * @param
+    590           * *****************************************************/
+
+   \                                 In  segment BANKED_CODE, align 1, keep-with-next
+    591          bool KeusThemeSwitchMiniWriteConfigDataIntoMemory(void)
+   \                     KeusThemeSwitchMiniWriteConfigDataIntoMemory:
+    592          {
+   \   000000                REQUIRE ?V0
+   \   000000                REQUIRE ?V1
+   \   000000   74F6         MOV       A,#-0xa
+   \   000002   12....       LCALL     ?BANKED_ENTER_XDATA
+   \   000005                ; Saved register size: 10
+   \   000005                ; Auto size: 0
+    593            uint8 res = osal_nv_write(NVIC_MEMORY_POSITION, 0, sizeof(config_data), (void *)config_data);
+    594          
+    595            if (res == SUCCESS)
+   \   000005                ; Setup parameters for call to function osal_nv_write
+   \   000005   75....       MOV       ?V0,#config_data & 0xff
+   \   000008   75....       MOV       ?V1,#(config_data >> 8) & 0xff
+   \   00000B   78..         MOV       R0,#?V0
+   \   00000D   12....       LCALL     ?PUSH_XSTACK_I_TWO
+   \   000010   75..0C       MOV       ?V0,#0xc
+   \   000013   75..00       MOV       ?V1,#0x0
+   \   000016   78..         MOV       R0,#?V0
+   \   000018   12....       LCALL     ?PUSH_XSTACK_I_TWO
+   \   00001B   7C00         MOV       R4,#0x0
+   \   00001D   7D00         MOV       R5,#0x0
+   \   00001F   7A10         MOV       R2,#0x10
+   \   000021   7B00         MOV       R3,#0x0
+   \   000023   12....       LCALL     `??osal_nv_write::?relay`; Banked call to: osal_nv_write
+   \   000026   7404         MOV       A,#0x4
+   \   000028   12....       LCALL     ?DEALLOC_XSTACK8
+   \   00002B   E9           MOV       A,R1
+   \   00002C   7004         JNZ       ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_0
+    596            {
+    597              return true;
+   \   00002E   7901         MOV       R1,#0x1
+   \   000030   8002         SJMP      ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_1
+    598            }
+    599            else
+    600            {
+    601              return false;
+   \                     ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_0:
+   \   000032   7900         MOV       R1,#0x0
+    602            }
+   \                     ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_1:
+   \   000034   80..         SJMP      ?Subroutine1
+    603          }
 
    \                                 In  segment XDATA_ID, align 1, keep-with-next
    \                     `?<Initializer for debounceTimer>`:
@@ -715,20 +2079,29 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
    \   000000   4B455553     DB "KEUS INIT"
    \            20494E49
    \            5400    
-    175          
-    176          // void check_sw_pressed(void){
-    177          // if (buttonPin1.state == BUTTON_ACTIVE) {
-    178          //     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-    179              
-    180          //     if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-    181          //       buttonManager.elapsedTime = 0;
-    182          //       ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
-    183          //       KeusGPIOSetPinValue(&ledPin1);
-    184          //     }
-    185          //   } else {
-    186          //     buttonManager.elapsedTime = 0;
-    187          //   }
-    188          // }
+
+   \                                 In  segment XDATA_ROM_C, align 1
+   \                     `?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0`:
+   \   000000   00           DB 0
+   \   000001   00           DB 0
+   \   000002   00           DB 0
+   \   000003   00           DB 0
+   \   000004   00           DB 0
+   \   000005   00           DB 0
+   \   000006   00           DB 0
+   \   000007   00           DB 0
+   \   000008   00           DB 0
+   \   000009   00           DB 0
+   \   00000A   00           DB 0
+   \   00000B   00           DB 0
+   \   00000C   00           DB 0
+   \   00000D   00           DB 0
+   \   00000E   00           DB 0
+   \   00000F   00           DB 0
+   \   000010   00           DB 0
+   \   000011   00           DB 0
+   \   000012   00           DB 0
+   \   000013   00           DB 0
 
    Maximum stack usage in bytes:
 
@@ -741,6 +2114,8 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
         0     10   -> KeusGPIOReadPinValue
         0     10   -> KeusGPIOSetDirection
         0     10   -> KeusGPIOSetPinValue
+        0     10   -> KeusThemeSwitchMiniMemoryInit
+        0     10   -> KeusThemeSwitchMiniReadConfigDataIntoMemory
         0     10   -> KeusTimerUtilAddTimer
         0     10   -> KeusTimerUtilInit
         0     10   -> KeusTimerUtilStartTimer
@@ -748,11 +2123,24 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
         0     10   -> osal_strlen
       2      0   KEUS_loop
         2      0   -> HalUARTPoll
+      0     22   KeusThemeSwitchMiniMemoryInit
+        0     12   -> osal_nv_item_init
+      0     24   KeusThemeSwitchMiniReadConfigDataIntoMemory
+        0     14   -> osal_nv_read
+      0     23   KeusThemeSwitchMiniWriteConfigDataIntoMemory
+        0     14   -> osal_nv_write
       4      0   ledTimerCbk
         2      0   -> KeusGPIOReadPinValue
         2      0   -> KeusGPIOSetPinValue
         2      0   -> KeusGPIOToggledState
       2      0   leddebounceCbk
+      3     20   uart_send_switch_sate_ack
+        2     20   -> HalUARTWrite
+      0      9   update_config_struct
+        0      9   -> KeusThemeSwitchMiniWriteConfigDataIntoMemory
+      2      0   update_config_to_memory
+        2      0   -> KeusThemeSwitchMiniWriteConfigDataIntoMemory
+      2      0   update_led
 
 
    Segment part sizes:
@@ -760,6 +2148,7 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
    Bytes  Function/Label
    -----  --------------
       10  ?<Constant "KEUS INIT">
+      20  ?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
        5  ?<Initializer for buttonPin1>
        5  ?<Initializer for buttonPin2>
        5  ?<Initializer for buttonPin3>
@@ -770,10 +2159,23 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
        5  ?<Initializer for ledPin2>
        5  ?<Initializer for ledPin3>
        5  ?<Initializer for ledPin4>
-       7  ?Subroutine0
-       6  ?Subroutine1
-     205  KEUS_init_fnc
+      10  ??Subroutine10_0
+       7  ??Subroutine11_0
+       1  ?Subroutine0
+       5  ?Subroutine1
+      21  ?Subroutine2
+       3  ?Subroutine3
+       7  ?Subroutine4
+       7  ?Subroutine5
+       6  ?Subroutine6
+       9  ?Subroutine7
+       6  ?Subroutine8
+      17  ?Subroutine9
+     273  KEUS_init_fnc
        9  KEUS_loop
+      47  KeusThemeSwitchMiniMemoryInit
+      54  KeusThemeSwitchMiniReadConfigDataIntoMemory
+      54  KeusThemeSwitchMiniWriteConfigDataIntoMemory
        6  buttonManager
        5  buttonPin1
        5  buttonPin2
@@ -781,32 +2183,45 @@ D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
        5  buttonPin4
        1  button_Pressed
        1  button_state
-       1  count
+      12  config_data
+       1  contineous_on1
+       1  contineous_on2
+       1  contineous_on3
+       1  contineous_on4
        1  count1
        1  count2
+       1  count3
+       1  count4
        1  debounce
        8  debounceTimer
+       1  init_status
        8  intervalTimer
        5  ledPin1
        5  ledPin2
        5  ledPin3
        5  ledPin4
-     105  ledTimerCbk
-      12  leddebounceCbk
-      24  -- Other
+     364  ledTimerCbk
+      11  leddebounceCbk
+       1  read_status
+     129  uart_send_switch_sate_ack
+      75  update_config_struct
+      14  update_config_to_memory
+     580  update_led
+       1  write_status
+      66  -- Other
 
  
- 344 bytes in segment BANKED_CODE
-  24 bytes in segment BANK_RELAYS
-  56 bytes in segment XDATA_I
-  56 bytes in segment XDATA_ID
-  10 bytes in segment XDATA_ROM_C
-  12 bytes in segment XDATA_Z
+ 1 709 bytes in segment BANKED_CODE
+    66 bytes in segment BANK_RELAYS
+    56 bytes in segment XDATA_I
+    56 bytes in segment XDATA_ID
+    30 bytes in segment XDATA_ROM_C
+    32 bytes in segment XDATA_Z
  
-  80 bytes of CODE     memory
-  10 bytes of CONST    memory
- 344 bytes of HUGECODE memory
-  68 bytes of XDATA    memory
+   122 bytes of CODE     memory
+    30 bytes of CONST    memory
+ 1 709 bytes of HUGECODE memory
+    88 bytes of XDATA    memory
 
 Errors: none
 Warnings: none
