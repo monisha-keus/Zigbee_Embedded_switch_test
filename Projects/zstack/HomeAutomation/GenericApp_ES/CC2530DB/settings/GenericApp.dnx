@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>2205342196</Checksum>
+        <Checksum>3644408722</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -25,8 +25,7 @@
     </watch_formats>
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c}.176.2" 0 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c}.73.7" 1 0 0 0 "" 0 ""</Bp1>
-        <Count>2</Count>
+        <Count>1</Count>
     </Breakpoints>
     <ChipconEmu>
         <StopTimersOnHalt>0</StopTimersOnHalt>
