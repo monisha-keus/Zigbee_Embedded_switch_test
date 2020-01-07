@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "Z:\Z-Stack 3.0.2\Projects\zstack\HomeAutomation\GenericApp - bkp\CC2530DB\settings\GenericApp.CoordinatorEB.general.xcl" --backend -f "Z:\Z-Stack 3.0.2\Projects\zstack\HomeAutomation\GenericApp - bkp\CC2530DB\settings\GenericApp.CoordinatorEB.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\settings\GenericApp.CoordinatorEB.general.xcl" --backend -f "D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\settings\GenericApp.CoordinatorEB.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "Z:\Z-Stack 3.0.2\Projects\zstack\HomeAutomation\GenericApp - bkp\CC2530DB\settings\GenericApp.CoordinatorEB.general.xcl" "--debug_file=%~1" --backend -f "Z:\Z-Stack 3.0.2\Projects\zstack\HomeAutomation\GenericApp - bkp\CC2530DB\settings\GenericApp.CoordinatorEB.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\settings\GenericApp.CoordinatorEB.general.xcl" "--debug_file=%~1" --backend -f "D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp_ES\CC2530DB\settings\GenericApp.CoordinatorEB.driver.xcl" 
 
 @echo off 
 :end

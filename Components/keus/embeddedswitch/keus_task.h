@@ -21,6 +21,15 @@
 #define BUTTON_ACTIVE   GPIO_LOW
 #define BUTTON_INAVTIVE GPIO_HIGH
 
+#define EVENT_1         1
+#define EVENT_2         2
+#define EVENT_3         4
+#define EVENT_4         8
+#define EVENT_5         16
+
+#define START           1
+#define STOP            0
+
 #define KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME 1000
 #define KEUS_EMBEDDEDSWITCH_RESET_BTN_TIMEOUT 10000
 //extern uint8 button_Pressed;

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// IAR C/C++ Compiler V10.30.1.6000 for 8051              06/Jan/2020  19:06:11
+// IAR C/C++ Compiler V10.30.1.6000 for 8051              07/Jan/2020  17:05:29
 // Copyright 2004-2018 IAR Systems AB.
 // PC-locked license - IAR Embedded Workbench for 8051
 //
@@ -14,7 +14,7 @@
 //    Source file        =  
 //        D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
 //    Command line       =  
-//        -f C:\Users\Monisha\AppData\Local\Temp\EW8C61.tmp
+//        -f C:\Users\Monisha\AppData\Local\Temp\EW671F.tmp
 //        (D:\Keus_Docs\zigbee_EStest\Components\keus\embeddedswitch\keus_task.c
 //        -D SECURE=1 -D TC_LINKKEY_JOIN -D NV_INIT -D NV_RESTORE -D
 //        HAL_KEY=FALSE -D HAL_LCD=FALSE -D HAL_LED=FALSE -D HAL_UART=TRUE -D
@@ -139,15 +139,19 @@
 
         EXTERN ?V0
         EXTERN ?V1
+        EXTERN ?V2
+        EXTERN ?V3
         EXTERN ?ALLOC_XSTACK8
         EXTERN ?BANKED_ENTER_XDATA
         EXTERN ?BANKED_LEAVE_XDATA
         EXTERN ?BDISPATCH
         EXTERN ?BRET
         EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?L_MOV_X
         EXTERN ?MOVE_LONG8_XDATA_XDATA
         EXTERN ?PUSH_XSTACK_I_TWO
         EXTERN ?XSP
+        EXTERN ?XSTACK_DISP0_8
         EXTERN __INIT_XDATA_I
         EXTERN __INIT_XDATA_Z
 
@@ -155,16 +159,24 @@
         FUNCTION `??KEUS_init_fnc::?relay`,0203H
         PUBLIC `??KEUS_loop::?relay`
         FUNCTION `??KEUS_loop::?relay`,0203H
+        PUBLIC `??KeusEmbeddedSwitchLedBlinkHandler::?relay`
+        FUNCTION `??KeusEmbeddedSwitchLedBlinkHandler::?relay`,0203H
         PUBLIC `??KeusThemeSwitchMiniMemoryInit::?relay`
         FUNCTION `??KeusThemeSwitchMiniMemoryInit::?relay`,0203H
         PUBLIC `??KeusThemeSwitchMiniReadConfigDataIntoMemory::`
         FUNCTION `??KeusThemeSwitchMiniReadConfigDataIntoMemory::`,0203H
         PUBLIC `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`
         FUNCTION `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`,0203H
+        PUBLIC `??get_config::?relay`
+        FUNCTION `??get_config::?relay`,0203H
+        PUBLIC `??get_state::?relay`
+        FUNCTION `??get_state::?relay`,0203H
         PUBLIC `??ledTimerCbk::?relay`
         FUNCTION `??ledTimerCbk::?relay`,0203H
         PUBLIC `??leddebounceCbk::?relay`
         FUNCTION `??leddebounceCbk::?relay`,0203H
+        PUBLIC `??uart_send_config_sate_ack::?relay`
+        FUNCTION `??uart_send_config_sate_ack::?relay`,0203H
         PUBLIC `??uart_send_switch_sate_ack::?relay`
         FUNCTION `??uart_send_switch_sate_ack::?relay`,0203H
         PUBLIC `??update_config_struct::?relay`
@@ -173,12 +185,19 @@
         FUNCTION `??update_config_to_memory::?relay`,0203H
         PUBLIC `??update_led::?relay`
         FUNCTION `??update_led::?relay`,0203H
+        PUBLIC APP_EVENT
         PUBLIC KEUS_init_fnc
         FUNCTION KEUS_init_fnc,0a1203H
         ARGFRAME XSTACK, 0, STACK
         LOCFRAME XSTACK, 10, STACK
         PUBLIC KEUS_loop
-        FUNCTION KEUS_loop,021203H
+        FUNCTION KEUS_loop,0a1203H
+        ARGFRAME XSTACK, 10, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
+        LOCFRAME XSTACK, 12, STACK
+        PUBLIC KeusEmbeddedSwitchLedBlinkHandler
+        FUNCTION KeusEmbeddedSwitchLedBlinkHandler,021603H
         ARGFRAME XSTACK, 0, STACK
         LOCFRAME ISTACK, 2, STACK
         PUBLIC KeusThemeSwitchMiniMemoryInit
@@ -199,6 +218,7 @@
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
         LOCFRAME XSTACK, 14, STACK
+        PUBLIC blink_led
         PUBLIC buttonManager
         PUBLIC buttonPin1
         PUBLIC buttonPin2
@@ -208,15 +228,19 @@
         PUBLIC button_state
         PUBLIC config_data
         PUBLIC contineous_on1
-        PUBLIC contineous_on2
-        PUBLIC contineous_on3
-        PUBLIC contineous_on4
         PUBLIC count1
-        PUBLIC count2
-        PUBLIC count3
-        PUBLIC count4
         PUBLIC debounce
         PUBLIC debounceTimer
+        PUBLIC get_config
+        FUNCTION get_config,0203H
+        ARGFRAME XSTACK, 0, STACK
+        LOCFRAME ISTACK, 1, STACK
+        LOCFRAME XSTACK, 9, STACK
+        PUBLIC get_state
+        FUNCTION get_state,0203H
+        ARGFRAME XSTACK, 0, STACK
+        LOCFRAME ISTACK, 1, STACK
+        LOCFRAME XSTACK, 9, STACK
         PUBLIC init_status
         PUBLIC intervalTimer
         PUBLIC ledPin1
@@ -227,16 +251,23 @@
         FUNCTION ledTimerCbk,021603H
         ARGFRAME XSTACK, 0, STACK
         LOCFRAME ISTACK, 4, STACK
+        PUBLIC ledTimerConfig
         PUBLIC leddebounceCbk
         FUNCTION leddebounceCbk,0603H
         ARGFRAME XSTACK, 0, STACK
         LOCFRAME ISTACK, 2, STACK
         PUBLIC read_status
+        PUBLIC timer1
+        PUBLIC uart_send_config_sate_ack
+        FUNCTION uart_send_config_sate_ack,021203H
+        ARGFRAME XSTACK, 0, STACK
+        LOCFRAME ISTACK, 1, STACK
+        LOCFRAME XSTACK, 29, STACK
         PUBLIC uart_send_switch_sate_ack
         FUNCTION uart_send_switch_sate_ack,021203H
         ARGFRAME XSTACK, 0, STACK
-        LOCFRAME ISTACK, 3, STACK
-        LOCFRAME XSTACK, 20, STACK
+        LOCFRAME ISTACK, 1, STACK
+        LOCFRAME XSTACK, 29, STACK
         PUBLIC update_config_struct
         FUNCTION update_config_struct,021203H
         ARGFRAME XSTACK, 0, STACK
@@ -246,9 +277,9 @@
         ARGFRAME XSTACK, 0, STACK
         LOCFRAME ISTACK, 2, STACK
         PUBLIC update_led
-        FUNCTION update_led,0203H
+        FUNCTION update_led,021203H
         ARGFRAME XSTACK, 0, STACK
-        LOCFRAME ISTACK, 2, STACK
+        LOCFRAME XSTACK, 9, STACK
         PUBLIC write_status
         
           CFI Names cfiNames0
@@ -440,16 +471,24 @@ KEUS_init_fnc       SYMBOL "KEUS_init_fnc"
 `??KEUS_init_fnc::?relay` SYMBOL "?relay", KEUS_init_fnc
 KEUS_loop           SYMBOL "KEUS_loop"
 `??KEUS_loop::?relay` SYMBOL "?relay", KEUS_loop
+KeusEmbeddedSwitchLedBlinkHandler SYMBOL "KeusEmbeddedSwitchLedBlinkHandler"
+`??KeusEmbeddedSwitchLedBlinkHandler::?relay` SYMBOL "?relay", KeusEmbeddedSwitchLedBlinkHandler
 KeusThemeSwitchMiniMemoryInit SYMBOL "KeusThemeSwitchMiniMemoryInit"
 `??KeusThemeSwitchMiniMemoryInit::?relay` SYMBOL "?relay", KeusThemeSwitchMiniMemoryInit
 KeusThemeSwitchMiniReadConfigDataIntoMemory SYMBOL "KeusThemeSwitchMiniReadConfigDataIntoMemory"
 `??KeusThemeSwitchMiniReadConfigDataIntoMemory::` SYMBOL "?relay", KeusThemeSwitchMiniReadConfigDataIntoMemory
 KeusThemeSwitchMiniWriteConfigDataIntoMemory SYMBOL "KeusThemeSwitchMiniWriteConfigDataIntoMemory"
 `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:` SYMBOL "?relay", KeusThemeSwitchMiniWriteConfigDataIntoMemory
+get_config          SYMBOL "get_config"
+`??get_config::?relay` SYMBOL "?relay", get_config
+get_state           SYMBOL "get_state"
+`??get_state::?relay` SYMBOL "?relay", get_state
 ledTimerCbk         SYMBOL "ledTimerCbk"
 `??ledTimerCbk::?relay` SYMBOL "?relay", ledTimerCbk
 leddebounceCbk      SYMBOL "leddebounceCbk"
 `??leddebounceCbk::?relay` SYMBOL "?relay", leddebounceCbk
+uart_send_config_sate_ack SYMBOL "uart_send_config_sate_ack"
+`??uart_send_config_sate_ack::?relay` SYMBOL "?relay", uart_send_config_sate_ack
 uart_send_switch_sate_ack SYMBOL "uart_send_switch_sate_ack"
 `??uart_send_switch_sate_ack::?relay` SYMBOL "?relay", uart_send_switch_sate_ack
 update_config_struct SYMBOL "update_config_struct"
@@ -491,16 +530,16 @@ update_led          SYMBOL "update_led"
         FUNCTION `??osal_strlen::?relay`,00H
         EXTERN HalUARTPoll
         FUNCTION HalUARTPoll,0202H
-        ARGFRAME ISTACK, 2, STACK
+        ARGFRAME ISTACK, 0, STACK
         ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 10, STACK
+        ARGFRAME XSTACK, 12, STACK
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
         EXTERN HalUARTWrite
         FUNCTION HalUARTWrite,0202H
-        ARGFRAME ISTACK, 2, STACK
+        ARGFRAME ISTACK, 0, STACK
         ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 20, STACK
+        ARGFRAME XSTACK, 29, STACK
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
         EXTERN KeusGPIOEdgeConfiguration
@@ -606,42 +645,38 @@ update_led          SYMBOL "update_led"
 //    8 #define UART0     HAL_UART_PORT_0
 //    9 //#define UART1     HAL_UART_PORT_1
 //   10 
+//   11 void ledTimerCbk(uint8 timerId);
+//   12 void leddebounceCbk(uint8 timerId);
+//   13 void update_led(uint8 led_no, uint8 led_state_t);
+//   14 void update_config_struct(uint8 led_no, uint8 led_state);
+//   15 void update_config_to_memory(void);
+//   16 void uart_send_switch_sate_ack(uint8 cmnd_id,uint8 data_len);
+//   17 void uart_send_config_sate_ack(uint8 cmnd_id,uint8 data_len);
+//   18 
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-//   11 bool debounce = false;
+//   19 bool debounce = false;
 debounce:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-//   12 uint8 count1 = 0, count2 = 0, count3 = 0,count4 = 0;
+//   20 uint8 count1 = 0,timer1 = 0;
 count1:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-count2:
+timer1:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-count3:
-        DS 1
-        REQUIRE __INIT_XDATA_Z
-
-        RSEG XDATA_Z:XDATA:NOROOT(0)
-        DATA8
-count4:
-        DS 1
-        REQUIRE __INIT_XDATA_Z
-
-        RSEG XDATA_Z:XDATA:NOROOT(0)
-        DATA8
-//   13 uint8 button_Pressed =0,button_state = 0;
+//   21 uint8 button_Pressed =0,button_state = 0;
 button_Pressed:
         DS 1
         REQUIRE __INIT_XDATA_Z
@@ -654,122 +689,131 @@ button_state:
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-//   14 uint8 contineous_on1 =0,contineous_on2 =0,contineous_on3 =0,contineous_on4 =0;
+//   22 uint8 contineous_on1 =0,blink_led = 0;
 contineous_on1:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-contineous_on2:
+blink_led:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
-        DATA8
-contineous_on3:
-        DS 1
+        DATA32
+//   23 uint32  APP_EVENT = 0;
+APP_EVENT:
+        DS 4
         REQUIRE __INIT_XDATA_Z
+//   24 //Variables for NVIC Memory
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-contineous_on4:
-        DS 1
-        REQUIRE __INIT_XDATA_Z
-//   15 
-//   16 //Variables for NVIC Memory
-
-        RSEG XDATA_Z:XDATA:NOROOT(0)
-        DATA8
-//   17 bool init_status = 0;
+//   25 bool init_status = 0;
 init_status:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-//   18 bool read_status = 0;
+//   26 bool read_status = 0;
 read_status:
         DS 1
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-//   19 bool write_status = 0;
+//   27 bool write_status = 0;
 write_status:
         DS 1
         REQUIRE __INIT_XDATA_Z
-//   20 
-//   21 void ledTimerCbk(uint8 timerId);
-//   22 void leddebounceCbk(uint8 timerId);
-//   23 void update_led(uint8 led_no, uint8 led_state_t);
-//   24 void update_config_struct(uint8 led_no, uint8 led_state);
-//   25 void update_config_to_memory(void);
-//   26 void uart_send_switch_sate_ack(void);
-//   27 
-//   28 typedef void (*KeusBtnCbk)(void);
-//   29 
-
-        RSEG XDATA_Z:XDATA:NOROOT(0)
-        DATA8
-//   30 struct CONFIG_INFO_t config_data[4];
-config_data:
-        DS 12
-        REQUIRE __INIT_XDATA_Z
-//   31 //
-//   32 typedef struct {
-//   33   uint16 btnDelay;
-//   34   uint16 elapsedTime;
-//   35   KeusBtnCbk btnCbk;
-//   36 } KeusBtnManager;
+//   28 
+//   29 uint8 get_state(uint8* buff);
+//   30 uint8 get_config(uint8* buff);
+//   31 
+//   32 
+//   33 
+//   34 void KeusEmbeddedSwitchLedBlinkHandler(uint8 timerId);
+//   35 
+//   36 typedef void (*KeusBtnCbk)(void);
 //   37 
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
-//   38 KeusBtnManager buttonManager;
+//   38 struct CONFIG_INFO_t config_data[4];
+config_data:
+        DS 12
+        REQUIRE __INIT_XDATA_Z
+//   39 //
+//   40 typedef struct {
+//   41   uint16 btnDelay;
+//   42   uint16 elapsedTime;
+//   43   KeusBtnCbk btnCbk;
+//   44 } KeusBtnManager;
+//   45 
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   46 KeusBtnManager buttonManager;
 buttonManager:
         DS 6
         REQUIRE __INIT_XDATA_Z
-//   39 
-//   40 //Debounce configuration
+//   47 
+//   48 //Debounce configuration
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   41 KeusTimerConfig debounceTimer = {
+//   49 KeusTimerConfig debounceTimer = {
 debounceTimer:
         DATA8
         DS 8
         REQUIRE `?<Initializer for debounceTimer>`
         REQUIRE __INIT_XDATA_I
-//   42     &leddebounceCbk,
-//   43     200,
-//   44     true,
-//   45     -1,
-//   46     0};
-//   47 
-//   48 //Timer Configuration
+//   50     &leddebounceCbk,
+//   51     200,
+//   52     true,
+//   53     -1,
+//   54     0};
+//   55 
+//   56 //Timer Configuration
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   49 KeusTimerConfig intervalTimer = {
+//   57 KeusTimerConfig intervalTimer = {
 intervalTimer:
         DATA8
         DS 8
         REQUIRE `?<Initializer for intervalTimer>`
         REQUIRE __INIT_XDATA_I
-//   50     &ledTimerCbk,
-//   51     100,
-//   52     true,
-//   53     -1,
-//   54     0};
-//   55 /****************************************************************************
-//   56  * **************************FUNCTION DECLARATION****************************
-//   57  * ***************************************************************************/
-//   58 void KEUS_init_fnc(void);
-//   59 void KEUS_loop(void);
-//   60 
-//   61 //********LED and button initilization
+//   58     &ledTimerCbk,
+//   59     100,
+//   60     true,
+//   61     -1,
+//   62     0};
+//   63 
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   62 extern KeusGPIOPin ledPin1 = {0, 0, GPIO_OUTPUT, false, LED_OFF};
+//   64   KeusTimerConfig ledTimerConfig = {
+ledTimerConfig:
+        DATA8
+        DS 8
+        REQUIRE `?<Initializer for ledTimerConfig>`
+        REQUIRE __INIT_XDATA_I
+//   65   &KeusEmbeddedSwitchLedBlinkHandler,
+//   66   500,
+//   67   true,
+//   68   -1,
+//   69   0
+//   70 };
+//   71 /****************************************************************************
+//   72  * **************************FUNCTION DECLARATION****************************
+//   73  * ***************************************************************************/
+//   74 void KEUS_init_fnc(void);
+//   75 uint8 KEUS_loop(void);
+//   76 
+//   77 //********LED and button initilization
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+//   78 extern KeusGPIOPin ledPin1 = {0, 0, GPIO_OUTPUT, false, LED_OFF};
 ledPin1:
         DATA8
         DS 5
@@ -777,7 +821,7 @@ ledPin1:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   63 extern KeusGPIOPin ledPin2 = {0, 1, GPIO_OUTPUT, false, LED_OFF};
+//   79 extern KeusGPIOPin ledPin2 = {0, 1, GPIO_OUTPUT, false, LED_OFF};
 ledPin2:
         DATA8
         DS 5
@@ -785,7 +829,7 @@ ledPin2:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   64 extern KeusGPIOPin ledPin3 = {0, 4, GPIO_OUTPUT, false, LED_OFF};
+//   80 extern KeusGPIOPin ledPin3 = {0, 4, GPIO_OUTPUT, false, LED_OFF};
 ledPin3:
         DATA8
         DS 5
@@ -793,16 +837,16 @@ ledPin3:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   65 extern KeusGPIOPin ledPin4 = {0, 5, GPIO_OUTPUT, false, LED_OFF};
+//   81 extern KeusGPIOPin ledPin4 = {0, 5, GPIO_OUTPUT, false, LED_OFF};
 ledPin4:
         DATA8
         DS 5
         REQUIRE `?<Initializer for ledPin4>`
         REQUIRE __INIT_XDATA_I
-//   66 
+//   82 
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   67 extern KeusGPIOPin buttonPin1 = {1, 2, GPIO_INPUT, true, LED_OFF};
+//   83 extern KeusGPIOPin buttonPin1 = {1, 2, GPIO_INPUT, true, LED_OFF};
 buttonPin1:
         DATA8
         DS 5
@@ -810,7 +854,7 @@ buttonPin1:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   68 extern KeusGPIOPin buttonPin2 = {1, 3, GPIO_INPUT, true, LED_OFF};
+//   84 extern KeusGPIOPin buttonPin2 = {1, 3, GPIO_INPUT, true, LED_OFF};
 buttonPin2:
         DATA8
         DS 5
@@ -818,7 +862,7 @@ buttonPin2:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   69 extern KeusGPIOPin buttonPin3 = {1, 4, GPIO_INPUT, true, LED_OFF};
+//   85 extern KeusGPIOPin buttonPin3 = {1, 4, GPIO_INPUT, true, LED_OFF};
 buttonPin3:
         DATA8
         DS 5
@@ -826,25 +870,25 @@ buttonPin3:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
-//   70 extern KeusGPIOPin buttonPin4 = {1, 5, GPIO_INPUT, true, LED_OFF};
+//   86 extern KeusGPIOPin buttonPin4 = {1, 5, GPIO_INPUT, true, LED_OFF};
 buttonPin4:
         DATA8
         DS 5
         REQUIRE `?<Initializer for buttonPin4>`
         REQUIRE __INIT_XDATA_I
-//   71 /*******************************************************
-//   72  * @brief  Callback function for timer
-//   73            Called every after 100ms
-//   74 
-//   75 *********************************************************/
+//   87 /*******************************************************
+//   88  * @brief  Callback function for timer
+//   89            Called every after 100ms
+//   90 
+//   91 *********************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//   76 void ledTimerCbk(uint8 timerId)
+//   92 void ledTimerCbk(uint8 timerId)
 ledTimerCbk:
           CFI Block cfiBlock0 Using cfiCommon0
           CFI Function ledTimerCbk
         CODE
-//   77 {
+//   93 {
         FUNCALL ledTimerCbk, KeusGPIOReadPinValue
         LOCFRAME ISTACK, 2, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -879,149 +923,6 @@ ledTimerCbk:
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
         FUNCALL ledTimerCbk, KeusGPIOReadPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOToggledState
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOToggledState
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOToggledState
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOToggledState
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL ledTimerCbk, KeusGPIOSetPinValue
         LOCFRAME ISTACK, 2, STACK
         LOCFRAME PSTACK, 0, STACK
         LOCFRAME XSTACK, 0, STACK
@@ -1073,491 +974,33 @@ ledTimerCbk:
           CFI CFA_SP SP+-5
         ; Saved register size: 2
         ; Auto size: 0
-//   78   KeusGPIOReadPinValue(&buttonPin1);
+//   94   KeusGPIOReadPinValue(&buttonPin1);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin1 & 0xff
         MOV       R3,#(buttonPin1 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//   79   KeusGPIOReadPinValue(&buttonPin2);
+//   95   KeusGPIOReadPinValue(&buttonPin2);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin2 & 0xff
         MOV       R3,#(buttonPin2 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//   80   KeusGPIOReadPinValue(&buttonPin3);
+//   96   KeusGPIOReadPinValue(&buttonPin3);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin3 & 0xff
         MOV       R3,#(buttonPin3 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//   81   KeusGPIOReadPinValue(&buttonPin4);
+//   97   KeusGPIOReadPinValue(&buttonPin4);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin4 & 0xff
         MOV       R3,#(buttonPin4 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//   82 
-//   83   if (buttonPin1.state == BUTTON_ACTIVE){
+//   98 
+//   99   if (buttonPin1.state == BUTTON_ACTIVE){
         MOV       DPTR,#buttonPin1 + 4
         MOVX      A,@DPTR
+        MOV       DPTR,#buttonManager + 2
         JNZ       ??ledTimerCbk_0
-//   84     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-        LCALL     ?Subroutine3 & 0xFFFF
-//   85     count1++;
-??CrossCallReturnLabel_27:
-        MOV       DPTR,#count1
-        LCALL     ?Subroutine4 & 0xFFFF
-//   86     if(count1 >= 50){
-??CrossCallReturnLabel_4:
-        JC        ??ledTimerCbk_1
-//   87       contineous_on1 = 1;
-        MOV       DPTR,#contineous_on1
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//   88       ledPin1.state = LED_ON;
-        MOV       DPTR,#ledPin1 + 4
-        CLR       A
-        SJMP      ??ledTimerCbk_2
-//   89       KeusGPIOSetPinValue(&ledPin1);
-//   90     }
-//   91     else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-??ledTimerCbk_1:
-        LCALL     ?Subroutine2 & 0xFFFF
-??CrossCallReturnLabel_0:
-        JNC       $+5
-        LJMP      ??ledTimerCbk_3 & 0xFFFF
-//   92       contineous_on1 = 0;
-        MOV       DPTR,#contineous_on1
-        LCALL     ?Subroutine7 & 0xFFFF
-//   93       buttonManager.elapsedTime = 0;
-//   94       ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
-??CrossCallReturnLabel_16:
-        ; Setup parameters for call to function KeusGPIOToggledState
-        MOV       DPTR,#ledPin1 + 4
-        LCALL     ?Subroutine5 & 0xFFFF
-??CrossCallReturnLabel_8:
-        MOV       DPTR,#ledPin1 + 4
-??ledTimerCbk_2:
-        MOVX      @DPTR,A
-//   95       KeusGPIOSetPinValue(&ledPin1);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin1 & 0xff
-        MOV       R3,#(ledPin1 >> 8) & 0xff
-        LJMP      ??ledTimerCbk_4 & 0xFFFF
-//   96     }
-//   97   } 
-//   98    else if (buttonPin2.state == BUTTON_ACTIVE) {
-??ledTimerCbk_0:
-        MOV       DPTR,#buttonPin2 + 4
-        MOVX      A,@DPTR
-        JNZ       ??ledTimerCbk_5
-//   99     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-        LCALL     ?Subroutine3 & 0xFFFF
-//  100     count2++;
-??CrossCallReturnLabel_28:
-        MOV       DPTR,#count2
-        LCALL     ?Subroutine4 & 0xFFFF
-//  101     if(count2 >= 50){
-??CrossCallReturnLabel_5:
-        JC        ??ledTimerCbk_6
-//  102       contineous_on2 = 1;
-        MOV       DPTR,#contineous_on2
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//  103       ledPin2.state = LED_ON;
-        MOV       DPTR,#ledPin2 + 4
-        CLR       A
-        SJMP      ??ledTimerCbk_7
-//  104       KeusGPIOSetPinValue(&ledPin2);
-//  105     }
-//  106     else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-??ledTimerCbk_6:
-        LCALL     ?Subroutine2 & 0xFFFF
-??CrossCallReturnLabel_1:
-        JNC       $+5
-        LJMP      ??ledTimerCbk_3 & 0xFFFF
-//  107       contineous_on2 = 0;
-        MOV       DPTR,#contineous_on2
-        LCALL     ?Subroutine7 & 0xFFFF
-//  108       buttonManager.elapsedTime = 0;
-//  109       ledPin2.state = KeusGPIOToggledState(ledPin2.state); //toggle led at button pressed
-??CrossCallReturnLabel_17:
-        ; Setup parameters for call to function KeusGPIOToggledState
-        MOV       DPTR,#ledPin2 + 4
-        LCALL     ?Subroutine5 & 0xFFFF
-??CrossCallReturnLabel_9:
-        MOV       DPTR,#ledPin2 + 4
-??ledTimerCbk_7:
-        MOVX      @DPTR,A
-//  110       KeusGPIOSetPinValue(&ledPin2);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin2 & 0xff
-        MOV       R3,#(ledPin2 >> 8) & 0xff
-        LJMP      ??ledTimerCbk_4 & 0xFFFF
-//  111     }
-//  112   }  
-//  113   else if (buttonPin3.state == BUTTON_ACTIVE) {
-??ledTimerCbk_5:
-        MOV       DPTR,#buttonPin3 + 4
-        MOVX      A,@DPTR
-        JNZ       ??ledTimerCbk_8
-//  114     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-        LCALL     ?Subroutine3 & 0xFFFF
-//  115     count3++;
-??CrossCallReturnLabel_29:
-        MOV       DPTR,#count3
-        LCALL     ?Subroutine4 & 0xFFFF
-//  116     if(count3 >= 50){
-??CrossCallReturnLabel_6:
-        JC        ??ledTimerCbk_9
-//  117       contineous_on3 = 1;
-        MOV       DPTR,#contineous_on3
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//  118       ledPin3.state = LED_ON;
-        MOV       DPTR,#ledPin3 + 4
-        CLR       A
-        SJMP      ??ledTimerCbk_10
-//  119       KeusGPIOSetPinValue(&ledPin3);
-//  120     }
-//  121     else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-??ledTimerCbk_9:
-        LCALL     ?Subroutine2 & 0xFFFF
-??CrossCallReturnLabel_2:
-        JNC       $+5
-        LJMP      ??ledTimerCbk_3 & 0xFFFF
-//  122       contineous_on3 = 0;
-        MOV       DPTR,#contineous_on3
-        LCALL     ?Subroutine7 & 0xFFFF
-//  123       buttonManager.elapsedTime = 0;
-//  124       ledPin3.state = KeusGPIOToggledState(ledPin3.state); //toggle led at button pressed
-??CrossCallReturnLabel_18:
-        ; Setup parameters for call to function KeusGPIOToggledState
-        MOV       DPTR,#ledPin3 + 4
-        LCALL     ?Subroutine5 & 0xFFFF
-??CrossCallReturnLabel_10:
-        MOV       DPTR,#ledPin3 + 4
-??ledTimerCbk_10:
-        MOVX      @DPTR,A
-//  125       KeusGPIOSetPinValue(&ledPin3);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin3 & 0xff
-        MOV       R3,#(ledPin3 >> 8) & 0xff
-        LJMP      ??ledTimerCbk_4 & 0xFFFF
-//  126     }
-//  127   }  
-//  128   else if (buttonPin4.state == BUTTON_ACTIVE) {
-??ledTimerCbk_8:
-        MOV       DPTR,#buttonPin4 + 4
-        MOVX      A,@DPTR
-        MOV       DPTR,#buttonManager + 2
-        JNZ       ??ledTimerCbk_11
-//  129     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-        LCALL     ??Subroutine10_0 & 0xFFFF
-//  130     count4++;
-??CrossCallReturnLabel_26:
-        MOV       DPTR,#count4
-        LCALL     ?Subroutine4 & 0xFFFF
-//  131     if(count4 >= 50){
-??CrossCallReturnLabel_7:
-        JC        ??ledTimerCbk_12
-//  132       contineous_on4 = 1;
-        MOV       DPTR,#contineous_on4
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//  133       ledPin4.state = LED_ON;
-        MOV       DPTR,#ledPin4 + 4
-        CLR       A
-        SJMP      ??ledTimerCbk_13
-//  134       KeusGPIOSetPinValue(&ledPin4);
-//  135     }
-//  136     else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-??ledTimerCbk_12:
-        LCALL     ?Subroutine2 & 0xFFFF
-??CrossCallReturnLabel_3:
-        JC        ??ledTimerCbk_3
-//  137       contineous_on4 = 0;
-        MOV       DPTR,#contineous_on4
-        LCALL     ?Subroutine7 & 0xFFFF
-//  138       buttonManager.elapsedTime = 0;
-//  139       ledPin4.state = KeusGPIOToggledState(ledPin4.state); //toggle led at button pressed
-??CrossCallReturnLabel_19:
-        ; Setup parameters for call to function KeusGPIOToggledState
-        MOV       DPTR,#ledPin4 + 4
-        LCALL     ?Subroutine5 & 0xFFFF
-//  140       KeusGPIOSetPinValue(&ledPin4);
-//  141     }
-//  142   } 
-??CrossCallReturnLabel_11:
-        MOV       DPTR,#ledPin4 + 4
-        SJMP      ??ledTimerCbk_13
-//  143   else {
-//  144     buttonManager.elapsedTime = 0;
-??ledTimerCbk_11:
-        CLR       A
-        MOVX      @DPTR,A
-        INC       DPTR
-        MOVX      @DPTR,A
-//  145     count1 = 0;
-        MOV       DPTR,#count1
-        MOVX      @DPTR,A
-//  146     count2 = 0;
-        MOV       DPTR,#count2
-        MOVX      @DPTR,A
-//  147     count3 = 0;
-        MOV       DPTR,#count3
-        MOVX      @DPTR,A
-//  148     count4 = 0;
-        MOV       DPTR,#count4
-        MOVX      @DPTR,A
-//  149 
-//  150     if(contineous_on1 ==0){
-        MOV       DPTR,#contineous_on1
-        MOVX      A,@DPTR
-        JNZ       ??ledTimerCbk_14
-//  151       ledPin1.state = LED_OFF;
-        MOV       DPTR,#ledPin1 + 4
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//  152       KeusGPIOSetPinValue(&ledPin1);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin1 & 0xff
-        MOV       R3,#(ledPin1 >> 8) & 0xff
-        LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  153     }
-//  154     if(contineous_on2 ==0){
-??ledTimerCbk_14:
-        MOV       DPTR,#contineous_on2
-        MOVX      A,@DPTR
-        JNZ       ??ledTimerCbk_15
-//  155       ledPin2.state = LED_OFF;
-        MOV       DPTR,#ledPin2 + 4
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//  156       KeusGPIOSetPinValue(&ledPin2);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin2 & 0xff
-        MOV       R3,#(ledPin2 >> 8) & 0xff
-        LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  157     }
-//  158     if(contineous_on3 ==0){
-??ledTimerCbk_15:
-        MOV       DPTR,#contineous_on3
-        MOVX      A,@DPTR
-        JNZ       ??ledTimerCbk_16
-//  159       ledPin3.state = LED_OFF;
-        MOV       DPTR,#ledPin3 + 4
-        MOV       A,#0x1
-        MOVX      @DPTR,A
-//  160       KeusGPIOSetPinValue(&ledPin3);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin3 & 0xff
-        MOV       R3,#(ledPin3 >> 8) & 0xff
-        LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  161     }
-//  162     if(contineous_on4 ==0){
-??ledTimerCbk_16:
-        MOV       DPTR,#contineous_on4
-        MOVX      A,@DPTR
-        JNZ       ??ledTimerCbk_3
-//  163       ledPin4.state = LED_OFF;
-        MOV       DPTR,#ledPin4 + 4
-        MOV       A,#0x1
-??ledTimerCbk_13:
-        MOVX      @DPTR,A
-//  164       KeusGPIOSetPinValue(&ledPin4);
-        ; Setup parameters for call to function KeusGPIOSetPinValue
-        MOV       R2,#ledPin4 & 0xff
-        MOV       R3,#(ledPin4 >> 8) & 0xff
-??ledTimerCbk_4:
-        LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  165     }
-//  166   }
-//  167 }
-??ledTimerCbk_3:
-        SJMP      ??Subroutine11_0
-          CFI EndBlock cfiBlock0
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine7:
-          CFI Block cfiCond1 Using cfiCommon0
-          CFI Function ledTimerCbk
-          CFI Conditional ??CrossCallReturnLabel_16
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond2 Using cfiCommon0
-          CFI (cfiCond2) Function ledTimerCbk
-          CFI (cfiCond2) Conditional ??CrossCallReturnLabel_17
-          CFI (cfiCond2) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond2) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond2) CFA_SP SP+-7
-          CFI Block cfiCond3 Using cfiCommon0
-          CFI (cfiCond3) Function ledTimerCbk
-          CFI (cfiCond3) Conditional ??CrossCallReturnLabel_18
-          CFI (cfiCond3) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond3) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond3) CFA_SP SP+-7
-          CFI Block cfiCond4 Using cfiCommon0
-          CFI (cfiCond4) Function ledTimerCbk
-          CFI (cfiCond4) Conditional ??CrossCallReturnLabel_19
-          CFI (cfiCond4) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond4) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond4) CFA_SP SP+-7
-          CFI Block cfiPicker5 Using cfiCommon1
-          CFI (cfiPicker5) NoFunction
-          CFI (cfiPicker5) Picker
-        CLR       A
-        MOVX      @DPTR,A
-        MOV       DPTR,#buttonManager + 2
-        MOVX      @DPTR,A
-        INC       DPTR
-        MOVX      @DPTR,A
-        RET
-          CFI EndBlock cfiCond1
-          CFI EndBlock cfiCond2
-          CFI EndBlock cfiCond3
-          CFI EndBlock cfiCond4
-          CFI EndBlock cfiPicker5
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine5:
-          CFI Block cfiCond6 Using cfiCommon0
-          CFI Function ledTimerCbk
-          CFI Conditional ??CrossCallReturnLabel_8
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond7 Using cfiCommon0
-          CFI (cfiCond7) Function ledTimerCbk
-          CFI (cfiCond7) Conditional ??CrossCallReturnLabel_9
-          CFI (cfiCond7) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond7) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond7) CFA_SP SP+-7
-          CFI Block cfiCond8 Using cfiCommon0
-          CFI (cfiCond8) Function ledTimerCbk
-          CFI (cfiCond8) Conditional ??CrossCallReturnLabel_10
-          CFI (cfiCond8) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond8) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond8) CFA_SP SP+-7
-          CFI Block cfiCond9 Using cfiCommon0
-          CFI (cfiCond9) Function ledTimerCbk
-          CFI (cfiCond9) Conditional ??CrossCallReturnLabel_11
-          CFI (cfiCond9) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond9) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond9) CFA_SP SP+-7
-          CFI Block cfiPicker10 Using cfiCommon1
-          CFI (cfiPicker10) NoFunction
-          CFI (cfiPicker10) Picker
-        MOVX      A,@DPTR
-        MOV       R1,A
-        LCALL     `??KeusGPIOToggledState::?relay`; Banked call to: KeusGPIOToggledState
-        MOV       A,R1
-        RET
-          CFI EndBlock cfiCond6
-          CFI EndBlock cfiCond7
-          CFI EndBlock cfiCond8
-          CFI EndBlock cfiCond9
-          CFI EndBlock cfiPicker10
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine4:
-          CFI Block cfiCond11 Using cfiCommon0
-          CFI Function ledTimerCbk
-          CFI Conditional ??CrossCallReturnLabel_4
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond12 Using cfiCommon0
-          CFI (cfiCond12) Function ledTimerCbk
-          CFI (cfiCond12) Conditional ??CrossCallReturnLabel_5
-          CFI (cfiCond12) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond12) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond12) CFA_SP SP+-7
-          CFI Block cfiCond13 Using cfiCommon0
-          CFI (cfiCond13) Function ledTimerCbk
-          CFI (cfiCond13) Conditional ??CrossCallReturnLabel_6
-          CFI (cfiCond13) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond13) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond13) CFA_SP SP+-7
-          CFI Block cfiCond14 Using cfiCommon0
-          CFI (cfiCond14) Function ledTimerCbk
-          CFI (cfiCond14) Conditional ??CrossCallReturnLabel_7
-          CFI (cfiCond14) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond14) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond14) CFA_SP SP+-7
-          CFI Block cfiPicker15 Using cfiCommon1
-          CFI (cfiPicker15) NoFunction
-          CFI (cfiPicker15) Picker
-        MOVX      A,@DPTR
-        INC       A
-        MOVX      @DPTR,A
-        CLR       C
-        SUBB      A,#0x32
-        RET
-          CFI EndBlock cfiCond11
-          CFI EndBlock cfiCond12
-          CFI EndBlock cfiCond13
-          CFI EndBlock cfiCond14
-          CFI EndBlock cfiPicker15
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine3:
-          CFI Block cfiCond16 Using cfiCommon0
-          CFI Function ledTimerCbk
-          CFI Conditional ??CrossCallReturnLabel_27
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond17 Using cfiCommon0
-          CFI (cfiCond17) Function ledTimerCbk
-          CFI (cfiCond17) Conditional ??CrossCallReturnLabel_28
-          CFI (cfiCond17) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond17) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond17) CFA_SP SP+-7
-          CFI Block cfiCond18 Using cfiCommon0
-          CFI (cfiCond18) Function ledTimerCbk
-          CFI (cfiCond18) Conditional ??CrossCallReturnLabel_29
-          CFI (cfiCond18) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond18) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond18) CFA_SP SP+-7
-          CFI Block cfiPicker19 Using cfiCommon1
-          CFI (cfiPicker19) NoFunction
-          CFI (cfiPicker19) Picker
-        MOV       DPTR,#buttonManager + 2
-          CFI EndBlock cfiCond16
-          CFI EndBlock cfiCond17
-          CFI EndBlock cfiCond18
-          CFI EndBlock cfiPicker19
-        REQUIRE ??Subroutine10_0
-        ; // Fall through to label ??Subroutine10_0
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-??Subroutine10_0:
-          CFI Block cfiCond20 Using cfiCommon0
-          CFI Function ledTimerCbk
-          CFI Conditional ??CrossCallReturnLabel_26
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond21 Using cfiCommon0
-          CFI (cfiCond21) Function ledTimerCbk
-          CFI (cfiCond21) Conditional ??CrossCallReturnLabel_27
-          CFI (cfiCond21) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond21) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond21) CFA_SP SP+-7
-          CFI Block cfiCond22 Using cfiCommon0
-          CFI (cfiCond22) Function ledTimerCbk
-          CFI (cfiCond22) Conditional ??CrossCallReturnLabel_28
-          CFI (cfiCond22) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond22) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond22) CFA_SP SP+-7
-          CFI Block cfiCond23 Using cfiCommon0
-          CFI (cfiCond23) Function ledTimerCbk
-          CFI (cfiCond23) Conditional ??CrossCallReturnLabel_29
-          CFI (cfiCond23) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond23) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond23) CFA_SP SP+-7
-          CFI Block cfiPicker24 Using cfiCommon1
-          CFI (cfiPicker24) NoFunction
-          CFI (cfiPicker24) Picker
+//  100     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
         MOVX      A,@DPTR
         ADD       A,#-0x18
         MOVX      @DPTR,A
@@ -1565,42 +1008,38 @@ ledTimerCbk:
         MOVX      A,@DPTR
         ADDC      A,#0x3
         MOVX      @DPTR,A
-        RET
-          CFI EndBlock cfiCond20
-          CFI EndBlock cfiCond21
-          CFI EndBlock cfiCond22
-          CFI EndBlock cfiCond23
-          CFI EndBlock cfiPicker24
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine2:
-          CFI Block cfiCond25 Using cfiCommon0
-          CFI Function ledTimerCbk
-          CFI Conditional ??CrossCallReturnLabel_0
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond26 Using cfiCommon0
-          CFI (cfiCond26) Function ledTimerCbk
-          CFI (cfiCond26) Conditional ??CrossCallReturnLabel_1
-          CFI (cfiCond26) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond26) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond26) CFA_SP SP+-7
-          CFI Block cfiCond27 Using cfiCommon0
-          CFI (cfiCond27) Function ledTimerCbk
-          CFI (cfiCond27) Conditional ??CrossCallReturnLabel_2
-          CFI (cfiCond27) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond27) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond27) CFA_SP SP+-7
-          CFI Block cfiCond28 Using cfiCommon0
-          CFI (cfiCond28) Function ledTimerCbk
-          CFI (cfiCond28) Conditional ??CrossCallReturnLabel_3
-          CFI (cfiCond28) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond28) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond28) CFA_SP SP+-7
-          CFI Block cfiPicker29 Using cfiCommon1
-          CFI (cfiPicker29) NoFunction
-          CFI (cfiPicker29) Picker
+//  101     count1++;
+        MOV       DPTR,#count1
+        MOVX      A,@DPTR
+        INC       A
+        MOVX      @DPTR,A
+//  102     button_Pressed = 1;
+        MOV       DPTR,#button_Pressed
+        MOV       A,#0x1
+        MOVX      @DPTR,A
+//  103     APP_EVENT = EVENT_3;
+        MOV       DPTR,#APP_EVENT
+        MOV       A,#0x4
+        LCALL     ?Subroutine8 & 0xFFFF
+//  104     if(count1 >= 50){
+??CrossCallReturnLabel_11:
+        MOV       DPTR,#count1
+        MOVX      A,@DPTR
+        CLR       C
+        SUBB      A,#0x32
+        JC        ??ledTimerCbk_1
+//  105       contineous_on1 = 1;
+        MOV       DPTR,#contineous_on1
+        MOV       A,#0x1
+        MOVX      @DPTR,A
+//  106       ledPin1.state = LED_ON;
+        MOV       DPTR,#ledPin1 + 4
+        CLR       A
+        SJMP      ??ledTimerCbk_2
+//  107       KeusGPIOSetPinValue(&ledPin1);
+//  108     }
+//  109     else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
+??ledTimerCbk_1:
         MOV       DPTR,#buttonManager
         MOVX      A,@DPTR
         MOV       R0,A
@@ -1615,36 +1054,74 @@ ledTimerCbk:
         INC       DPTR
         MOVX      A,@DPTR
         SUBB      A,R1
-        RET
-          CFI EndBlock cfiCond25
-          CFI EndBlock cfiCond26
-          CFI EndBlock cfiCond27
-          CFI EndBlock cfiCond28
-          CFI EndBlock cfiPicker29
-//  168 
-//  169 /**************************************************************
-//  170  * @fn      leddebounceCbk
-//  171  * @brief   callback function for Debounce,called every after 200ms
-//  172  * @param   none
-//  173  * @return  None
-//  174  * ***********************************************************/
-//  175 
+        JC        ??ledTimerCbk_3
+//  110       contineous_on1 = 0;
+        MOV       DPTR,#contineous_on1
+        CLR       A
+        MOVX      @DPTR,A
+//  111       buttonManager.elapsedTime = 0;
+        MOV       DPTR,#buttonManager + 2
+        MOVX      @DPTR,A
+        INC       DPTR
+        MOVX      @DPTR,A
+//  112       ledPin1.state = LED_OFF;//KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
+        MOV       DPTR,#ledPin1 + 4
+        INC       A
+//  113       KeusGPIOSetPinValue(&ledPin1);
+//  114     }
+//  115   } 
+??ledTimerCbk_2:
+        LCALL     ?Subroutine6 & 0xFFFF
+??CrossCallReturnLabel_4:
+        SJMP      ??ledTimerCbk_3
+//  116    
+//  117   else {
+//  118     buttonManager.elapsedTime = 0;
+??ledTimerCbk_0:
+        CLR       A
+        MOVX      @DPTR,A
+        INC       DPTR
+        MOVX      @DPTR,A
+//  119     count1 = 0;
+        MOV       DPTR,#count1
+        MOVX      @DPTR,A
+//  120 
+//  121     if(contineous_on1 ==0){
+        MOV       DPTR,#contineous_on1
+        MOVX      A,@DPTR
+        JNZ       ??CrossCallReturnLabel_5
+//  122       ledPin1.state = LED_OFF;
+        MOV       DPTR,#ledPin1 + 4
+        MOV       A,#0x1
+        LCALL     ?Subroutine6 & 0xFFFF
+//  123       KeusGPIOSetPinValue(&ledPin1);
+//  124     }
+//  125     button_Pressed =0;
+??CrossCallReturnLabel_5:
+        MOV       DPTR,#button_Pressed
+        CLR       A
+        MOVX      @DPTR,A
+//  126   }
+//  127 }
+??ledTimerCbk_3:
+        SJMP      ??Subroutine12_0
+          CFI EndBlock cfiBlock0
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
 ?Subroutine0:
-          CFI Block cfiBlock30 Using cfiCommon0
+          CFI Block cfiBlock1 Using cfiCommon0
           CFI NoFunction
           CFI CFA_SP SP+-5
           CFI DPL0 Frame(CFA_SP, 4)
           CFI DPH0 Frame(CFA_SP, 5)
         MOVX      @DPTR,A
-          CFI EndBlock cfiBlock30
-        REQUIRE ??Subroutine11_0
-        ; // Fall through to label ??Subroutine11_0
+          CFI EndBlock cfiBlock1
+        REQUIRE ??Subroutine12_0
+        ; // Fall through to label ??Subroutine12_0
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-??Subroutine11_0:
-          CFI Block cfiBlock31 Using cfiCommon0
+??Subroutine12_0:
+          CFI Block cfiBlock2 Using cfiCommon0
           CFI NoFunction
           CFI CFA_SP SP+-5
           CFI DPL0 Frame(CFA_SP, 4)
@@ -1656,15 +1133,41 @@ ledTimerCbk:
           CFI CFA_SP SP+-3
           CFI DPL0 SameValue
         LJMP      ?BRET
-          CFI EndBlock cfiBlock31
+          CFI EndBlock cfiBlock2
+//  128 
+//  129 /************************************************************************************
+//  130  * @brief   Timer Function to Blink(500ms) Led1 contineously from start. 
+//  131  * 
+//  132  * ***********************************************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  176 void leddebounceCbk(uint8 timerId)
-leddebounceCbk:
-          CFI Block cfiBlock32 Using cfiCommon0
-          CFI Function leddebounceCbk
+//  133 void KeusEmbeddedSwitchLedBlinkHandler(uint8 timerId){
+KeusEmbeddedSwitchLedBlinkHandler:
+          CFI Block cfiBlock3 Using cfiCommon0
+          CFI Function KeusEmbeddedSwitchLedBlinkHandler
         CODE
-//  177 {
+        FUNCALL KeusEmbeddedSwitchLedBlinkHandler, KeusGPIOToggledState
+        LOCFRAME ISTACK, 2, STACK
+        LOCFRAME PSTACK, 0, STACK
+        LOCFRAME XSTACK, 0, STACK
+        LOCFRAME IOVERLAY, 0, STATIC
+        LOCFRAME DOVERLAY, 0, STATIC
+        ARGFRAME ISTACK, 2, STACK
+        ARGFRAME PSTACK, 0, STACK
+        ARGFRAME XSTACK, 0, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
+        FUNCALL KeusEmbeddedSwitchLedBlinkHandler, KeusGPIOSetPinValue
+        LOCFRAME ISTACK, 2, STACK
+        LOCFRAME PSTACK, 0, STACK
+        LOCFRAME XSTACK, 0, STACK
+        LOCFRAME IOVERLAY, 0, STATIC
+        LOCFRAME DOVERLAY, 0, STATIC
+        ARGFRAME ISTACK, 2, STACK
+        ARGFRAME PSTACK, 0, STACK
+        ARGFRAME XSTACK, 0, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
         PUSH      DPL
           CFI DPL0 Frame(CFA_SP, 4)
           CFI CFA_SP SP+-4
@@ -1673,29 +1176,113 @@ leddebounceCbk:
           CFI CFA_SP SP+-5
         ; Saved register size: 2
         ; Auto size: 0
-//  178   debounce = true;
+//  134   if(blink_led == START && button_Pressed == 0){
+        MOV       DPTR,#blink_led
+        MOVX      A,@DPTR
+        XRL       A,#0x1
+        JNZ       ??CrossCallReturnLabel_6
+        MOV       DPTR,#button_Pressed
+        MOVX      A,@DPTR
+        JNZ       ??CrossCallReturnLabel_6
+//  135     ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
+        ; Setup parameters for call to function KeusGPIOToggledState
+        MOV       DPTR,#ledPin1 + 4
+        MOVX      A,@DPTR
+        MOV       R1,A
+        LCALL     `??KeusGPIOToggledState::?relay`; Banked call to: KeusGPIOToggledState
+        MOV       A,R1
+        MOV       DPTR,#ledPin1 + 4
+        LCALL     ?Subroutine6 & 0xFFFF
+//  136     KeusGPIOSetPinValue(&ledPin1);
+//  137   }
+//  138 }
+??CrossCallReturnLabel_6:
+        SJMP      ??Subroutine12_0
+          CFI EndBlock cfiBlock3
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine6:
+          CFI Block cfiCond4 Using cfiCommon0
+          CFI Function ledTimerCbk
+          CFI Conditional ??CrossCallReturnLabel_4
+          CFI DPL0 Frame(CFA_SP, 4)
+          CFI DPH0 Frame(CFA_SP, 5)
+          CFI CFA_SP SP+-7
+          CFI Block cfiCond5 Using cfiCommon0
+          CFI (cfiCond5) Function ledTimerCbk
+          CFI (cfiCond5) Conditional ??CrossCallReturnLabel_5
+          CFI (cfiCond5) DPL0 Frame(CFA_SP, 4)
+          CFI (cfiCond5) DPH0 Frame(CFA_SP, 5)
+          CFI (cfiCond5) CFA_SP SP+-7
+          CFI Block cfiCond6 Using cfiCommon0
+          CFI (cfiCond6) Function KeusEmbeddedSwitchLedBlinkHandler
+          CFI (cfiCond6) Conditional ??CrossCallReturnLabel_6
+          CFI (cfiCond6) DPL0 Frame(CFA_SP, 4)
+          CFI (cfiCond6) DPH0 Frame(CFA_SP, 5)
+          CFI (cfiCond6) CFA_SP SP+-7
+          CFI Block cfiPicker7 Using cfiCommon1
+          CFI (cfiPicker7) NoFunction
+          CFI (cfiPicker7) Picker
+        MOVX      @DPTR,A
+        ; Setup parameters for call to function KeusGPIOSetPinValue
+        ; Setup parameters for call to function KeusGPIOSetPinValue
+        ; Setup parameters for call to function KeusGPIOSetPinValue
+        MOV       R2,#ledPin1 & 0xff
+        MOV       R3,#(ledPin1 >> 8) & 0xff
+        LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
+        RET
+          CFI EndBlock cfiCond4
+          CFI EndBlock cfiCond5
+          CFI EndBlock cfiCond6
+          CFI EndBlock cfiPicker7
+//  139 
+//  140 
+//  141 /**************************************************************
+//  142  * @fn      leddebounceCbk
+//  143  * @brief   callback function for Debounce,called every after 200ms
+//  144  * @param   none
+//  145  * @return  None
+//  146  * ***********************************************************/
+//  147 
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+//  148 void leddebounceCbk(uint8 timerId)
+leddebounceCbk:
+          CFI Block cfiBlock8 Using cfiCommon0
+          CFI Function leddebounceCbk
+        CODE
+//  149 {
+        PUSH      DPL
+          CFI DPL0 Frame(CFA_SP, 4)
+          CFI CFA_SP SP+-4
+        PUSH      DPH
+          CFI DPH0 Frame(CFA_SP, 5)
+          CFI CFA_SP SP+-5
+        ; Saved register size: 2
+        ; Auto size: 0
+//  150   debounce = true;
         MOV       DPTR,#debounce
         MOV       A,#0x1
         SJMP      ?Subroutine0
-//  179 }
-          CFI EndBlock cfiBlock32
-//  180 
-//  181 
-//  182 
-//  183 /*************************************************************
-//  184  * @fn      KEUS_init_fnc
-//  185  * @brief   All Initilization
-//  186  * @return  None
-//  187  * @param   None  
-//  188  * ***********************************************************/
+//  151 }
+          CFI EndBlock cfiBlock8
+//  152 
+//  153 
+//  154 
+//  155 /*************************************************************
+//  156  * @fn      KEUS_init_fnc
+//  157  * @brief   All Initilization
+//  158  * @return  None
+//  159  * @param   None  
+//  160  * ***********************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  189 void KEUS_init_fnc(void)
+//  161 void KEUS_init_fnc(void)
 KEUS_init_fnc:
-          CFI Block cfiBlock33 Using cfiCommon0
+          CFI Block cfiBlock9 Using cfiCommon0
           CFI Function KEUS_init_fnc
         CODE
-//  190 {
+//  162 {
         FUNCALL KEUS_init_fnc, KeusGPIOSetDirection
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -1906,6 +1493,17 @@ KEUS_init_fnc:
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
         FUNCALL KEUS_init_fnc, KeusGPIOSetPinValue
+        LOCFRAME ISTACK, 0, STACK
+        LOCFRAME PSTACK, 0, STACK
+        LOCFRAME XSTACK, 10, STACK
+        LOCFRAME IOVERLAY, 0, STATIC
+        LOCFRAME DOVERLAY, 0, STATIC
+        ARGFRAME ISTACK, 0, STACK
+        ARGFRAME PSTACK, 0, STACK
+        ARGFRAME XSTACK, 10, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
+        FUNCALL KEUS_init_fnc, KeusTimerUtilAddTimer
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
         LOCFRAME XSTACK, 10, STACK
@@ -2015,7 +1613,7 @@ KEUS_init_fnc:
         ARGFRAME XSTACK, 10, STACK
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
-        FUNCALL KEUS_init_fnc, HalUARTPoll
+        FUNCALL KEUS_init_fnc, KEUS_loop
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
         LOCFRAME XSTACK, 10, STACK
@@ -2044,151 +1642,157 @@ KEUS_init_fnc:
           CFI CFA_XSP16 add(XSP16, 10)
         ; Saved register size: 10
         ; Auto size: 0
-//  191 
-//  192   //****Setting GPIOs direction and edge
-//  193   KeusGPIOSetDirection(&ledPin1);
+//  163 
+//  164   //****Setting GPIOs direction and edge
+//  165   KeusGPIOSetDirection(&ledPin1);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#ledPin1 & 0xff
         MOV       R3,#(ledPin1 >> 8) & 0xff
         LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-//  194   KeusGPIOSetDirection(&buttonPin1);
+//  166   KeusGPIOSetDirection(&buttonPin1);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#buttonPin1 & 0xff
         MOV       R3,#(buttonPin1 >> 8) & 0xff
-        LCALL     ?Subroutine8 & 0xFFFF
-//  195   KeusGPIOEdgeConfiguration(&buttonPin1, GPIO_RISING_EDGE);
-??CrossCallReturnLabel_20:
+        LCALL     ?Subroutine7 & 0xFFFF
+//  167   KeusGPIOEdgeConfiguration(&buttonPin1, GPIO_RISING_EDGE);
+??CrossCallReturnLabel_7:
         MOV       R2,#buttonPin1 & 0xff
         MOV       R3,#(buttonPin1 >> 8) & 0xff
         LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-//  196   KeusGPIOReadPinValue(&buttonPin1);
+//  168   KeusGPIOReadPinValue(&buttonPin1);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin1 & 0xff
         MOV       R3,#(buttonPin1 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//  197   KeusGPIOSetPinValue(&ledPin1);
+//  169   KeusGPIOSetPinValue(&ledPin1);
         ; Setup parameters for call to function KeusGPIOSetPinValue
         MOV       R2,#ledPin1 & 0xff
         MOV       R3,#(ledPin1 >> 8) & 0xff
         LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  198 
-//  199   KeusGPIOSetDirection(&ledPin2);
+//  170 
+//  171   KeusGPIOSetDirection(&ledPin2);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#ledPin2 & 0xff
         MOV       R3,#(ledPin2 >> 8) & 0xff
         LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-//  200   KeusGPIOSetDirection(&buttonPin2);
+//  172   KeusGPIOSetDirection(&buttonPin2);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#buttonPin2 & 0xff
         MOV       R3,#(buttonPin2 >> 8) & 0xff
-        LCALL     ?Subroutine8 & 0xFFFF
-//  201   KeusGPIOEdgeConfiguration(&buttonPin2, GPIO_RISING_EDGE);
-??CrossCallReturnLabel_21:
+        LCALL     ?Subroutine7 & 0xFFFF
+//  173   KeusGPIOEdgeConfiguration(&buttonPin2, GPIO_RISING_EDGE);
+??CrossCallReturnLabel_8:
         MOV       R2,#buttonPin2 & 0xff
         MOV       R3,#(buttonPin2 >> 8) & 0xff
         LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-//  202   KeusGPIOReadPinValue(&buttonPin2);
+//  174   KeusGPIOReadPinValue(&buttonPin2);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin2 & 0xff
         MOV       R3,#(buttonPin2 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//  203   KeusGPIOSetPinValue(&ledPin2);
+//  175   KeusGPIOSetPinValue(&ledPin2);
         ; Setup parameters for call to function KeusGPIOSetPinValue
         MOV       R2,#ledPin2 & 0xff
         MOV       R3,#(ledPin2 >> 8) & 0xff
         LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  204 
-//  205   KeusGPIOSetDirection(&ledPin3);
+//  176 
+//  177   KeusGPIOSetDirection(&ledPin3);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#ledPin3 & 0xff
         MOV       R3,#(ledPin3 >> 8) & 0xff
         LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-//  206   KeusGPIOSetDirection(&buttonPin3);
+//  178   KeusGPIOSetDirection(&buttonPin3);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#buttonPin3 & 0xff
         MOV       R3,#(buttonPin3 >> 8) & 0xff
-        LCALL     ?Subroutine8 & 0xFFFF
-//  207   KeusGPIOEdgeConfiguration(&buttonPin3, GPIO_RISING_EDGE);
-??CrossCallReturnLabel_22:
+        LCALL     ?Subroutine7 & 0xFFFF
+//  179   KeusGPIOEdgeConfiguration(&buttonPin3, GPIO_RISING_EDGE);
+??CrossCallReturnLabel_9:
         MOV       R2,#buttonPin3 & 0xff
         MOV       R3,#(buttonPin3 >> 8) & 0xff
         LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-//  208   KeusGPIOReadPinValue(&buttonPin3);
+//  180   KeusGPIOReadPinValue(&buttonPin3);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin3 & 0xff
         MOV       R3,#(buttonPin3 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//  209   KeusGPIOSetPinValue(&ledPin3);
+//  181   KeusGPIOSetPinValue(&ledPin3);
         ; Setup parameters for call to function KeusGPIOSetPinValue
         MOV       R2,#ledPin3 & 0xff
         MOV       R3,#(ledPin3 >> 8) & 0xff
         LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  210 
-//  211   KeusGPIOSetDirection(&ledPin4);
+//  182 
+//  183   KeusGPIOSetDirection(&ledPin4);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#ledPin4 & 0xff
         MOV       R3,#(ledPin4 >> 8) & 0xff
         LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
-//  212   KeusGPIOSetDirection(&buttonPin4);
+//  184   KeusGPIOSetDirection(&buttonPin4);
         ; Setup parameters for call to function KeusGPIOSetDirection
         MOV       R2,#buttonPin4 & 0xff
         MOV       R3,#(buttonPin4 >> 8) & 0xff
-        LCALL     ?Subroutine8 & 0xFFFF
-//  213   KeusGPIOEdgeConfiguration(&buttonPin4, GPIO_RISING_EDGE);
-??CrossCallReturnLabel_23:
+        LCALL     ?Subroutine7 & 0xFFFF
+//  185   KeusGPIOEdgeConfiguration(&buttonPin4, GPIO_RISING_EDGE);
+??CrossCallReturnLabel_10:
         MOV       R2,#buttonPin4 & 0xff
         MOV       R3,#(buttonPin4 >> 8) & 0xff
         LCALL     `??KeusGPIOEdgeConfiguration::?relay`; Banked call to: KeusGPIOEdgeConfiguration
-//  214   KeusGPIOReadPinValue(&buttonPin4);
+//  186   KeusGPIOReadPinValue(&buttonPin4);
         ; Setup parameters for call to function KeusGPIOReadPinValue
         MOV       R2,#buttonPin4 & 0xff
         MOV       R3,#(buttonPin4 >> 8) & 0xff
         LCALL     `??KeusGPIOReadPinValue::?relay`; Banked call to: KeusGPIOReadPinValue
-//  215   KeusGPIOSetPinValue(&ledPin4);
+//  187   KeusGPIOSetPinValue(&ledPin4);
         ; Setup parameters for call to function KeusGPIOSetPinValue
         MOV       R2,#ledPin4 & 0xff
         MOV       R3,#(ledPin4 >> 8) & 0xff
         LCALL     `??KeusGPIOSetPinValue::?relay`; Banked call to: KeusGPIOSetPinValue
-//  216 
-//  217   //******Enabling Timer and Debounce
-//  218   KeusTimerUtilAddTimer(&intervalTimer);
+//  188 
+//  189   //******Enabling Timer and Debounce
+//  190   KeusTimerUtilAddTimer(&intervalTimer);
         ; Setup parameters for call to function KeusTimerUtilAddTimer
         MOV       R2,#intervalTimer & 0xff
         MOV       R3,#(intervalTimer >> 8) & 0xff
         LCALL     `??KeusTimerUtilAddTimer::?relay`; Banked call to: KeusTimerUtilAddTimer
-//  219   KeusTimerUtilAddTimer(&debounceTimer);
+//  191   KeusTimerUtilAddTimer(&debounceTimer);
         ; Setup parameters for call to function KeusTimerUtilAddTimer
         MOV       R2,#debounceTimer & 0xff
         MOV       R3,#(debounceTimer >> 8) & 0xff
         LCALL     `??KeusTimerUtilAddTimer::?relay`; Banked call to: KeusTimerUtilAddTimer
-//  220 
-//  221   init_status = KeusThemeSwitchMiniMemoryInit();
+//  192   KeusTimerUtilAddTimer(&ledTimerConfig);
+        ; Setup parameters for call to function KeusTimerUtilAddTimer
+        MOV       R2,#ledTimerConfig & 0xff
+        MOV       R3,#(ledTimerConfig >> 8) & 0xff
+        LCALL     `??KeusTimerUtilAddTimer::?relay`; Banked call to: KeusTimerUtilAddTimer
+//  193 
+//  194 
+//  195   init_status = KeusThemeSwitchMiniMemoryInit();
         ; Setup parameters for call to function KeusThemeSwitchMiniMemoryInit
         LCALL     `??KeusThemeSwitchMiniMemoryInit::?relay`; Banked call to: KeusThemeSwitchMiniMemoryInit
         MOV       A,R1
         MOV       DPTR,#init_status
         MOVX      @DPTR,A
-//  222   read_status = KeusThemeSwitchMiniReadConfigDataIntoMemory();
+//  196   read_status = KeusThemeSwitchMiniReadConfigDataIntoMemory();
         ; Setup parameters for call to function KeusThemeSwitchMiniReadConfigDataIntoMemory
         LCALL     `??KeusThemeSwitchMiniReadConfigDataIntoMemory::`; Banked call to: KeusThemeSwitchMiniReadConfigDataIntoMemory
         MOV       A,R1
         MOV       DPTR,#read_status
         MOVX      @DPTR,A
-//  223   //*****Timer Initialization
-//  224   KeusTimerUtilInit();
+//  197   //*****Timer Initialization
+//  198   KeusTimerUtilInit();
         ; Setup parameters for call to function KeusTimerUtilInit
         LCALL     `??KeusTimerUtilInit::?relay`; Banked call to: KeusTimerUtilInit
-//  225   //******Timer Start
-//  226   KeusTimerUtilStartTimer();
+//  199   //******Timer Start
+//  200   KeusTimerUtilStartTimer();
         ; Setup parameters for call to function KeusTimerUtilStartTimer
         LCALL     `??KeusTimerUtilStartTimer::?relay`; Banked call to: KeusTimerUtilStartTimer
-//  227 
-//  228   // //*****UART Initialization
-//  229   initUart0();
+//  201 
+//  202   // //*****UART Initialization
+//  203   initUart0();
         ; Setup parameters for call to function initUart0
         LCALL     `??initUart0::?relay`; Banked call to: initUart0
-//  230 
-//  231   HalUARTWrite(HAL_UART_PORT_0, "KEUS INIT", (byte)osal_strlen("KEUS INIT"));
+//  204 
+//  205   HalUARTWrite(HAL_UART_PORT_0, "KEUS INIT", (byte)osal_strlen("KEUS INIT"));
         ; Setup parameters for call to function osal_strlen
         MOV       R2,#`?<Constant "KEUS INIT">` & 0xff
         MOV       R3,#(`?<Constant "KEUS INIT">` >> 8) & 0xff
@@ -2201,76 +1805,118 @@ KEUS_init_fnc:
         MOV       R3,#(`?<Constant "KEUS INIT">` >> 8) & 0xff
         MOV       R1,#0x0
         LCALL     `??HalUARTWrite::?relay`; Banked call to: HalUARTWrite
-//  232 
-//  233   
-//  234   buttonManager.btnDelay = KEUS_EMBEDDEDSWITCH_RESET_BTN_TIMEOUT;
+//  206 
+//  207   
+//  208   buttonManager.btnDelay = KEUS_EMBEDDEDSWITCH_RESET_BTN_TIMEOUT;
         MOV       DPTR,#buttonManager
         MOV       A,#0x10
         MOVX      @DPTR,A
         INC       DPTR
         MOV       A,#0x27
         MOVX      @DPTR,A
-//  235 
-//  236   config_data[0].config_id = 1;
+//  209 
+//  210   config_data[0].config_id = 1;
         MOV       DPTR,#config_data + 2
         MOV       A,#0x1
         MOVX      @DPTR,A
-//  237   config_data[0].led = 1;
+//  211   config_data[0].led = 1;
         MOV       DPTR,#config_data
         MOVX      @DPTR,A
-//  238   config_data[0].valid_state = 1;
+//  212   config_data[0].valid_state = 1;
         INC       DPTR
         MOVX      @DPTR,A
-//  239 
-//  240   config_data[1].config_id = 1;
+//  213 
+//  214   config_data[1].config_id = 1;
         MOV       DPTR,#config_data + 5
         MOVX      @DPTR,A
-//  241   config_data[1].led = 2;
+//  215   config_data[1].led = 2;
         MOV       DPTR,#config_data + 3
         INC       A
         MOVX      @DPTR,A
-//  242   config_data[1].valid_state = 1;
+//  216   config_data[1].valid_state = 1;
         INC       DPTR
         DEC       A
         MOVX      @DPTR,A
-//  243 
-//  244   config_data[2].config_id = 1;
+//  217 
+//  218   config_data[2].config_id = 1;
         MOV       DPTR,#config_data + 8
         MOVX      @DPTR,A
-//  245   config_data[2].led = 3;
+//  219   config_data[2].led = 3;
         MOV       DPTR,#config_data + 6
         MOV       A,#0x3
         MOVX      @DPTR,A
-//  246   config_data[2].valid_state = 1;
+//  220   config_data[2].valid_state = 1;
         INC       DPTR
         MOV       A,#0x1
         MOVX      @DPTR,A
-//  247 
-//  248   config_data[3].config_id = 1;
+//  221 
+//  222   config_data[3].config_id = 1;
         MOV       DPTR,#config_data + 11
         MOVX      @DPTR,A
-//  249   config_data[3].led = 4;
+//  223   config_data[3].led = 4;
         MOV       DPTR,#config_data + 9
         MOV       A,#0x4
         MOVX      @DPTR,A
-//  250   config_data[3].valid_state = 1;
+//  224   config_data[3].valid_state = 1;
         INC       DPTR
         MOV       A,#0x1
         MOVX      @DPTR,A
-//  251 
-//  252   KEUS_loop();
-??KEUS_init_fnc_0:
-        ; Setup parameters for call to function HalUARTPoll
-        LCALL     `??HalUARTPoll::?relay`; Banked call to: HalUARTPoll
-        SJMP      ??KEUS_init_fnc_0
-//  253 }
-          CFI EndBlock cfiBlock33
+//  225 
+//  226   APP_EVENT = EVENT_1;
+        MOV       DPTR,#APP_EVENT
+        LCALL     ?Subroutine8 & 0xFFFF
+//  227   KEUS_loop();
+??CrossCallReturnLabel_12:
+        ; Setup parameters for call to function KEUS_loop
+        LCALL     `??KEUS_loop::?relay`; Banked call to: KEUS_loop
+//  228 }
+        LJMP      ?Subroutine1 & 0xFFFF
+          CFI EndBlock cfiBlock9
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
 ?Subroutine8:
-          CFI Block cfiCond34 Using cfiCommon0
+          CFI Block cfiCond10 Using cfiCommon0
+          CFI Function ledTimerCbk
+          CFI Conditional ??CrossCallReturnLabel_11
+          CFI DPL0 Frame(CFA_SP, 4)
+          CFI DPH0 Frame(CFA_SP, 5)
+          CFI CFA_SP SP+-7
+          CFI Block cfiCond11 Using cfiCommon0
+          CFI (cfiCond11) Function KEUS_init_fnc
+          CFI (cfiCond11) Conditional ??CrossCallReturnLabel_12
+          CFI (cfiCond11) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
+          CFI (cfiCond11) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond11) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond11) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond11) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond11) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond11) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond11) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond11) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond11) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond11) CFA_SP SP+-2
+          CFI (cfiCond11) CFA_XSP16 add(XSP16, 10)
+          CFI Block cfiPicker12 Using cfiCommon1
+          CFI (cfiPicker12) NoFunction
+          CFI (cfiPicker12) Picker
+        MOVX      @DPTR,A
+        INC       DPTR
+        CLR       A
+        MOVX      @DPTR,A
+        INC       DPTR
+        MOVX      @DPTR,A
+        INC       DPTR
+        MOVX      @DPTR,A
+        RET
+          CFI EndBlock cfiCond10
+          CFI EndBlock cfiCond11
+          CFI EndBlock cfiPicker12
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine7:
+          CFI Block cfiCond13 Using cfiCommon0
           CFI Function KEUS_init_fnc
-          CFI Conditional ??CrossCallReturnLabel_20
+          CFI Conditional ??CrossCallReturnLabel_7
           CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
           CFI VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
           CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
@@ -2283,54 +1929,54 @@ KEUS_init_fnc:
           CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
           CFI CFA_SP SP+-2
           CFI CFA_XSP16 add(XSP16, 10)
-          CFI Block cfiCond35 Using cfiCommon0
-          CFI (cfiCond35) Function KEUS_init_fnc
-          CFI (cfiCond35) Conditional ??CrossCallReturnLabel_21
-          CFI (cfiCond35) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
-          CFI (cfiCond35) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
-          CFI (cfiCond35) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
-          CFI (cfiCond35) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
-          CFI (cfiCond35) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
-          CFI (cfiCond35) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
-          CFI (cfiCond35) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
-          CFI (cfiCond35) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
-          CFI (cfiCond35) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
-          CFI (cfiCond35) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
-          CFI (cfiCond35) CFA_SP SP+-2
-          CFI (cfiCond35) CFA_XSP16 add(XSP16, 10)
-          CFI Block cfiCond36 Using cfiCommon0
-          CFI (cfiCond36) Function KEUS_init_fnc
-          CFI (cfiCond36) Conditional ??CrossCallReturnLabel_22
-          CFI (cfiCond36) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
-          CFI (cfiCond36) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
-          CFI (cfiCond36) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
-          CFI (cfiCond36) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
-          CFI (cfiCond36) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
-          CFI (cfiCond36) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
-          CFI (cfiCond36) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
-          CFI (cfiCond36) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
-          CFI (cfiCond36) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
-          CFI (cfiCond36) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
-          CFI (cfiCond36) CFA_SP SP+-2
-          CFI (cfiCond36) CFA_XSP16 add(XSP16, 10)
-          CFI Block cfiCond37 Using cfiCommon0
-          CFI (cfiCond37) Function KEUS_init_fnc
-          CFI (cfiCond37) Conditional ??CrossCallReturnLabel_23
-          CFI (cfiCond37) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
-          CFI (cfiCond37) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
-          CFI (cfiCond37) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
-          CFI (cfiCond37) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
-          CFI (cfiCond37) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
-          CFI (cfiCond37) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
-          CFI (cfiCond37) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
-          CFI (cfiCond37) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
-          CFI (cfiCond37) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
-          CFI (cfiCond37) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
-          CFI (cfiCond37) CFA_SP SP+-2
-          CFI (cfiCond37) CFA_XSP16 add(XSP16, 10)
-          CFI Block cfiPicker38 Using cfiCommon1
-          CFI (cfiPicker38) NoFunction
-          CFI (cfiPicker38) Picker
+          CFI Block cfiCond14 Using cfiCommon0
+          CFI (cfiCond14) Function KEUS_init_fnc
+          CFI (cfiCond14) Conditional ??CrossCallReturnLabel_8
+          CFI (cfiCond14) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
+          CFI (cfiCond14) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond14) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond14) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond14) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond14) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond14) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond14) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond14) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond14) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond14) CFA_SP SP+-2
+          CFI (cfiCond14) CFA_XSP16 add(XSP16, 10)
+          CFI Block cfiCond15 Using cfiCommon0
+          CFI (cfiCond15) Function KEUS_init_fnc
+          CFI (cfiCond15) Conditional ??CrossCallReturnLabel_9
+          CFI (cfiCond15) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
+          CFI (cfiCond15) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond15) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond15) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond15) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond15) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond15) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond15) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond15) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond15) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond15) CFA_SP SP+-2
+          CFI (cfiCond15) CFA_XSP16 add(XSP16, 10)
+          CFI Block cfiCond16 Using cfiCommon0
+          CFI (cfiCond16) Function KEUS_init_fnc
+          CFI (cfiCond16) Conditional ??CrossCallReturnLabel_10
+          CFI (cfiCond16) R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
+          CFI (cfiCond16) VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond16) V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond16) V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond16) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond16) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond16) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond16) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond16) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond16) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond16) CFA_SP SP+-2
+          CFI (cfiCond16) CFA_XSP16 add(XSP16, 10)
+          CFI Block cfiPicker17 Using cfiCommon1
+          CFI (cfiPicker17) NoFunction
+          CFI (cfiPicker17) Picker
         LCALL     `??KeusGPIOSetDirection::?relay`; Banked call to: KeusGPIOSetDirection
         ; Setup parameters for call to function KeusGPIOEdgeConfiguration
         ; Setup parameters for call to function KeusGPIOEdgeConfiguration
@@ -2338,265 +1984,386 @@ KEUS_init_fnc:
         ; Setup parameters for call to function KeusGPIOEdgeConfiguration
         MOV       R1,#0x1
         RET
-          CFI EndBlock cfiCond34
-          CFI EndBlock cfiCond35
-          CFI EndBlock cfiCond36
-          CFI EndBlock cfiCond37
-          CFI EndBlock cfiPicker38
-//  254 
-//  255 /**********************************************************************
-//  256  * @fn      KEUS_loop
-//  257  * @brief   Infinite loop
-//  258  * @return  No return after this
-//  259  * @param   None
-//  260  * *********************************************************************/
+          CFI EndBlock cfiCond13
+          CFI EndBlock cfiCond14
+          CFI EndBlock cfiCond15
+          CFI EndBlock cfiCond16
+          CFI EndBlock cfiPicker17
+//  229 
+//  230 /**********************************************************************
+//  231  * @fn      KEUS_loop
+//  232  * @brief   Infinite loop
+//  233  * @return  No return after this
+//  234  * @param   None
+//  235  * *********************************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  261 void KEUS_loop(void)
+//  236 uint8 KEUS_loop(void)
 KEUS_loop:
-          CFI Block cfiBlock39 Using cfiCommon0
+          CFI Block cfiBlock18 Using cfiCommon0
           CFI Function KEUS_loop
         CODE
-//  262 {
+//  237 {
         FUNCALL KEUS_loop, HalUARTPoll
-        LOCFRAME ISTACK, 2, STACK
+        LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 0, STACK
+        LOCFRAME XSTACK, 12, STACK
         LOCFRAME IOVERLAY, 0, STATIC
         LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
+        ARGFRAME ISTACK, 0, STACK
         ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 0, STACK
+        ARGFRAME XSTACK, 12, STACK
         ARGFRAME IOVERLAY, 0, STATIC
         ARGFRAME DOVERLAY, 0, STATIC
-        PUSH      DPL
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI CFA_SP SP+-4
-        PUSH      DPH
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-5
-        ; Saved register size: 2
+        REQUIRE ?V0
+        REQUIRE ?V1
+        REQUIRE ?V2
+        REQUIRE ?V3
+        MOV       A,#-0xc
+        LCALL     ?BANKED_ENTER_XDATA
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-12)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-11)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-10)))
+          CFI V1 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI V2 load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V3 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 12)
+        ; Saved register size: 12
         ; Auto size: 0
-//  263   while (1)
-//  264   {
-//  265     HalUARTPoll();
+//  238   while (1)
+//  239   {
+//  240     HalUARTPoll();
 ??KEUS_loop_0:
         ; Setup parameters for call to function HalUARTPoll
         LCALL     `??HalUARTPoll::?relay`; Banked call to: HalUARTPoll
-        SJMP      ??KEUS_loop_0
-//  266     
-//  267   }
-//  268 }
-          CFI EndBlock cfiBlock39
-//  269 
-//  270 /*******************************************************************
-//  271  * @fn    update_led
-//  272  * @brief   Function to receive LED state
-//  273  * *****************************************************************/
-//  274 
+//  241     if(APP_EVENT & EVENT_1){
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        MOV       C,0xE0 /* A   */.0
+        JNC       ??KEUS_loop_1
+//  242       blink_led = START;
+        MOV       DPTR,#blink_led
+        MOV       A,#0x1
+        MOVX      @DPTR,A
+//  243       return APP_EVENT ^ EVENT_1;
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        XRL       A,#0x1
+        SJMP      ??KEUS_loop_2
+//  244     }
+//  245     if(APP_EVENT & EVENT_2){
+??KEUS_loop_1:
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        ANL       A,#0x2
+        JZ        ??KEUS_loop_3
+//  246       blink_led = STOP;
+        MOV       DPTR,#blink_led
+        CLR       A
+        MOVX      @DPTR,A
+//  247       return APP_EVENT ^ EVENT_2;
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        XRL       A,#0x2
+        SJMP      ??KEUS_loop_2
+//  248     }
+//  249     if(APP_EVENT & EVENT_3){
+??KEUS_loop_3:
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        ANL       A,#0x4
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        JZ        ??KEUS_loop_4
+//  250       return APP_EVENT ^ EVENT_3;
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        XRL       A,#0x4
+        SJMP      ??KEUS_loop_2
+//  251     }
+//  252     if(APP_EVENT & EVENT_4){
+??KEUS_loop_4:
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        ANL       A,#0x8
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        JZ        ??KEUS_loop_5
+//  253       return APP_EVENT ^ EVENT_4;
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        XRL       A,#0x8
+        SJMP      ??KEUS_loop_2
+//  254     }
+//  255     if(APP_EVENT & EVENT_5){
+??KEUS_loop_5:
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        ANL       A,#0x10
+        JNZ       $+5
+        LJMP      ??KEUS_loop_0 & 0xFFFF
+//  256       return APP_EVENT ^ EVENT_5;
+        MOV       DPTR,#APP_EVENT
+        MOV       R0,#?V0
+        LCALL     ?L_MOV_X
+        MOV       A,?V0
+        XRL       A,#0x10
+??KEUS_loop_2:
+        MOV       R1,A
+        MOV       R7,#0x4
+        LJMP      ?BANKED_LEAVE_XDATA
+//  257     } 
+//  258   }
+//  259 }
+          CFI EndBlock cfiBlock18
+//  260 /*******************************************************************
+//  261  * @fn      update_led
+//  262  * @brief   Function to receive LED state
+//  263  * *****************************************************************/
+//  264 
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  275 void update_led(uint8 led_no, uint8 led_state_t){
+//  265 void update_led(uint8 led_no, uint8 led_state_t){
 update_led:
-          CFI Block cfiBlock40 Using cfiCommon0
+          CFI Block cfiBlock19 Using cfiCommon0
           CFI Function update_led
         CODE
-        PUSH      DPL
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI CFA_SP SP+-4
-        PUSH      DPH
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-5
-        ; Saved register size: 2
+        FUNCALL update_led, KeusThemeSwitchMiniWriteConfigDataIntoMemory
+        LOCFRAME ISTACK, 0, STACK
+        LOCFRAME PSTACK, 0, STACK
+        LOCFRAME XSTACK, 9, STACK
+        LOCFRAME IOVERLAY, 0, STATIC
+        LOCFRAME DOVERLAY, 0, STATIC
+        ARGFRAME ISTACK, 0, STACK
+        ARGFRAME PSTACK, 0, STACK
+        ARGFRAME XSTACK, 9, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
+        MOV       A,#-0x9
+        LCALL     ?BANKED_ENTER_XDATA
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+        ; Saved register size: 9
         ; Auto size: 0
-//  276   uint8 led_state;
-//  277   led_state = led_state_t;
-//  278   if (led_no == 1)
+        MOV       A,R1
+        MOV       R6,A
+        MOV       A,R2
+        MOV       R7,A
+//  266   uint8 led_state;
+//  267   led_state = led_state_t;
+//  268   //LED1
+//  269   if (led_no == 1)
         MOV       A,#0x69
         ADD       A,R2
-        MOV       R5,A
+        MOV       R3,A
         MOV       A,#-0x65
         ADD       A,R2
-        MOV       R4,A
+        MOV       R2,A
         MOV       A,#-0x33
-        ADD       A,R2
-        MOV       R3,A
+        ADD       A,R7
+        MOV       R1,A
         MOV       A,#0x1
-        XRL       A,R1
+        XRL       A,R6
         JZ        $+5
         LJMP      ??update_led_0 & 0xFFFF
-//  279   {
-//  280     if (config_data[0].config_id == ONOFF)
+//  270   {
+//  271     if (config_data[0].config_id == ONOFF)
         MOV       DPTR,#config_data + 2
-        LCALL     ?Subroutine6 & 0xFFFF
-??CrossCallReturnLabel_12:
+        LCALL     ?Subroutine5 & 0xFFFF
+??CrossCallReturnLabel_0:
         JNZ       ??update_led_1
-//  281     {
-//  282       if (led_state == 0)
-        MOV       A,R2
+//  272     {
+//  273       if (led_state == 0)
+        MOV       A,R7
         JNZ       ??update_led_2
-//  283       {
-//  284         config_data[0].valid_state = LOW;
+//  274       {
+//  275         config_data[0].valid_state = LOW;
         MOV       DPTR,#config_data + 1
         CLR       A
         SJMP      ??update_led_3
-//  285       }
-//  286       else
-//  287       {
-//  288         config_data[0].valid_state = HIGH;
-//  289       }
-//  290     }
-//  291     else if (config_data[0].config_id == DIMMING)
+//  276       }
+//  277       else
+//  278       {
+//  279         config_data[0].valid_state = HIGH;
+//  280       }
+//  281     }
+//  282     else if (config_data[0].config_id == DIMMING)
 ??update_led_1:
         MOV       A,#0x2
         XRL       A,R0
         JZ        ??update_led_4
-//  292     {
-//  293       config_data[0].valid_state = led_state;
-//  294     }
-//  295     else if (config_data[0].config_id == FAN_CONTROLLER)
+//  283     {
+//  284       config_data[0].valid_state = led_state;
+//  285     }
+//  286     else if (config_data[0].config_id == FAN_CONTROLLER)
         MOV       A,#0x3
         XRL       A,R0
         JNZ       ??update_led_5
-//  296     {
-//  297       if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
-        MOV       A,R2
+//  287     {
+//  288       if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
+        MOV       A,R7
         JZ        ??update_led_4
         MOV       A,#0x32
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_4
         MOV       A,#0x64
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_4
         MOV       A,#-0x6a
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_4
         MOV       A,#-0x38
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_4
         MOV       A,#-0x1
-        XRL       A,R2
+        XRL       A,R7
         JNZ       ??update_led_6
-//  298       {
-//  299         config_data[0].valid_state = led_state;
+//  289       {
+//  290         config_data[0].valid_state = led_state;
 ??update_led_4:
-        MOV       A,R2
+        MOV       A,R7
         MOV       DPTR,#config_data + 1
         SJMP      ??update_led_3
-//  300       }
-//  301       else if (led_state > 0 && led_state < 50)
+//  291       }
+//  292       else if (led_state > 0 && led_state < 50)
 ??update_led_6:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#0x32
         JNC       ??update_led_7
-//  302       {
-//  303         config_data[0].valid_state = 50;
+//  293       {
+//  294         config_data[0].valid_state = 50;
         MOV       DPTR,#config_data + 1
         MOV       A,#0x32
         SJMP      ??update_led_3
-//  304       }
-//  305       else if (led_state > 50 && led_state < 100)
+//  295       }
+//  296       else if (led_state > 50 && led_state < 100)
 ??update_led_7:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_8
-//  306       {
-//  307         config_data[0].valid_state = 100;
+//  297       {
+//  298         config_data[0].valid_state = 100;
         MOV       DPTR,#config_data + 1
         MOV       A,#0x64
         SJMP      ??update_led_3
-//  308       }
-//  309       else if (led_state > 100 && led_state < 150)
+//  299       }
+//  300       else if (led_state > 100 && led_state < 150)
 ??update_led_8:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_9
-//  310       {
-//  311         config_data[0].valid_state = 150;
+//  301       {
+//  302         config_data[0].valid_state = 150;
         MOV       DPTR,#config_data + 1
         MOV       A,#-0x6a
         SJMP      ??update_led_3
-//  312       }
-//  313       else if (led_state > 150 && led_state < 200)
+//  303       }
+//  304       else if (led_state > 150 && led_state < 200)
 ??update_led_9:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_10
-//  314       {
-//  315         config_data[0].valid_state = 200;
+//  305       {
+//  306         config_data[0].valid_state = 200;
         MOV       DPTR,#config_data + 1
         MOV       A,#-0x38
         SJMP      ??update_led_3
-//  316       }
-//  317       else if (led_state > 200 && led_state < 255)
+//  307       }
+//  308       else if (led_state > 200 && led_state < 255)
 ??update_led_10:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#-0x37
         JC        ??update_led_5
-//  318       {
-//  319         config_data[0].valid_state = 255;
+//  309       {
+//  310         config_data[0].valid_state = 255;
 ??update_led_2:
         MOV       DPTR,#config_data + 1
         MOV       A,#-0x1
 ??update_led_3:
         MOVX      @DPTR,A
-//  320       }
-//  321     }
-//  322     config_data[0].led = led_no;
+//  311       }
+//  312     }
+//  313     config_data[0].led = led_no;
 ??update_led_5:
         MOV       DPTR,#config_data
         MOV       A,#0x1
         LJMP      ??update_led_11 & 0xFFFF
-//  323   }
-//  324 
-//  325   //LED == 2
-//  326   else if (led_no == 2)
+//  314   }
+//  315 
+//  316   //LED == 2
+//  317   else if (led_no == 2)
 ??update_led_0:
         MOV       A,#0x2
-        XRL       A,R1
+        XRL       A,R6
         JZ        $+5
         LJMP      ??update_led_12 & 0xFFFF
-//  327   {
-//  328     if (config_data[1].config_id == ONOFF)
+//  318   {
+//  319     if (config_data[1].config_id == ONOFF)
         MOV       DPTR,#config_data + 5
-        LCALL     ?Subroutine6 & 0xFFFF
-??CrossCallReturnLabel_13:
+        LCALL     ?Subroutine5 & 0xFFFF
+??CrossCallReturnLabel_1:
         JNZ       ??update_led_13
-//  329     {
-//  330       if (led_state == 0)
-        MOV       A,R2
+//  320     {
+//  321       if (led_state == 0)
+        MOV       A,R7
         JNZ       ??update_led_14
-//  331       {
-//  332         config_data[1].valid_state = LOW;
+//  322       {
+//  323         config_data[1].valid_state = LOW;
         MOV       DPTR,#config_data + 4
         CLR       A
         SJMP      ??update_led_15
-//  333       }
-//  334       else
-//  335       {
-//  336         config_data[1].valid_state = HIGH;
-//  337       }
-//  338     }
-//  339     else if (config_data[1].config_id == DIMMING)
+//  324       }
+//  325       else
+//  326       {
+//  327         config_data[1].valid_state = HIGH;
+//  328       }
+//  329     }
+//  330     else if (config_data[1].config_id == DIMMING)
 ??update_led_13:
         MOV       A,#0x2
         XRL       A,R0
         JZ        ??update_led_16
-//  340     {
-//  341       config_data[1].valid_state = led_state;
-//  342     }
-//  343     
-//  344     else if (config_data[1].config_id == FAN_CONTROLLER)
+//  331     {
+//  332       config_data[1].valid_state = led_state;
+//  333     }
+//  334     
+//  335     else if (config_data[1].config_id == FAN_CONTROLLER)
         MOV       A,#0x3
         XRL       A,R0
         JNZ       ??update_led_17
-//  345     {
-//  346       if (config_data[1].valid_state == 0 || config_data[1].valid_state == 50 || config_data[1].valid_state == 100 || config_data[1].valid_state == 150 || config_data[1].valid_state == 200 || config_data[1].valid_state == 255)
+//  336     {
+//  337       if (config_data[1].valid_state == 0 || config_data[1].valid_state == 50 || config_data[1].valid_state == 100 || config_data[1].valid_state == 150 || config_data[1].valid_state == 200 || config_data[1].valid_state == 255)
         MOV       DPTR,#config_data + 4
         MOVX      A,@DPTR
         MOV       R0,A
@@ -2616,414 +2383,471 @@ update_led:
         MOV       A,#-0x1
         XRL       A,R0
         JNZ       ??update_led_18
-//  347       {
-//  348         config_data[1].valid_state = led_state;
+//  338       {
+//  339         config_data[1].valid_state = led_state;
 ??update_led_16:
-        MOV       A,R2
+        MOV       A,R7
         MOV       DPTR,#config_data + 4
         SJMP      ??update_led_15
-//  349       }
-//  350       else if (led_state > 0 && led_state < 50)
+//  340       }
+//  341       else if (led_state > 0 && led_state < 50)
 ??update_led_18:
-        MOV       A,R2
+        MOV       A,R7
         JZ        ??update_led_19
         CLR       C
         SUBB      A,#0x32
         JNC       ??update_led_19
-//  351       {
-//  352         config_data[1].valid_state = 50;
+//  342       {
+//  343         config_data[1].valid_state = 50;
         MOV       A,#0x32
         SJMP      ??update_led_15
-//  353       }
-//  354       else if (led_state > 50 && led_state < 100)
+//  344       }
+//  345       else if (led_state > 50 && led_state < 100)
 ??update_led_19:
-        MOV       A,R3
+        MOV       A,R1
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_20
-//  355       {
-//  356         config_data[1].valid_state = 100;
+//  346       {
+//  347         config_data[1].valid_state = 100;
         MOV       A,#0x64
         SJMP      ??update_led_15
-//  357       }
-//  358       else if (led_state > 100 && led_state < 150)
+//  348       }
+//  349       else if (led_state > 100 && led_state < 150)
 ??update_led_20:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_21
-//  359       {
-//  360         config_data[1].valid_state = 150;
+//  350       {
+//  351         config_data[1].valid_state = 150;
         MOV       A,#-0x6a
         SJMP      ??update_led_15
-//  361       }
-//  362       else if (led_state > 150 && led_state < 200)
+//  352       }
+//  353       else if (led_state > 150 && led_state < 200)
 ??update_led_21:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_22
-//  363       {
-//  364         config_data[1].valid_state = 200;
+//  354       {
+//  355         config_data[1].valid_state = 200;
         MOV       A,#-0x38
         SJMP      ??update_led_15
-//  365       }
-//  366       else if (led_state > 200 && led_state < 255)
+//  356       }
+//  357       else if (led_state > 200 && led_state < 255)
 ??update_led_22:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#-0x37
         JC        ??update_led_17
         MOV       A,#-0x1
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_17
-//  367       {
-//  368         config_data[1].valid_state = 255;
+//  358       {
+//  359         config_data[1].valid_state = 255;
 ??update_led_14:
         MOV       DPTR,#config_data + 4
         MOV       A,#-0x1
 ??update_led_15:
         MOVX      @DPTR,A
-//  369       }
-//  370     }
-//  371     config_data[1].led = led_no;
+//  360       }
+//  361     }
+//  362     config_data[1].led = led_no;
 ??update_led_17:
         MOV       DPTR,#config_data + 3
         MOV       A,#0x2
         LJMP      ??update_led_11 & 0xFFFF
-//  372   }
-//  373   //LED == 3
-//  374   else if (led_no == 3)
+//  363   }
+//  364   //LED == 3
+//  365   else if (led_no == 3)
 ??update_led_12:
         MOV       A,#0x3
-        XRL       A,R1
+        XRL       A,R6
         JZ        $+5
         LJMP      ??update_led_23 & 0xFFFF
-//  375   {
-//  376     if (config_data[2].config_id == ONOFF)
+//  366   {
+//  367     if (config_data[2].config_id == ONOFF)
         MOV       DPTR,#config_data + 8
-        LCALL     ?Subroutine6 & 0xFFFF
-??CrossCallReturnLabel_14:
+        LCALL     ?Subroutine5 & 0xFFFF
+??CrossCallReturnLabel_2:
         JNZ       ??update_led_24
-//  377     {
-//  378       if (led_state == 0)
-        MOV       A,R2
+//  368     {
+//  369       if (led_state == 0)
+        MOV       A,R7
         JNZ       ??update_led_25
-//  379       {
-//  380         config_data[2].valid_state = LOW;
+//  370       {
+//  371         config_data[2].valid_state = LOW;
         MOV       DPTR,#config_data + 7
         CLR       A
         SJMP      ??update_led_26
-//  381       }
-//  382       else
-//  383       {
-//  384         config_data[2].valid_state = HIGH;
-//  385       }
-//  386     }
-//  387     else if (config_data[2].config_id == DIMMING)
+//  372       }
+//  373       else
+//  374       {
+//  375         config_data[2].valid_state = HIGH;
+//  376       }
+//  377     }
+//  378     else if (config_data[2].config_id == DIMMING)
 ??update_led_24:
         MOV       A,#0x2
         XRL       A,R0
         JZ        ??update_led_27
-//  388     {
-//  389       config_data[2].valid_state = led_state;
-//  390       
-//  391     }
-//  392     else if (config_data[2].config_id == FAN_CONTROLLER)
+//  379     {
+//  380       config_data[2].valid_state = led_state;
+//  381       
+//  382     }
+//  383     else if (config_data[2].config_id == FAN_CONTROLLER)
         MOV       A,#0x3
         XRL       A,R0
         JNZ       ??update_led_28
-//  393     {
-//  394       if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
-        MOV       A,R2
+//  384     {
+//  385       if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
+        MOV       A,R7
         JZ        ??update_led_27
         MOV       A,#0x32
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_27
         MOV       A,#0x64
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_27
         MOV       A,#-0x6a
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_27
         MOV       A,#-0x38
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_27
         MOV       A,#-0x1
-        XRL       A,R2
+        XRL       A,R7
         JNZ       ??update_led_29
-//  395       {
-//  396         config_data[2].valid_state = led_state;
+//  386       {
+//  387         config_data[2].valid_state = led_state;
 ??update_led_27:
-        MOV       A,R2
+        MOV       A,R7
         MOV       DPTR,#config_data + 7
         SJMP      ??update_led_26
-//  397       }
-//  398       else if (led_state > 0 && led_state < 50)
+//  388       }
+//  389       else if (led_state > 0 && led_state < 50)
 ??update_led_29:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#0x32
         JNC       ??update_led_30
-//  399       {
-//  400         config_data[2].valid_state = 50;
+//  390       {
+//  391         config_data[2].valid_state = 50;
         MOV       DPTR,#config_data + 7
         MOV       A,#0x32
         SJMP      ??update_led_26
-//  401       }
-//  402       else if (led_state > 50 && led_state < 100)
+//  392       }
+//  393       else if (led_state > 50 && led_state < 100)
 ??update_led_30:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_31
-//  403       {
-//  404         config_data[2].valid_state = 100;
+//  394       {
+//  395         config_data[2].valid_state = 100;
         MOV       DPTR,#config_data + 7
         MOV       A,#0x64
         SJMP      ??update_led_26
-//  405       }
-//  406       else if (led_state > 100 && led_state < 150)
+//  396       }
+//  397       else if (led_state > 100 && led_state < 150)
 ??update_led_31:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_32
-//  407       {
-//  408         config_data[2].valid_state = 150;
+//  398       {
+//  399         config_data[2].valid_state = 150;
         MOV       DPTR,#config_data + 7
         MOV       A,#-0x6a
         SJMP      ??update_led_26
-//  409       }
-//  410       else if (led_state > 150 && led_state < 200)
+//  400       }
+//  401       else if (led_state > 150 && led_state < 200)
 ??update_led_32:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_33
-//  411       {
-//  412         config_data[2].valid_state = 200;
+//  402       {
+//  403         config_data[2].valid_state = 200;
         MOV       DPTR,#config_data + 7
         MOV       A,#-0x38
         SJMP      ??update_led_26
-//  413       }
-//  414       else if (led_state > 200 && led_state < 255)
+//  404       }
+//  405       else if (led_state > 200 && led_state < 255)
 ??update_led_33:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#-0x37
         JC        ??update_led_28
-//  415       {
-//  416         config_data[2].valid_state = 255;
+//  406       {
+//  407         config_data[2].valid_state = 255;
 ??update_led_25:
         MOV       DPTR,#config_data + 7
         MOV       A,#-0x1
 ??update_led_26:
         MOVX      @DPTR,A
-//  417       }
-//  418     }
-//  419     config_data[2].led = led_no;
+//  408       }
+//  409     }
+//  410     config_data[2].led = led_no;
 ??update_led_28:
         MOV       DPTR,#config_data + 6
         MOV       A,#0x3
         LJMP      ??update_led_11 & 0xFFFF
-//  420   }
-//  421   //LED == 4
-//  422   else if (led_no == 4)
+//  411   }
+//  412   //LED == 4
+//  413   else if (led_no == 4)
 ??update_led_23:
         MOV       A,#0x4
-        XRL       A,R1
+        XRL       A,R6
         JZ        $+5
         LJMP      ??update_led_34 & 0xFFFF
-//  423   {
-//  424     if (config_data[3].config_id == ONOFF)
+//  414   {
+//  415     if (config_data[3].config_id == ONOFF)
         MOV       DPTR,#config_data + 11
-        LCALL     ?Subroutine6 & 0xFFFF
-??CrossCallReturnLabel_15:
+        LCALL     ?Subroutine5 & 0xFFFF
+??CrossCallReturnLabel_3:
         JNZ       ??update_led_35
-//  425     {
-//  426       if (led_state == 0)
-        MOV       A,R2
+//  416     {
+//  417       if (led_state == 0)
+        MOV       A,R7
         JNZ       ??update_led_36
-//  427       {
-//  428         config_data[3].valid_state = LOW;
+//  418       {
+//  419         config_data[3].valid_state = LOW;
         MOV       DPTR,#config_data + 10
         CLR       A
         SJMP      ??update_led_37
-//  429       }
-//  430       else
-//  431       {
-//  432         config_data[3].valid_state = HIGH;
-//  433       }
-//  434     }
-//  435     else if (config_data[3].config_id == DIMMING)
+//  420       }
+//  421       else
+//  422       {
+//  423         config_data[3].valid_state = HIGH;
+//  424       }
+//  425     }
+//  426     else if (config_data[3].config_id == DIMMING)
 ??update_led_35:
         MOV       A,#0x2
         XRL       A,R0
         JZ        ??update_led_38
-//  436     {
-//  437       config_data[3].valid_state = led_state;
-//  438       
-//  439     }
-//  440     else if (config_data[3].config_id == FAN_CONTROLLER)
+//  427     {
+//  428       config_data[3].valid_state = led_state;
+//  429       
+//  430     }
+//  431     else if (config_data[3].config_id == FAN_CONTROLLER)
         MOV       A,#0x3
         XRL       A,R0
         JNZ       ??update_led_39
-//  441     {
-//  442       if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
-        MOV       A,R2
+//  432     {
+//  433       if (led_state == 0 || led_state == 50 || led_state == 100 || led_state == 150 || led_state == 200 || led_state == 255)
+        MOV       A,R7
         JZ        ??update_led_38
         MOV       A,#0x32
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_38
         MOV       A,#0x64
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_38
         MOV       A,#-0x6a
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_38
         MOV       A,#-0x38
-        XRL       A,R2
+        XRL       A,R7
         JZ        ??update_led_38
         MOV       A,#-0x1
-        XRL       A,R2
+        XRL       A,R7
         JNZ       ??update_led_40
-//  443       {
-//  444         config_data[3].valid_state = led_state;
+//  434       {
+//  435         config_data[3].valid_state = led_state;
 ??update_led_38:
-        MOV       A,R2
+        MOV       A,R7
         MOV       DPTR,#config_data + 10
         SJMP      ??update_led_37
-//  445       }
-//  446       else if (led_state > 0 && led_state < 50)
+//  436       }
+//  437       else if (led_state > 0 && led_state < 50)
 ??update_led_40:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#0x32
         JNC       ??update_led_41
-//  447       {
-//  448         config_data[3].valid_state = 50;
+//  438       {
+//  439         config_data[3].valid_state = 50;
         MOV       DPTR,#config_data + 10
         MOV       A,#0x32
         SJMP      ??update_led_37
-//  449       }
-//  450       else if (led_state > 50 && led_state < 100)
+//  440       }
+//  441       else if (led_state > 50 && led_state < 100)
 ??update_led_41:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_42
-//  451       {
-//  452         config_data[3].valid_state = 100;
+//  442       {
+//  443         config_data[3].valid_state = 100;
         MOV       DPTR,#config_data + 10
         MOV       A,#0x64
         SJMP      ??update_led_37
-//  453       }
-//  454       else if (led_state > 100 && led_state < 150)
+//  444       }
+//  445       else if (led_state > 100 && led_state < 150)
 ??update_led_42:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_43
-//  455       {
-//  456         config_data[3].valid_state = 150;
+//  446       {
+//  447         config_data[3].valid_state = 150;
         MOV       DPTR,#config_data + 10
         MOV       A,#-0x6a
         SJMP      ??update_led_37
-//  457       }
-//  458       else if (led_state > 150 && led_state < 200)
+//  448       }
+//  449       else if (led_state > 150 && led_state < 200)
 ??update_led_43:
         DEC       A
         CLR       C
         SUBB      A,#0x31
         JNC       ??update_led_44
-//  459       {
-//  460         config_data[3].valid_state = 200;
+//  450       {
+//  451         config_data[3].valid_state = 200;
         MOV       DPTR,#config_data + 10
         MOV       A,#-0x38
         SJMP      ??update_led_37
-//  461       }
-//  462       else if (led_state > 200 && led_state < 255)
+//  452       }
+//  453       else if (led_state > 200 && led_state < 255)
 ??update_led_44:
-        MOV       A,R2
+        MOV       A,R7
         CLR       C
         SUBB      A,#-0x37
         JC        ??update_led_39
-//  463       {
-//  464         config_data[3].valid_state = 255;
+//  454       {
+//  455         config_data[3].valid_state = 255;
 ??update_led_36:
         MOV       DPTR,#config_data + 10
         MOV       A,#-0x1
 ??update_led_37:
         MOVX      @DPTR,A
-//  465       }
-//  466     }
-//  467     config_data[3].led = led_no;
+//  456       }
+//  457     }
+//  458     config_data[3].led = led_no;
 ??update_led_39:
         MOV       DPTR,#config_data + 9
         MOV       A,#0x4
 ??update_led_11:
         MOVX      @DPTR,A
-//  468   }
-//  469 }
+//  459   }
+//  460   update_config_to_memory();
 ??update_led_34:
-        LJMP      ??Subroutine11_0 & 0xFFFF
-          CFI EndBlock cfiBlock40
+          CFI EndBlock cfiBlock19
+        ; Setup parameters for call to function KeusThemeSwitchMiniWriteConfigDataIntoMemory
+        REQUIRE ?Subroutine3
+        ; // Fall through to label ?Subroutine3
+//  461 }
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine6:
-          CFI Block cfiCond41 Using cfiCommon0
+?Subroutine3:
+          CFI Block cfiBlock20 Using cfiCommon0
+          CFI NoFunction
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+        LCALL     `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`; Banked call to: KeusThemeSwitchMiniWriteConfigDataIntoMemory
+        MOV       A,R1
+        MOV       DPTR,#write_status
+        MOVX      @DPTR,A
+        SJMP      ??Subroutine13_0
+          CFI EndBlock cfiBlock20
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine5:
+          CFI Block cfiCond21 Using cfiCommon0
           CFI Function update_led
-          CFI Conditional ??CrossCallReturnLabel_12
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-7
-          CFI Block cfiCond42 Using cfiCommon0
-          CFI (cfiCond42) Function update_led
-          CFI (cfiCond42) Conditional ??CrossCallReturnLabel_13
-          CFI (cfiCond42) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond42) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond42) CFA_SP SP+-7
-          CFI Block cfiCond43 Using cfiCommon0
-          CFI (cfiCond43) Function update_led
-          CFI (cfiCond43) Conditional ??CrossCallReturnLabel_14
-          CFI (cfiCond43) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond43) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond43) CFA_SP SP+-7
-          CFI Block cfiCond44 Using cfiCommon0
-          CFI (cfiCond44) Function update_led
-          CFI (cfiCond44) Conditional ??CrossCallReturnLabel_15
-          CFI (cfiCond44) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond44) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond44) CFA_SP SP+-7
-          CFI Block cfiPicker45 Using cfiCommon1
-          CFI (cfiPicker45) NoFunction
-          CFI (cfiPicker45) Picker
+          CFI Conditional ??CrossCallReturnLabel_0
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI CFA_SP SP+-2
+          CFI CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiCond22 Using cfiCommon0
+          CFI (cfiCond22) Function update_led
+          CFI (cfiCond22) Conditional ??CrossCallReturnLabel_1
+          CFI (cfiCond22) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond22) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond22) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond22) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond22) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond22) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond22) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond22) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond22) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond22) CFA_SP SP+-2
+          CFI (cfiCond22) CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiCond23 Using cfiCommon0
+          CFI (cfiCond23) Function update_led
+          CFI (cfiCond23) Conditional ??CrossCallReturnLabel_2
+          CFI (cfiCond23) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond23) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond23) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond23) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond23) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond23) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond23) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond23) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond23) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond23) CFA_SP SP+-2
+          CFI (cfiCond23) CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiCond24 Using cfiCommon0
+          CFI (cfiCond24) Function update_led
+          CFI (cfiCond24) Conditional ??CrossCallReturnLabel_3
+          CFI (cfiCond24) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond24) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond24) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond24) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond24) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond24) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond24) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond24) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond24) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond24) CFA_SP SP+-2
+          CFI (cfiCond24) CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiPicker25 Using cfiCommon1
+          CFI (cfiPicker25) NoFunction
+          CFI (cfiPicker25) Picker
         MOVX      A,@DPTR
         MOV       R0,A
         MOV       A,#0x1
         XRL       A,R0
         RET
-          CFI EndBlock cfiCond41
-          CFI EndBlock cfiCond42
-          CFI EndBlock cfiCond43
-          CFI EndBlock cfiCond44
-          CFI EndBlock cfiPicker45
-//  470 
-//  471 
-//  472 /***********************************************************************
-//  473  * @fn      update_config_struct
-//  474  * @brief   update config structure
-//  475  * 
-//  476  * ********************************************************************/
+          CFI EndBlock cfiCond21
+          CFI EndBlock cfiCond22
+          CFI EndBlock cfiCond23
+          CFI EndBlock cfiCond24
+          CFI EndBlock cfiPicker25
+//  462 
+//  463 
+//  464 /***********************************************************************
+//  465  * @fn      update_config_struct
+//  466  * @brief   update config structure
+//  467  * 
+//  468  * ********************************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  477 void update_config_struct(uint8 led_no, uint8 led_state)
+//  469 void update_config_struct(uint8 led_no, uint8 led_state)
 update_config_struct:
-          CFI Block cfiBlock46 Using cfiCommon0
+          CFI Block cfiBlock26 Using cfiCommon0
           CFI Function update_config_struct
         CODE
-//  478 {
+//  470 {
         FUNCALL update_config_struct, KeusThemeSwitchMiniWriteConfigDataIntoMemory
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -3052,135 +2876,325 @@ update_config_struct:
         ; Auto size: 0
         MOV       A,R1
         MOV       R6,A
-//  479   if (led_no == 1)
+//  471   if (led_no == 1)
         MOV       A,#0x1
         XRL       A,R6
         JNZ       ??update_config_struct_0
-//  480   {
-//  481     config_data[0].valid_state = led_state;
+//  472   {
+//  473     config_data[0].valid_state = led_state;
         MOV       A,R2
         MOV       DPTR,#config_data + 1
         MOVX      @DPTR,A
-//  482     config_data[0].led = led_no;
+//  474     config_data[0].led = led_no;
         MOV       DPTR,#config_data
         MOV       A,#0x1
         SJMP      ??update_config_struct_1
-//  483   }
-//  484   else if (led_no == 2)
+//  475   }
+//  476   else if (led_no == 2)
 ??update_config_struct_0:
         MOV       A,#0x2
         XRL       A,R6
         JNZ       ??update_config_struct_2
-//  485   {
-//  486     config_data[1].led = led_no;
+//  477   {
+//  478     config_data[1].led = led_no;
         MOV       DPTR,#config_data + 3
         MOV       A,#0x2
         SJMP      ??update_config_struct_3
-//  487     config_data[1].valid_state = led_state;
-//  488   }
-//  489   else if (led_no == 3)
+//  479     config_data[1].valid_state = led_state;
+//  480   }
+//  481   else if (led_no == 3)
 ??update_config_struct_2:
         MOV       A,#0x3
         XRL       A,R6
         JNZ       ??update_config_struct_4
-//  490   {
-//  491     config_data[2].led = led_no;
+//  482   {
+//  483     config_data[2].led = led_no;
         MOV       DPTR,#config_data + 6
         MOV       A,#0x3
         SJMP      ??update_config_struct_3
-//  492     config_data[2].valid_state = led_state;
-//  493   }
-//  494   else if (led_no == 4)
+//  484     config_data[2].valid_state = led_state;
+//  485   }
+//  486   else if (led_no == 4)
 ??update_config_struct_4:
         MOV       A,#0x4
         XRL       A,R6
         JNZ       ??update_config_struct_5
-//  495   {
-//  496     config_data[3].led = led_no;
+//  487   {
+//  488     config_data[3].led = led_no;
         MOV       DPTR,#config_data + 9
         MOV       A,#0x4
 ??update_config_struct_3:
         MOVX      @DPTR,A
-//  497     config_data[3].valid_state = led_state;
+//  489     config_data[3].valid_state = led_state;
         MOV       A,R2
         INC       DPTR
 ??update_config_struct_1:
         MOVX      @DPTR,A
-//  498   }
-//  499   update_config_to_memory();
+//  490   }
+//  491   update_config_to_memory();
 ??update_config_struct_5:
         ; Setup parameters for call to function KeusThemeSwitchMiniWriteConfigDataIntoMemory
-        LCALL     `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`; Banked call to: KeusThemeSwitchMiniWriteConfigDataIntoMemory
-        MOV       A,R1
-        MOV       DPTR,#write_status
-        MOVX      @DPTR,A
-//  500 }
-        MOV       R7,#0x1
-        LJMP      ?BANKED_LEAVE_XDATA
-          CFI EndBlock cfiBlock46
-//  501 
-//  502 // uint8 get_state(uint8* state){
-//  503 //   uint8 Tx_buff [] = {0},index = 0;
-//  504 //   for(uint8 i = 0;i<4;i++){
-//  505 //   Tx_buff[index++] = config_data[i].led;
-//  506 //   Tx_buff[index++] = config_data[i].valid_state;
-//  507 //   }
-//  508 //   return Tx_buff;
-//  509 // }
-//  510 
-//  511 /*****************************************************************************
-//  512  * @fn      uart_send_sate_ack
-//  513  * @brief   Send back State of all switch to uart
-//  514  * @return
-//  515  * @param 
-//  516  * **************************************************************************/
+        SJMP      ?Subroutine3
+//  492 }
+          CFI EndBlock cfiBlock26
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  517 void uart_send_switch_sate_ack(void){
-uart_send_switch_sate_ack:
-          CFI Block cfiBlock47 Using cfiCommon0
-          CFI Function uart_send_switch_sate_ack
-        CODE
-        FUNCALL uart_send_switch_sate_ack, HalUARTWrite
-        LOCFRAME ISTACK, 2, STACK
-        LOCFRAME PSTACK, 0, STACK
-        LOCFRAME XSTACK, 20, STACK
-        LOCFRAME IOVERLAY, 0, STATIC
-        LOCFRAME DOVERLAY, 0, STATIC
-        ARGFRAME ISTACK, 2, STACK
-        ARGFRAME PSTACK, 0, STACK
-        ARGFRAME XSTACK, 20, STACK
-        ARGFRAME IOVERLAY, 0, STATIC
-        ARGFRAME DOVERLAY, 0, STATIC
-        PUSH      DPL
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI CFA_SP SP+-4
-        PUSH      DPH
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-5
-        ; Saved register size: 2
-        ; Auto size: 20
-        MOV       A,#-0x14
-        LCALL     ?ALLOC_XSTACK8
-          CFI CFA_XSP16 add(XSP16, 20)
-//  518   uint8 Tx_buff[20] = {0};
-        MOV       DPTR,#`?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0`
-        MOV       R4,?XSP + 0
-        MOV       R5,?XSP + 1
-        MOV       A,#0x14
-        LCALL     ?MOVE_LONG8_XDATA_XDATA
-//  519   uint8 index =0;
-//  520   Tx_buff[index++] = 0x28;
-        MOV       DPL,?XSP + 0
-        MOV       DPH,?XSP + 1
-        MOV       A,#0x28
+?Subroutine2:
+          CFI Block cfiBlock27 Using cfiCommon0
+          CFI NoFunction
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 29)
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+        LCALL     ?Subroutine10 & 0xFFFF
+??CrossCallReturnLabel_15:
+        MOV       A,#0x29
         MOVX      @DPTR,A
-        MOV       R2,#0x1
-//  521   for(uint8 i = 0;i<4;i++){
-        MOV       R3,#0x0
-//  522   Tx_buff[index++] = config_data[i].led;
-??uart_send_switch_sate_ack_0:
-        MOV       A,R3
+        ; Setup parameters for call to function HalUARTWrite
+        ; Setup parameters for call to function HalUARTWrite
+        INC       R4
+        INC       R4
+        INC       R4
+        MOV       R5,#0x0
+        MOV       R2,?XSP + 0
+        MOV       R3,?XSP + 1
+        MOV       R1,#0x0
+        LCALL     `??HalUARTWrite::?relay`; Banked call to: HalUARTWrite
+        MOV       A,#0x14
+        LCALL     ?DEALLOC_XSTACK8
+          CFI EndBlock cfiBlock27
+        REQUIRE ??Subroutine13_0
+        ; // Fall through to label ??Subroutine13_0
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+??Subroutine13_0:
+          CFI Block cfiBlock28 Using cfiCommon0
+          CFI NoFunction
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+        MOV       R7,#0x1
+        LJMP      ?BANKED_LEAVE_XDATA
+          CFI EndBlock cfiBlock28
+//  493 
+//  494 /***************************************************************************
+//  495  * @brief   Function to ge state and corresponding led_no
+//  496  * ************************************************************************/
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+//  497 uint8 get_state(uint8* buff){
+get_state:
+          CFI Block cfiBlock29 Using cfiCommon0
+          CFI Function get_state
+        CODE
+        MOV       A,#-0x9
+        LCALL     ?BANKED_ENTER_XDATA
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+        ; Saved register size: 9
+        ; Auto size: 0
+//  498   uint8 index = 0,no_of_led = 4;
+//  499   buff[index++] = no_of_led;
+        MOV       DPL,R2
+        MOV       DPH,R3
+        MOV       A,#0x4
+        MOVX      @DPTR,A
+        MOV       R4,#0x1
+//  500   for(uint8 i = 0;i<no_of_led;i++){
+        MOV       R5,#0x0
+//  501     buff[index++] = config_data[i].led;
+??get_state_0:
+        LCALL     ?Subroutine9 & 0xFFFF
+??CrossCallReturnLabel_20:
+        PUSH      A
+          CFI CFA_SP SP+-1
+        MOV       A,R4
+        MOV       R6,A
+        MOV       A,R2
+        ADD       A,R6
+        MOV       DPL,A
+        CLR       A
+        ADDC      A,R3
+        MOV       DPH,A
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R4
+//  502     buff[index++] = config_data[i].valid_state;
+        MOV       DPL,R0
+        MOV       DPH,R1
+        INC       DPTR
+        MOVX      A,@DPTR
+        PUSH      A
+          CFI CFA_SP SP+-1
+        MOV       A,R2
+        ADD       A,R4
+        MOV       DPL,A
+        CLR       A
+        ADDC      A,R3
+        MOV       DPH,A
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R4
+//  503   }
+        INC       R5
+        MOV       A,R5
+        CLR       C
+        SUBB      A,#0x4
+        JC        ??get_state_0
+//  504   return index-1;
+          CFI EndBlock cfiBlock29
+        REQUIRE ?Subroutine4
+        ; // Fall through to label ?Subroutine4
+//  505 }
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine4:
+          CFI Block cfiBlock30 Using cfiCommon0
+          CFI NoFunction
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+        MOV       A,#-0x1
+        ADD       A,R4
+        MOV       R1,A
+        SJMP      ??Subroutine13_0
+          CFI EndBlock cfiBlock30
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine9:
+          CFI Block cfiCond31 Using cfiCommon0
+          CFI Function get_state
+          CFI Conditional ??CrossCallReturnLabel_20
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI CFA_SP SP+-2
+          CFI CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiCond32 Using cfiCommon0
+          CFI (cfiCond32) Function get_config
+          CFI (cfiCond32) Conditional ??CrossCallReturnLabel_21
+          CFI (cfiCond32) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond32) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond32) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond32) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond32) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond32) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond32) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond32) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond32) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond32) CFA_SP SP+-2
+          CFI (cfiCond32) CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiPicker33 Using cfiCommon1
+          CFI (cfiPicker33) NoFunction
+          CFI (cfiPicker33) Picker
+        MOV       A,R5
+          CFI EndBlock cfiCond31
+          CFI EndBlock cfiCond32
+          CFI EndBlock cfiPicker33
+        REQUIRE ??Subroutine14_0
+        ; // Fall through to label ??Subroutine14_0
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+??Subroutine14_0:
+          CFI Block cfiCond34 Using cfiCommon0
+          CFI Function uart_send_switch_sate_ack
+          CFI Conditional ??CrossCallReturnLabel_18
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI CFA_SP SP+-2
+          CFI CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiCond35 Using cfiCommon0
+          CFI (cfiCond35) Function uart_send_config_sate_ack
+          CFI (cfiCond35) Conditional ??CrossCallReturnLabel_19
+          CFI (cfiCond35) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond35) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond35) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond35) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond35) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond35) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond35) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond35) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond35) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond35) CFA_SP SP+-2
+          CFI (cfiCond35) CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiCond36 Using cfiCommon0
+          CFI (cfiCond36) Function get_state
+          CFI (cfiCond36) Conditional ??CrossCallReturnLabel_20
+          CFI (cfiCond36) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond36) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond36) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond36) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond36) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond36) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond36) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond36) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond36) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond36) CFA_SP SP+-2
+          CFI (cfiCond36) CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiCond37 Using cfiCommon0
+          CFI (cfiCond37) Function get_config
+          CFI (cfiCond37) Conditional ??CrossCallReturnLabel_21
+          CFI (cfiCond37) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond37) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond37) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond37) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond37) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond37) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond37) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond37) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond37) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond37) CFA_SP SP+-2
+          CFI (cfiCond37) CFA_XSP16 add(XSP16, 9)
+          CFI Block cfiPicker38 Using cfiCommon1
+          CFI (cfiPicker38) NoFunction
+          CFI (cfiPicker38) Picker
         MOV       B,#0x3
         MUL       AB
         MOV       R0,A
@@ -3194,8 +3208,434 @@ uart_send_switch_sate_ack:
         MOV       DPL,R0
         MOV       DPH,A
         MOVX      A,@DPTR
+        RET
+          CFI EndBlock cfiCond34
+          CFI EndBlock cfiCond35
+          CFI EndBlock cfiCond36
+          CFI EndBlock cfiCond37
+          CFI EndBlock cfiPicker38
+//  506 
+//  507 /***************************************************************************
+//  508  * @brief   Function to ge config_id and corresponding led_no
+//  509  * **************************************************************************/
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+//  510 uint8 get_config(uint8* buff){
+get_config:
+          CFI Block cfiBlock39 Using cfiCommon0
+          CFI Function get_config
+        CODE
+        MOV       A,#-0x9
+        LCALL     ?BANKED_ENTER_XDATA
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+        ; Saved register size: 9
+        ; Auto size: 0
+//  511   uint8 index = 0,no_of_led = 4;
+//  512   buff[index++] = no_of_led;
+        MOV       DPL,R2
+        MOV       DPH,R3
+        MOV       A,#0x4
+        MOVX      @DPTR,A
+        MOV       R4,#0x1
+//  513   for(uint8 i = 0;i<no_of_led;i++){
+        MOV       R5,#0x0
+//  514     buff[index++] = config_data[i].led;
+??get_config_0:
+        LCALL     ?Subroutine9 & 0xFFFF
+??CrossCallReturnLabel_21:
         PUSH      A
-          CFI CFA_SP SP+-6
+          CFI CFA_SP SP+-1
+        MOV       A,R4
+        MOV       R6,A
+        MOV       A,R2
+        ADD       A,R6
+        MOV       DPL,A
+        CLR       A
+        ADDC      A,R3
+        MOV       DPH,A
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R4
+//  515     buff[index++] = config_data[i].config_id;
+        MOV       DPL,R0
+        MOV       DPH,R1
+        INC       DPTR
+        INC       DPTR
+        MOVX      A,@DPTR
+        PUSH      A
+          CFI CFA_SP SP+-1
+        MOV       A,R2
+        ADD       A,R4
+        MOV       DPL,A
+        CLR       A
+        ADDC      A,R3
+        MOV       DPH,A
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R4
+//  516   }
+        INC       R5
+        MOV       A,R5
+        CLR       C
+        SUBB      A,#0x4
+        JC        ??get_config_0
+//  517   return index-1;
+        SJMP      ?Subroutine4
+//  518 }
+          CFI EndBlock cfiBlock39
+//  519 
+//  520 /*****************************************************************************
+//  521  * @fn      uart_send_sate_ack
+//  522  * @brief   Send back State of all switch to uart
+//  523  * @return
+//  524  * @param 
+//  525  * **************************************************************************/
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+//  526 void uart_send_switch_sate_ack(uint8 cmnd_id,uint8 data_len){
+uart_send_switch_sate_ack:
+          CFI Block cfiBlock40 Using cfiCommon0
+          CFI Function uart_send_switch_sate_ack
+        CODE
+        FUNCALL uart_send_switch_sate_ack, HalUARTWrite
+        LOCFRAME ISTACK, 0, STACK
+        LOCFRAME PSTACK, 0, STACK
+        LOCFRAME XSTACK, 29, STACK
+        LOCFRAME IOVERLAY, 0, STATIC
+        LOCFRAME DOVERLAY, 0, STATIC
+        ARGFRAME ISTACK, 0, STACK
+        ARGFRAME PSTACK, 0, STACK
+        ARGFRAME XSTACK, 29, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
+        MOV       A,#-0x9
+        LCALL     ?BANKED_ENTER_XDATA
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+        ; Saved register size: 9
+        ; Auto size: 20
+        MOV       A,#-0x14
+        LCALL     ?ALLOC_XSTACK8
+          CFI CFA_XSP16 add(XSP16, 29)
+//  527   uint8 Tx_buff[20] = {0};
+        MOV       DPTR,#`?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0`
+        MOV       R4,?XSP + 0
+        MOV       R5,?XSP + 1
+        MOV       A,#0x14
+        LCALL     ?MOVE_LONG8_XDATA_XDATA
+//  528   uint8 index =0,no_of_leds=4;
+//  529   Tx_buff[index++] = 0x28;
+        MOV       DPL,?XSP + 0
+        MOV       DPH,?XSP + 1
+        MOV       A,#0x28
+        MOVX      @DPTR,A
+//  530   Tx_buff[index++] = data_len;
+        MOV       A,#0x1
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,R2
+        MOVX      @DPTR,A
+//  531   Tx_buff[index++] = cmnd_id;
+        MOV       A,#0x2
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,R1
+        MOVX      @DPTR,A
+//  532   Tx_buff[index++] = 0x01;
+        MOV       A,#0x3
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,#0x1
+        MOVX      @DPTR,A
+//  533   Tx_buff[index++] = no_of_leds;
+        MOV       A,#0x4
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,#0x4
+        MOVX      @DPTR,A
+        MOV       R2,#0x5
+//  534 
+//  535   for(uint8 i = 0;i<4;i++){
+        MOV       R3,#0x0
+//  536   Tx_buff[index++] = config_data[i].led;
+??uart_send_switch_sate_ack_0:
+        MOV       A,R3
+        LCALL     ??Subroutine14_0 & 0xFFFF
+??CrossCallReturnLabel_18:
+        PUSH      A
+          CFI CFA_SP SP+-1
+        LCALL     ?Subroutine11 & 0xFFFF
+??CrossCallReturnLabel_16:
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R2
+//  537   Tx_buff[index++] = config_data[i].valid_state;
+        MOV       DPL,R0
+        MOV       DPH,R1
+        INC       DPTR
+        MOVX      A,@DPTR
+        PUSH      A
+          CFI CFA_SP SP+-1
+        LCALL     ?Subroutine10 & 0xFFFF
+//  538   }
+??CrossCallReturnLabel_13:
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R2
+        INC       R3
+        MOV       A,R3
+        CLR       C
+        SUBB      A,#0x4
+        JC        ??uart_send_switch_sate_ack_0
+//  539   Tx_buff[index++] = 0x29;
+        LJMP      ?Subroutine2 & 0xFFFF
+//  540   HalUARTWrite(HAL_UART_PORT_0, Tx_buff, index);
+//  541 }
+          CFI EndBlock cfiBlock40
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine10:
+          CFI Block cfiCond41 Using cfiCommon0
+          CFI Function uart_send_switch_sate_ack
+          CFI Conditional ??CrossCallReturnLabel_15
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI CFA_SP SP+-2
+          CFI CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiCond42 Using cfiCommon0
+          CFI (cfiCond42) Function uart_send_config_sate_ack
+          CFI (cfiCond42) Conditional ??CrossCallReturnLabel_15
+          CFI (cfiCond42) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond42) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond42) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond42) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond42) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond42) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond42) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond42) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond42) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond42) CFA_SP SP+-2
+          CFI (cfiCond42) CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiCond43 Using cfiCommon0
+          CFI (cfiCond43) Function uart_send_switch_sate_ack
+          CFI (cfiCond43) Conditional ??CrossCallReturnLabel_13
+          CFI (cfiCond43) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond43) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond43) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond43) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond43) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond43) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond43) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond43) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond43) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond43) CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiCond44 Using cfiCommon0
+          CFI (cfiCond44) Function uart_send_config_sate_ack
+          CFI (cfiCond44) Conditional ??CrossCallReturnLabel_14
+          CFI (cfiCond44) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond44) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond44) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond44) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond44) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond44) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond44) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond44) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond44) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond44) CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiPicker45 Using cfiCommon1
+          CFI (cfiPicker45) NoFunction
+          CFI (cfiPicker45) Picker
+        MOV       DPL,?XSP + 0
+        MOV       DPH,?XSP + 1
+        MOV       A,DPL
+        ADD       A,R2
+        MOV       DPL,A
+        CLR       A
+        ADDC      A,DPH
+        MOV       DPH,A
+        RET
+          CFI EndBlock cfiCond41
+          CFI EndBlock cfiCond42
+          CFI EndBlock cfiCond43
+          CFI EndBlock cfiCond44
+          CFI EndBlock cfiPicker45
+//  542 
+//  543 /*****************************************************************************
+//  544  * @fn      uart_send_config_sate_ack
+//  545  * @brief   Send back State of all config_id to uart
+//  546  * @return
+//  547  * @param 
+//  548  * **************************************************************************/
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+//  549 void uart_send_config_sate_ack(uint8 cmnd_id,uint8 data_len){
+uart_send_config_sate_ack:
+          CFI Block cfiBlock46 Using cfiCommon0
+          CFI Function uart_send_config_sate_ack
+        CODE
+        FUNCALL uart_send_config_sate_ack, HalUARTWrite
+        LOCFRAME ISTACK, 0, STACK
+        LOCFRAME PSTACK, 0, STACK
+        LOCFRAME XSTACK, 29, STACK
+        LOCFRAME IOVERLAY, 0, STATIC
+        LOCFRAME DOVERLAY, 0, STATIC
+        ARGFRAME ISTACK, 0, STACK
+        ARGFRAME PSTACK, 0, STACK
+        ARGFRAME XSTACK, 29, STACK
+        ARGFRAME IOVERLAY, 0, STATIC
+        ARGFRAME DOVERLAY, 0, STATIC
+        MOV       A,#-0x9
+        LCALL     ?BANKED_ENTER_XDATA
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 9)
+        ; Saved register size: 9
+        ; Auto size: 20
+        MOV       A,#-0x14
+        LCALL     ?ALLOC_XSTACK8
+          CFI CFA_XSP16 add(XSP16, 29)
+//  550   uint8 Tx_buff[20] = {0};
+        MOV       DPTR,#`?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0_1`
+        MOV       R4,?XSP + 0
+        MOV       R5,?XSP + 1
+        MOV       A,#0x14
+        LCALL     ?MOVE_LONG8_XDATA_XDATA
+//  551   uint8 index =0,no_of_leds=4;
+//  552   Tx_buff[index++] = 0x28;
+        MOV       DPL,?XSP + 0
+        MOV       DPH,?XSP + 1
+        MOV       A,#0x28
+        MOVX      @DPTR,A
+//  553   Tx_buff[index++] = data_len;
+        MOV       A,#0x1
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,R2
+        MOVX      @DPTR,A
+//  554   Tx_buff[index++] = cmnd_id;
+        MOV       A,#0x2
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,R1
+        MOVX      @DPTR,A
+//  555   Tx_buff[index++] = 0x01;
+        MOV       A,#0x3
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,#0x1
+        MOVX      @DPTR,A
+//  556   Tx_buff[index++] = no_of_leds;
+        MOV       A,#0x4
+        LCALL     ?XSTACK_DISP0_8
+        MOV       A,#0x4
+        MOVX      @DPTR,A
+        MOV       R2,#0x5
+//  557 
+//  558   for(uint8 i = 0;i<no_of_leds;i++){
+        MOV       R3,#0x0
+//  559   Tx_buff[index++] = config_data[i].led;
+??uart_send_config_sate_ack_0:
+        MOV       A,R3
+        LCALL     ??Subroutine14_0 & 0xFFFF
+??CrossCallReturnLabel_19:
+        PUSH      A
+          CFI CFA_SP SP+-1
+        LCALL     ?Subroutine11 & 0xFFFF
+??CrossCallReturnLabel_17:
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R2
+//  560   Tx_buff[index++] = config_data[i].config_id;
+        MOV       DPL,R0
+        MOV       DPH,R1
+        INC       DPTR
+        INC       DPTR
+        MOVX      A,@DPTR
+        PUSH      A
+          CFI CFA_SP SP+-1
+        LCALL     ?Subroutine10 & 0xFFFF
+//  561   }
+??CrossCallReturnLabel_14:
+        POP       A
+          CFI CFA_SP SP+0
+        MOVX      @DPTR,A
+        INC       R2
+        INC       R3
+        MOV       A,R3
+        CLR       C
+        SUBB      A,#0x4
+        JC        ??uart_send_config_sate_ack_0
+//  562   Tx_buff[index++] = 0x29;
+        LJMP      ?Subroutine2 & 0xFFFF
+//  563 
+//  564   HalUARTWrite(HAL_UART_PORT_0, Tx_buff, index);
+//  565 
+//  566 }
+          CFI EndBlock cfiBlock46
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+?Subroutine11:
+          CFI Block cfiCond47 Using cfiCommon0
+          CFI Function uart_send_switch_sate_ack
+          CFI Conditional ??CrossCallReturnLabel_16
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiCond48 Using cfiCommon0
+          CFI (cfiCond48) Function uart_send_config_sate_ack
+          CFI (cfiCond48) Conditional ??CrossCallReturnLabel_17
+          CFI (cfiCond48) R6 load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI (cfiCond48) VB load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI (cfiCond48) V0 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI (cfiCond48) R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI (cfiCond48) ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+          CFI (cfiCond48) ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI (cfiCond48) ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI (cfiCond48) DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI (cfiCond48) DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI (cfiCond48) CFA_XSP16 add(XSP16, 29)
+          CFI Block cfiPicker49 Using cfiCommon1
+          CFI (cfiPicker49) NoFunction
+          CFI (cfiPicker49) Picker
         MOV       A,R2
         MOV       R4,A
         MOV       DPL,?XSP + 0
@@ -3206,94 +3646,21 @@ uart_send_switch_sate_ack:
         CLR       A
         ADDC      A,DPH
         MOV       DPH,A
-        POP       A
-          CFI CFA_SP SP+-5
-        MOVX      @DPTR,A
-        INC       R2
-//  523   Tx_buff[index++] = config_data[i].valid_state;
-        MOV       DPL,R0
-        MOV       DPH,R1
-        INC       DPTR
-        MOVX      A,@DPTR
-        PUSH      A
-          CFI CFA_SP SP+-6
-        LCALL     ?Subroutine9 & 0xFFFF
-//  524   }
-??CrossCallReturnLabel_24:
-        POP       A
-          CFI CFA_SP SP+-5
-        MOVX      @DPTR,A
-        INC       R2
-        INC       R3
-        MOV       A,R3
-        CLR       C
-        SUBB      A,#0x4
-        JC        ??uart_send_switch_sate_ack_0
-//  525   Tx_buff[index++] = 0x29;
-        LCALL     ?Subroutine9 & 0xFFFF
-??CrossCallReturnLabel_25:
-        MOV       A,#0x29
-        MOVX      @DPTR,A
-//  526   HalUARTWrite(HAL_UART_PORT_0, Tx_buff, index);
-        ; Setup parameters for call to function HalUARTWrite
-        INC       R4
-        INC       R4
-        INC       R4
-        MOV       R5,#0x0
-        MOV       R2,?XSP + 0
-        MOV       R3,?XSP + 1
-        MOV       R1,#0x0
-        LCALL     `??HalUARTWrite::?relay`; Banked call to: HalUARTWrite
-//  527   index++;
-//  528 }
-        MOV       A,#0x14
-        LCALL     ?DEALLOC_XSTACK8
-          CFI CFA_XSP16 XSP16+0
-        LJMP      ??Subroutine11_0 & 0xFFFF
-          CFI EndBlock cfiBlock47
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine9:
-          CFI Block cfiCond48 Using cfiCommon0
-          CFI Function uart_send_switch_sate_ack
-          CFI Conditional ??CrossCallReturnLabel_24
-          CFI DPL0 Frame(CFA_SP, 4)
-          CFI DPH0 Frame(CFA_SP, 5)
-          CFI CFA_SP SP+-8
-          CFI CFA_XSP16 add(XSP16, 20)
-          CFI Block cfiCond49 Using cfiCommon0
-          CFI (cfiCond49) Function uart_send_switch_sate_ack
-          CFI (cfiCond49) Conditional ??CrossCallReturnLabel_25
-          CFI (cfiCond49) DPL0 Frame(CFA_SP, 4)
-          CFI (cfiCond49) DPH0 Frame(CFA_SP, 5)
-          CFI (cfiCond49) CFA_SP SP+-7
-          CFI (cfiCond49) CFA_XSP16 add(XSP16, 20)
-          CFI Block cfiPicker50 Using cfiCommon1
-          CFI (cfiPicker50) NoFunction
-          CFI (cfiPicker50) Picker
-        MOV       DPL,?XSP + 0
-        MOV       DPH,?XSP + 1
-        MOV       A,DPL
-        ADD       A,R2
-        MOV       DPL,A
-        CLR       A
-        ADDC      A,DPH
-        MOV       DPH,A
         RET
+          CFI EndBlock cfiCond47
           CFI EndBlock cfiCond48
-          CFI EndBlock cfiCond49
-          CFI EndBlock cfiPicker50
-//  529 /*****************************************************************************
-//  530  * @fn        update_config_to_memory
-//  531  * **************************************************************************/
+          CFI EndBlock cfiPicker49
+//  567 /*****************************************************************************
+//  568  * @fn        update_config_to_memory
+//  569  * **************************************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  532 void update_config_to_memory(void)
+//  570 void update_config_to_memory(void)
 update_config_to_memory:
-          CFI Block cfiBlock51 Using cfiCommon0
+          CFI Block cfiBlock50 Using cfiCommon0
           CFI Function update_config_to_memory
         CODE
-//  533 {
+//  571 {
         FUNCALL update_config_to_memory, KeusThemeSwitchMiniWriteConfigDataIntoMemory
         LOCFRAME ISTACK, 2, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -3313,32 +3680,32 @@ update_config_to_memory:
           CFI CFA_SP SP+-5
         ; Saved register size: 2
         ; Auto size: 0
-//  534   write_status = KeusThemeSwitchMiniWriteConfigDataIntoMemory();
+//  572   write_status = KeusThemeSwitchMiniWriteConfigDataIntoMemory();
         ; Setup parameters for call to function KeusThemeSwitchMiniWriteConfigDataIntoMemory
         LCALL     `??KeusThemeSwitchMiniWriteConfigDataIntoMemory:`; Banked call to: KeusThemeSwitchMiniWriteConfigDataIntoMemory
         MOV       A,R1
         MOV       DPTR,#write_status
         LJMP      ?Subroutine0 & 0xFFFF
-//  535 }
-          CFI EndBlock cfiBlock51
-//  536 
-//  537 
-//  538 //*************************NVIC MEMORY
-//  539 
-//  540 /*******************************************************
-//  541  * @fn          KeusThemeSwitchMiniMemoryInit
-//  542  * @brief       nvic memory init
-//  543  * @return
-//  544  * @param
-//  545  * *****************************************************/
+//  573 }
+          CFI EndBlock cfiBlock50
+//  574 
+//  575 
+//  576 //*************************NVIC MEMORY
+//  577 
+//  578 /*******************************************************
+//  579  * @fn          KeusThemeSwitchMiniMemoryInit
+//  580  * @brief       nvic memory init
+//  581  * @return
+//  582  * @param
+//  583  * *****************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  546 bool KeusThemeSwitchMiniMemoryInit(void)
+//  584 bool KeusThemeSwitchMiniMemoryInit(void)
 KeusThemeSwitchMiniMemoryInit:
-          CFI Block cfiBlock52 Using cfiCommon0
+          CFI Block cfiBlock51 Using cfiCommon0
           CFI Function KeusThemeSwitchMiniMemoryInit
         CODE
-//  547 {
+//  585 {
         FUNCALL KeusThemeSwitchMiniMemoryInit, osal_nv_item_init
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -3368,12 +3735,12 @@ KeusThemeSwitchMiniMemoryInit:
           CFI CFA_XSP16 add(XSP16, 10)
         ; Saved register size: 10
         ; Auto size: 0
-//  548   //  for (uint8 i = 0; i < CLICK_TYPES; i++)
-//  549   //  {
-//  550   //    themeManager.btnThemeMap[i] = 255;
-//  551   //  }
-//  552 
-//  553   uint8 res = osal_nv_item_init(NVIC_MEMORY_POSITION, sizeof(config_data), (void *)config_data);
+//  586   //  for (uint8 i = 0; i < CLICK_TYPES; i++)
+//  587   //  {
+//  588   //    themeManager.btnThemeMap[i] = 255;
+//  589   //  }
+//  590 
+//  591   uint8 res = osal_nv_item_init(NVIC_MEMORY_POSITION, sizeof(config_data), (void *)config_data);
         ; Setup parameters for call to function osal_nv_item_init
         MOV       ?V0,#config_data & 0xff
         MOV       ?V1,#(config_data >> 8) & 0xff
@@ -3390,63 +3757,42 @@ KeusThemeSwitchMiniMemoryInit:
           CFI CFA_XSP16 add(XSP16, 10)
         MOV       A,R1
         MOV       R0,A
-//  554 
-//  555   if (res == SUCCESS || res == NV_ITEM_UNINIT)
+//  592 
+//  593   if (res == SUCCESS || res == NV_ITEM_UNINIT)
         JZ        ??KeusThemeSwitchMiniMemoryInit_0
         MOV       A,#0x9
         XRL       A,R0
         JNZ       ??KeusThemeSwitchMiniMemoryInit_1
-//  556   {
-//  557     return true;
+//  594   {
+//  595     return true;
 ??KeusThemeSwitchMiniMemoryInit_0:
         MOV       R1,#0x1
         SJMP      ??KeusThemeSwitchMiniMemoryInit_2
-//  558   }
-//  559   else
-//  560   {
-//  561     return false;
+//  596   }
+//  597   else
+//  598   {
+//  599     return false;
 ??KeusThemeSwitchMiniMemoryInit_1:
         MOV       R1,#0x0
-//  562   }
+//  600   }
 ??KeusThemeSwitchMiniMemoryInit_2:
-          CFI EndBlock cfiBlock52
-        REQUIRE ?Subroutine1
-        ; // Fall through to label ?Subroutine1
-//  563 }
+        SJMP      ?Subroutine1
+//  601 }
+          CFI EndBlock cfiBlock51
+//  602 /*******************************************************
+//  603  * @fn      KeusThemeSwitchMiniReadConfigDataIntoMemory
+//  604  * @brief   NVIC memory read 
+//  605  * @return
+//  606  * @param  
+//  607  * ****************************************************/
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-?Subroutine1:
-          CFI Block cfiBlock53 Using cfiCommon0
-          CFI NoFunction
-          CFI CFA_SP SP+0
-          CFI CFA_XSP16 add(XSP16, 10)
-          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
-          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
-          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
-          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
-          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
-          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
-          CFI V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
-          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
-          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
-          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
-        MOV       R7,#0x2
-        LJMP      ?BANKED_LEAVE_XDATA
-          CFI EndBlock cfiBlock53
-//  564 /*******************************************************
-//  565  * @fn      KeusThemeSwitchMiniReadConfigDataIntoMemory
-//  566  * @brief   NVIC memory read 
-//  567  * @return
-//  568  * @param  
-//  569  * ****************************************************/
-
-        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  570 bool KeusThemeSwitchMiniReadConfigDataIntoMemory(void)
+//  608 bool KeusThemeSwitchMiniReadConfigDataIntoMemory(void)
 KeusThemeSwitchMiniReadConfigDataIntoMemory:
-          CFI Block cfiBlock54 Using cfiCommon0
+          CFI Block cfiBlock52 Using cfiCommon0
           CFI Function KeusThemeSwitchMiniReadConfigDataIntoMemory
         CODE
-//  571 {
+//  609 {
         FUNCALL KeusThemeSwitchMiniReadConfigDataIntoMemory, osal_nv_read
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -3476,9 +3822,9 @@ KeusThemeSwitchMiniReadConfigDataIntoMemory:
           CFI CFA_XSP16 add(XSP16, 10)
         ; Saved register size: 10
         ; Auto size: 0
-//  572   uint8 res = osal_nv_read(NVIC_MEMORY_POSITION, 0, sizeof(config_data), (void *)config_data);
-//  573 
-//  574   if (res == SUCCESS)
+//  610   uint8 res = osal_nv_read(NVIC_MEMORY_POSITION, 0, sizeof(config_data), (void *)config_data);
+//  611 
+//  612   if (res == SUCCESS)
         ; Setup parameters for call to function osal_nv_read
         MOV       ?V0,#config_data & 0xff
         MOV       ?V1,#(config_data >> 8) & 0xff
@@ -3500,37 +3846,58 @@ KeusThemeSwitchMiniReadConfigDataIntoMemory:
           CFI CFA_XSP16 add(XSP16, 10)
         MOV       A,R1
         JNZ       ??KeusThemeSwitchMiniReadConfigDataIntoMemory_0
-//  575   {
-//  576     return true;
+//  613   {
+//  614     return true;
         MOV       R1,#0x1
         SJMP      ??KeusThemeSwitchMiniReadConfigDataIntoMemory_1
-//  577   }
-//  578   else
-//  579   {
-//  580     return false;
+//  615   }
+//  616   else
+//  617   {
+//  618     return false;
 ??KeusThemeSwitchMiniReadConfigDataIntoMemory_0:
         MOV       R1,#0x0
-//  581   }
+//  619   }
 ??KeusThemeSwitchMiniReadConfigDataIntoMemory_1:
-        SJMP      ?Subroutine1
-//  582 }
-          CFI EndBlock cfiBlock54
-//  583 
-//  584 
-//  585 /********************************************************
-//  586  * @fn      KeusThemeSwitchMiniWriteConfigDataIntoMemory
-//  587  * @brief   NVIC Memory write
-//  588  * @return
-//  589  * @param
-//  590  * *****************************************************/
+          CFI EndBlock cfiBlock52
+        REQUIRE ?Subroutine1
+        ; // Fall through to label ?Subroutine1
+//  620 }
 
         RSEG BANKED_CODE:HUGECODE:NOROOT(0)
-//  591 bool KeusThemeSwitchMiniWriteConfigDataIntoMemory(void)
+?Subroutine1:
+          CFI Block cfiBlock53 Using cfiCommon0
+          CFI NoFunction
+          CFI CFA_SP SP+0
+          CFI CFA_XSP16 add(XSP16, 10)
+          CFI VB load(1, XDATA, add(CFA_XSP16, literal(-9)))
+          CFI DPL0 load(1, XDATA, add(CFA_XSP16, literal(-2)))
+          CFI DPH0 load(1, XDATA, add(CFA_XSP16, literal(-1)))
+          CFI R6 load(1, XDATA, add(CFA_XSP16, literal(-10)))
+          CFI R7 load(1, XDATA, add(CFA_XSP16, literal(-6)))
+          CFI V0 load(1, XDATA, add(CFA_XSP16, literal(-8)))
+          CFI V1 load(1, XDATA, add(CFA_XSP16, literal(-7)))
+          CFI ?BRET_EXT load(1, XDATA, add(CFA_XSP16, literal(-3)))
+          CFI ?RET_HIGH load(1, XDATA, add(CFA_XSP16, literal(-4)))
+          CFI ?RET_LOW load(1, XDATA, add(CFA_XSP16, literal(-5)))
+        MOV       R7,#0x2
+        LJMP      ?BANKED_LEAVE_XDATA
+          CFI EndBlock cfiBlock53
+//  621 
+//  622 
+//  623 /********************************************************
+//  624  * @fn      KeusThemeSwitchMiniWriteConfigDataIntoMemory
+//  625  * @brief   NVIC Memory write
+//  626  * @return
+//  627  * @param
+//  628  * *****************************************************/
+
+        RSEG BANKED_CODE:HUGECODE:NOROOT(0)
+//  629 bool KeusThemeSwitchMiniWriteConfigDataIntoMemory(void)
 KeusThemeSwitchMiniWriteConfigDataIntoMemory:
-          CFI Block cfiBlock55 Using cfiCommon0
+          CFI Block cfiBlock54 Using cfiCommon0
           CFI Function KeusThemeSwitchMiniWriteConfigDataIntoMemory
         CODE
-//  592 {
+//  630 {
         FUNCALL KeusThemeSwitchMiniWriteConfigDataIntoMemory, osal_nv_write
         LOCFRAME ISTACK, 0, STACK
         LOCFRAME PSTACK, 0, STACK
@@ -3560,9 +3927,9 @@ KeusThemeSwitchMiniWriteConfigDataIntoMemory:
           CFI CFA_XSP16 add(XSP16, 10)
         ; Saved register size: 10
         ; Auto size: 0
-//  593   uint8 res = osal_nv_write(NVIC_MEMORY_POSITION, 0, sizeof(config_data), (void *)config_data);
-//  594 
-//  595   if (res == SUCCESS)
+//  631   uint8 res = osal_nv_write(NVIC_MEMORY_POSITION, 0, sizeof(config_data), (void *)config_data);
+//  632 
+//  633   if (res == SUCCESS)
         ; Setup parameters for call to function osal_nv_write
         MOV       ?V0,#config_data & 0xff
         MOV       ?V1,#(config_data >> 8) & 0xff
@@ -3584,21 +3951,21 @@ KeusThemeSwitchMiniWriteConfigDataIntoMemory:
           CFI CFA_XSP16 add(XSP16, 10)
         MOV       A,R1
         JNZ       ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_0
-//  596   {
-//  597     return true;
+//  634   {
+//  635     return true;
         MOV       R1,#0x1
         SJMP      ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_1
-//  598   }
-//  599   else
-//  600   {
-//  601     return false;
+//  636   }
+//  637   else
+//  638   {
+//  639     return false;
 ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_0:
         MOV       R1,#0x0
-//  602   }
+//  640   }
 ??KeusThemeSwitchMiniWriteConfigDataIntoMemory_1:
         SJMP      ?Subroutine1
-//  603 }
-          CFI EndBlock cfiBlock55
+//  641 }
+          CFI EndBlock cfiBlock54
 
         RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for debounceTimer>`:
@@ -3616,6 +3983,17 @@ KeusThemeSwitchMiniWriteConfigDataIntoMemory:
         DATA16
         DW `??ledTimerCbk::?relay`
         DW 100
+        DATA8
+        DB 1
+        DB -1
+        DATA16
+        DW 0
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for ledTimerConfig>`:
+        DATA16
+        DW `??KeusEmbeddedSwitchLedBlinkHandler::?relay`
+        DW 500
         DATA8
         DB 1
         DB -1
@@ -3702,6 +4080,13 @@ KeusThemeSwitchMiniWriteConfigDataIntoMemory:
         DC24    ledTimerCbk
 
         RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
+`??KeusEmbeddedSwitchLedBlinkHandler::?relay`:
+        CODE
+        LCALL   ?BDISPATCH
+        DATA24
+        DC24    KeusEmbeddedSwitchLedBlinkHandler
+
+        RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
 `??leddebounceCbk::?relay`:
         CODE
         LCALL   ?BDISPATCH
@@ -3737,11 +4122,32 @@ KeusThemeSwitchMiniWriteConfigDataIntoMemory:
         DC24    update_config_struct
 
         RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
+`??get_state::?relay`:
+        CODE
+        LCALL   ?BDISPATCH
+        DATA24
+        DC24    get_state
+
+        RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
+`??get_config::?relay`:
+        CODE
+        LCALL   ?BDISPATCH
+        DATA24
+        DC24    get_config
+
+        RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
 `??uart_send_switch_sate_ack::?relay`:
         CODE
         LCALL   ?BDISPATCH
         DATA24
         DC24    uart_send_switch_sate_ack
+
+        RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
+`??uart_send_config_sate_ack::?relay`:
+        CODE
+        LCALL   ?BDISPATCH
+        DATA24
+        DC24    uart_send_config_sate_ack
 
         RSEG BANK_RELAYS:CODE:REORDER:NOROOT(0)
 `??update_config_to_memory::?relay`:
@@ -3800,19 +4206,43 @@ KeusThemeSwitchMiniWriteConfigDataIntoMemory:
         DB 0
         DB 0
 
+        RSEG XDATA_ROM_C:CONST:REORDER:NOROOT(0)
+        DATA8
+`?<Constant {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0_1`:
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+        DB 0
+
         END
 // 
-// 1 709 bytes in segment BANKED_CODE
-//    66 bytes in segment BANK_RELAYS
-//    56 bytes in segment XDATA_I
-//    56 bytes in segment XDATA_ID
-//    30 bytes in segment XDATA_ROM_C
+// 1 947 bytes in segment BANKED_CODE
+//    90 bytes in segment BANK_RELAYS
+//    64 bytes in segment XDATA_I
+//    64 bytes in segment XDATA_ID
+//    50 bytes in segment XDATA_ROM_C
 //    32 bytes in segment XDATA_Z
 // 
-//   122 bytes of CODE     memory
-//    30 bytes of CONST    memory
-// 1 709 bytes of HUGECODE memory
-//    88 bytes of XDATA    memory
+//   154 bytes of CODE     memory
+//    50 bytes of CONST    memory
+// 1 947 bytes of HUGECODE memory
+//    96 bytes of XDATA    memory
 //
 //Errors: none
 //Warnings: none

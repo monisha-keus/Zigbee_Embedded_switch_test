@@ -1444,7 +1444,7 @@
                 </option>
                 <option>
                     <name>OGChipConfigPath</name>
-                    <state>$TOOLKIT_DIR$\config\devices\Texas Instruments\CC2530F256.i51</state>
+                    <state>C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\8051\bin\..\config\devices\Texas Instruments\CC25xx\3x\CC2530F256.i51</state>
                 </option>
             </data>
         </settings>
@@ -1677,6 +1677,7 @@
                     <state>$PROJ_DIR$\..\..\..\..\..\Components\stack\zdo</state>
                     <state>$PROJ_DIR$\..\..\..\..\..\Components\zmac</state>
                     <state>$PROJ_DIR$\..\..\..\..\..\Components\zmac\f8w</state>
+                    <state>$PROJ_DIR$\..\..\..\..\..\Components\keus</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -3530,7 +3531,7 @@
             <name>$PROJ_DIR$\..\..\..\..\..\Components\stack\bdb\bdb_touchlink.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\Components\stack\bdb\bdb_touchLink.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\Components\stack\bdb\bdb_touchlink.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\Components\stack\bdb\bdb_touchlink_initiator.c</name>

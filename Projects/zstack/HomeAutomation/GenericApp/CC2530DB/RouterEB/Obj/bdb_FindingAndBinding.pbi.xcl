@@ -57,6 +57,8 @@ D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp\CC2530DB\..
 -I
 D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp\CC2530DB\..\..\..\..\..\Components\zmac\f8w
 -I
+D:\Keus_Docs\zigbee_EStest\Projects\zstack\HomeAutomation\GenericApp\CC2530DB\..\..\..\..\..\Components\keus
+-I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\8051\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\8051\lib\dlib
@@ -114,6 +116,8 @@ D:\Keus_Docs\zigbee_EStest\Components\stack\zdo
 D:\Keus_Docs\zigbee_EStest\Components\zmac
 -I
 D:\Keus_Docs\zigbee_EStest\Components\zmac\f8w
+-I
+D:\Keus_Docs\zigbee_EStest\Components\keus
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0

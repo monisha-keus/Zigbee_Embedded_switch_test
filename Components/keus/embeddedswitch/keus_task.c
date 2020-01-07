@@ -8,22 +8,30 @@
 #define UART0     HAL_UART_PORT_0
 //#define UART1     HAL_UART_PORT_1
 
-bool debounce = false;
-uint8 count1 = 0, count2 = 0, count3 = 0,count4 = 0;
-uint8 button_Pressed =0,button_state = 0;
-uint8 contineous_on1 =0,contineous_on2 =0,contineous_on3 =0,contineous_on4 =0;
-
-//Variables for NVIC Memory
-bool init_status = 0;
-bool read_status = 0;
-bool write_status = 0;
-
 void ledTimerCbk(uint8 timerId);
 void leddebounceCbk(uint8 timerId);
 void update_led(uint8 led_no, uint8 led_state_t);
 void update_config_struct(uint8 led_no, uint8 led_state);
 void update_config_to_memory(void);
-void uart_send_switch_sate_ack(void);
+void uart_send_switch_sate_ack(uint8 cmnd_id,uint8 data_len);
+void uart_send_config_sate_ack(uint8 cmnd_id,uint8 data_len);
+
+bool debounce = false;
+uint8 count1 = 0,timer1 = 0;
+uint8 button_Pressed =0,button_state = 0;
+uint8 contineous_on1 =0,blink_led = 0;
+uint32  APP_EVENT = 0;
+//Variables for NVIC Memory
+bool init_status = 0;
+bool read_status = 0;
+bool write_status = 0;
+
+uint8 get_state(uint8* buff);
+uint8 get_config(uint8* buff);
+
+
+
+void KeusEmbeddedSwitchLedBlinkHandler(uint8 timerId);
 
 typedef void (*KeusBtnCbk)(void);
 
@@ -52,11 +60,19 @@ KeusTimerConfig intervalTimer = {
     true,
     -1,
     0};
+
+  KeusTimerConfig ledTimerConfig = {
+  &KeusEmbeddedSwitchLedBlinkHandler,
+  500,
+  true,
+  -1,
+  0
+};
 /****************************************************************************
  * **************************FUNCTION DECLARATION****************************
  * ***************************************************************************/
 void KEUS_init_fnc(void);
-void KEUS_loop(void);
+uint8 KEUS_loop(void);
 
 //********LED and button initilization
 extern KeusGPIOPin ledPin1 = {0, 0, GPIO_OUTPUT, false, LED_OFF};
@@ -83,6 +99,10 @@ void ledTimerCbk(uint8 timerId)
   if (buttonPin1.state == BUTTON_ACTIVE){
     buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
     count1++;
+    button_Pressed = 1;
+
+    APP_EVENT = EVENT_3;
+    
     if(count1 >= 50){
       contineous_on1 = 1;
       ledPin1.state = LED_ON;
@@ -91,80 +111,34 @@ void ledTimerCbk(uint8 timerId)
     else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
       contineous_on1 = 0;
       buttonManager.elapsedTime = 0;
-      ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
+      ledPin1.state = LED_OFF;
       KeusGPIOSetPinValue(&ledPin1);
     }
   } 
-   else if (buttonPin2.state == BUTTON_ACTIVE) {
-    buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-    count2++;
-    if(count2 >= 50){
-      contineous_on2 = 1;
-      ledPin2.state = LED_ON;
-      KeusGPIOSetPinValue(&ledPin2);
-    }
-    else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-      contineous_on2 = 0;
-      buttonManager.elapsedTime = 0;
-      ledPin2.state = KeusGPIOToggledState(ledPin2.state); //toggle led at button pressed
-      KeusGPIOSetPinValue(&ledPin2);
-    }
-  }  
-  else if (buttonPin3.state == BUTTON_ACTIVE) {
-    buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-    count3++;
-    if(count3 >= 50){
-      contineous_on3 = 1;
-      ledPin3.state = LED_ON;
-      KeusGPIOSetPinValue(&ledPin3);
-    }
-    else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-      contineous_on3 = 0;
-      buttonManager.elapsedTime = 0;
-      ledPin3.state = KeusGPIOToggledState(ledPin3.state); //toggle led at button pressed
-      KeusGPIOSetPinValue(&ledPin3);
-    }
-  }  
-  else if (buttonPin4.state == BUTTON_ACTIVE) {
-    buttonManager.elapsedTime += KEUS_EMBEDDEDSWITCH_BUTTON_POLL_TIME;
-    count4++;
-    if(count4 >= 50){
-      contineous_on4 = 1;
-      ledPin4.state = LED_ON;
-      KeusGPIOSetPinValue(&ledPin4);
-    }
-    else if (buttonManager.elapsedTime >= buttonManager.btnDelay) {
-      contineous_on4 = 0;
-      buttonManager.elapsedTime = 0;
-      ledPin4.state = KeusGPIOToggledState(ledPin4.state); //toggle led at button pressed
-      KeusGPIOSetPinValue(&ledPin4);
-    }
-  } 
+   
   else {
     buttonManager.elapsedTime = 0;
     count1 = 0;
-    count2 = 0;
-    count3 = 0;
-    count4 = 0;
 
     if(contineous_on1 ==0){
       ledPin1.state = LED_OFF;
       KeusGPIOSetPinValue(&ledPin1);
     }
-    if(contineous_on2 ==0){
-      ledPin2.state = LED_OFF;
-      KeusGPIOSetPinValue(&ledPin2);
-    }
-    if(contineous_on3 ==0){
-      ledPin3.state = LED_OFF;
-      KeusGPIOSetPinValue(&ledPin3);
-    }
-    if(contineous_on4 ==0){
-      ledPin4.state = LED_OFF;
-      KeusGPIOSetPinValue(&ledPin4);
-    }
+    button_Pressed =0;
   }
 }
+
+/************************************************************************************
+ * @brief   Timer Function to Blink(500ms) Led1 contineously from start. 
+ * 
+ * ***********************************************************************************/
+void KeusEmbeddedSwitchLedBlinkHandler(uint8 timerId){
+  if(blink_led == START && button_Pressed == 0){
+    ledPin1.state = KeusGPIOToggledState(ledPin1.state); //toggle led at button pressed
+    KeusGPIOSetPinValue(&ledPin1);
+  }
+}
+
 
 /**************************************************************
  * @fn      leddebounceCbk
@@ -217,6 +191,8 @@ void KEUS_init_fnc(void)
   //******Enabling Timer and Debounce
   KeusTimerUtilAddTimer(&intervalTimer);
   KeusTimerUtilAddTimer(&debounceTimer);
+  KeusTimerUtilAddTimer(&ledTimerConfig);
+
 
   init_status = KeusThemeSwitchMiniMemoryInit();
   read_status = KeusThemeSwitchMiniReadConfigDataIntoMemory();
@@ -249,6 +225,7 @@ void KEUS_init_fnc(void)
   config_data[3].led = 4;
   config_data[3].valid_state = 1;
 
+  APP_EVENT = EVENT_1;
   KEUS_loop();
 }
 
@@ -258,23 +235,39 @@ void KEUS_init_fnc(void)
  * @return  No return after this
  * @param   None
  * *********************************************************************/
-void KEUS_loop(void)
+uint8 KEUS_loop(void)
 {
   while (1)
   {
     HalUARTPoll();
-    
+    if(APP_EVENT & EVENT_1){
+      blink_led = START;
+      return APP_EVENT ^ EVENT_1;
+    }
+    if(APP_EVENT & EVENT_2){
+      blink_led = STOP;
+      return APP_EVENT ^ EVENT_2;
+    }
+    if(APP_EVENT & EVENT_3){
+      return APP_EVENT ^ EVENT_3;
+    }
+    if(APP_EVENT & EVENT_4){
+      return APP_EVENT ^ EVENT_4;
+    }
+    if(APP_EVENT & EVENT_5){
+      return APP_EVENT ^ EVENT_5;
+    } 
   }
 }
-
 /*******************************************************************
- * @fn    update_led
+ * @fn      update_led
  * @brief   Function to receive LED state
  * *****************************************************************/
 
 void update_led(uint8 led_no, uint8 led_state_t){
   uint8 led_state;
   led_state = led_state_t;
+  //LED1
   if (led_no == 1)
   {
     if (config_data[0].config_id == ONOFF)
@@ -466,6 +459,7 @@ void update_led(uint8 led_no, uint8 led_state_t){
     }
     config_data[3].led = led_no;
   }
+  update_config_to_memory();
 }
 
 
@@ -499,14 +493,31 @@ void update_config_struct(uint8 led_no, uint8 led_state)
   update_config_to_memory();
 }
 
-// uint8 get_state(uint8* state){
-//   uint8 Tx_buff [] = {0},index = 0;
-//   for(uint8 i = 0;i<4;i++){
-//   Tx_buff[index++] = config_data[i].led;
-//   Tx_buff[index++] = config_data[i].valid_state;
-//   }
-//   return Tx_buff;
-// }
+/***************************************************************************
+ * @brief   Function to ge state and corresponding led_no
+ * ************************************************************************/
+uint8 get_state(uint8* buff){
+  uint8 index = 0,no_of_led = 4;
+  buff[index++] = no_of_led;
+  for(uint8 i = 0;i<no_of_led;i++){
+    buff[index++] = config_data[i].led;
+    buff[index++] = config_data[i].valid_state;
+  }
+  return index-1;
+}
+
+/***************************************************************************
+ * @brief   Function to ge config_id and corresponding led_no
+ * **************************************************************************/
+uint8 get_config(uint8* buff){
+  uint8 index = 0,no_of_led = 4;
+  buff[index++] = no_of_led;
+  for(uint8 i = 0;i<no_of_led;i++){
+    buff[index++] = config_data[i].led;
+    buff[index++] = config_data[i].config_id;
+  }
+  return index-1;
+}
 
 /*****************************************************************************
  * @fn      uart_send_sate_ack
@@ -514,17 +525,46 @@ void update_config_struct(uint8 led_no, uint8 led_state)
  * @return
  * @param 
  * **************************************************************************/
-void uart_send_switch_sate_ack(void){
+void uart_send_switch_sate_ack(uint8 cmnd_id,uint8 data_len){
   uint8 Tx_buff[20] = {0};
-  uint8 index =0;
+  uint8 index =0,no_of_leds=4;
   Tx_buff[index++] = 0x28;
+  Tx_buff[index++] = data_len;
+  Tx_buff[index++] = cmnd_id;
+  Tx_buff[index++] = 0x01;
+  Tx_buff[index++] = no_of_leds;
+
   for(uint8 i = 0;i<4;i++){
   Tx_buff[index++] = config_data[i].led;
   Tx_buff[index++] = config_data[i].valid_state;
   }
   Tx_buff[index++] = 0x29;
   HalUARTWrite(HAL_UART_PORT_0, Tx_buff, index);
-  index++;
+}
+
+/*****************************************************************************
+ * @fn      uart_send_config_sate_ack
+ * @brief   Send back State of all config_id to uart
+ * @return
+ * @param 
+ * **************************************************************************/
+void uart_send_config_sate_ack(uint8 cmnd_id,uint8 data_len){
+  uint8 Tx_buff[20] = {0};
+  uint8 index =0,no_of_leds=4;
+  Tx_buff[index++] = 0x28;
+  Tx_buff[index++] = data_len;
+  Tx_buff[index++] = cmnd_id;
+  Tx_buff[index++] = 0x01;
+  Tx_buff[index++] = no_of_leds;
+
+  for(uint8 i = 0;i<no_of_leds;i++){
+  Tx_buff[index++] = config_data[i].led;
+  Tx_buff[index++] = config_data[i].config_id;
+  }
+  Tx_buff[index++] = 0x29;
+
+  HalUARTWrite(HAL_UART_PORT_0, Tx_buff, index);
+
 }
 /*****************************************************************************
  * @fn        update_config_to_memory
